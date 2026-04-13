@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mis Anexos | Cristina Uceda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #faf7f4;
+  --white: #ffffff;
+  --rosa: #d4879a;
+  --rosa-light: #f0d5dc;
+  --rosa-pale: #fbeef1;
+  --mauve: #9e6070;
+  --mauve-dark: #7a4555;
+  --text: #3d2b32;
+  --text-light: #9a7d85;
+  --border: #ecdde2;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Montserrat',sans-serif; background:var(--cream); color:var(--text); min-height:100vh; }
+
+header {
+  background:var(--mauve-dark);
+  padding:36px 20px 30px;
+  text-align:center;
+  position:relative;
+}
+.logo-wrap { display:flex; flex-direction:column; align-items:center; gap:14px; }
+.logo-img { width:130px; height:130px; object-fit:contain; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15)); }
+.logo-placeholder {
+  width:88px; height:88px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.5);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; color:rgba(255,255,255,0.9);
+}
+.logo-placeholder .script { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.35rem; line-height:1; }
+.logo-placeholder .caps { font-size:0.52rem; font-weight:600; letter-spacing:4px; }
+
+.header-titles h1 { font-family:'Cormorant Garamond',serif; font-size:1.75rem; font-weight:300; color:var(--white); line-height:1.2; }
+.header-titles h1 em { font-style:italic; color:var(--rosa-light); }
+.header-sub { margin-top:6px; font-size:0.62rem; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.55); }
+
+.intro { max-width:580px; margin:28px auto 0; padding:0 20px; text-align:center; }
+.intro p { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-style:italic; color:var(--text-light); line-height:1.8; }
+.intro strong { font-style:normal; color:var(--mauve); font-weight:600; }
+
+.divider { max-width:160px; margin:22px auto 0; display:flex; align-items:center; gap:10px; color:var(--rosa); font-size:0.6rem; letter-spacing:2px; }
+.divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.filtros-wrap { margin:24px 0 0; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px; }
+.filtros-wrap::-webkit-scrollbar { display:none; }
+.filtros { display:flex; gap:8px; padding:0 20px; width:max-content; margin:0 auto; }
+.filtro-btn {
+  background:transparent; border:1px solid var(--border); color:var(--text-light);
+  padding:8px 16px; border-radius:2px; cursor:pointer;
+  font-size:0.64rem; font-family:'Montserrat',sans-serif; font-weight:500;
+  letter-spacing:1.5px; text-transform:uppercase; transition:all 0.2s; white-space:nowrap;
+}
+.filtro-btn:hover, .filtro-btn:active { border-color:var(--rosa); color:var(--rosa); }
+.filtro-btn.active { background:var(--mauve-dark); border-color:var(--mauve-dark); color:white; }
+
+.contador { text-align:center; font-size:0.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); margin:16px 0 0; }
+
+.grid { max-width:1020px; margin:20px auto 60px; padding:0 16px; display:grid; grid-template-columns:1fr; gap:12px; }
+@media(min-width:600px){ .grid { grid-template-columns:repeat(2,1fr); gap:18px; padding:0 20px; } }
+@media(min-width:900px){ .grid { grid-template-columns:repeat(3,1fr); gap:22px; padding:0 24px; } }
+
+.section-label { grid-column:1/-1; display:flex; align-items:center; gap:12px; margin-top:16px; padding:0 2px; }
+.section-label .label-text { font-size:0.6rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--mauve); white-space:nowrap; }
+.section-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
+
+.card {
+  background:var(--white); border:1px solid var(--border); border-radius:12px;
+  padding:20px 18px 16px; display:flex; flex-direction:row; align-items:flex-start;
+  gap:14px; position:relative; overflow:hidden; transition:box-shadow 0.2s,border-color 0.2s; cursor:pointer;
+}
+.card-left { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:10px; }
+.card-icon { width:40px; height:40px; border-radius:50%; background:var(--rosa-pale); display:flex; align-items:center; justify-content:center; }
+.card-icon svg { width:18px; height:18px; fill:none; stroke:var(--mauve); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.card-right { flex:1; min-width:0; }
+.card-tag { font-size:0.58rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--rosa); margin-bottom:4px; }
+.card-title { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:400; color:var(--mauve-dark); line-height:1.3; margin-bottom:6px; }
+.card-desc { font-size:0.75rem; color:var(--text-light); line-height:1.7; font-weight:300; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.card-btn { display:inline-flex; align-items:center; gap:6px; color:var(--mauve-dark); font-size:0.62rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; text-decoration:none; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); width:100%; transition:color 0.2s; }
+.card-btn:hover, .card-btn:active { color:var(--rosa); }
+.card-btn svg { width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-left:auto; }
+.card:hover, .card:active { box-shadow:0 4px 20px rgba(120,60,80,0.1); border-color:var(--rosa-light); }
+.card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--rosa),var(--mauve)); transform:scaleX(0); transform-origin:left; transition:transform 0.25s; }
+.card:hover::after { transform:scaleX(1); }
+
+footer { background:var(--white); border-top:1px solid var(--border); padding:20px; text-align:center; }
+footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); }
+.card.hidden { display:none; }
+.section-label.hidden { display:none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <img src="logo.png" alt="Cristina Uceda" class="logo-img">     
+    <div class="header-titles">
+      <h1><em>Mis Anexos</em> del Reto</h1>
+      <p class="header-sub">Entrenamiento · Dietética · Nutrición</p>
+    </div>
+  </div>
+</header>
+
+<div class="intro">
+  <p>Toda la información de tu plan, siempre a mano.<br>
+  <strong>Léelos con calma</strong> — cada uno está pensado para ti. 💕</p>
+</div>
+<div class="divider"><span>✦</span></div>
+
+<div class="filtros-wrap">
+  <div class="filtros">
+    <button class="filtro-btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('normas',this)">Normas</button>
+    <button class="filtro-btn" onclick="filtrar('mujeres',this)">Mujeres</button>
+    <button class="filtro-btn" onclick="filtrar('hombres',this)">Hombres</button>
+    <button class="filtro-btn" onclick="filtrar('menopausia',this)">Menopausia</button>
+    <button class="filtro-btn" onclick="filtrar('suplementacion',this)">Suplementación</button>
+    <button class="filtro-btn" onclick="filtrar('alimentacion',this)">Alimentación</button>
+    <button class="filtro-btn" onclick="filtrar('condiciones',this)">Condiciones</button>
+    <button class="filtro-btn" onclick="filtrar('deporte',this)">Deporte</button>
+  </div>
+</div>
+
+<p class="contador" id="contador">20 anexos</p>
+
+<div class="grid" id="grid">
+
+  <!-- NORMAS -->
+  <div class="section-label" data-cat="normas"><span class="label-text">Normas del plan</span></div>
+
+  <div class="card" data-cat="normas" onclick="abrirPDF('pdfs/normas-basicas.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Normas del plan</div>
+      <div class="card-title">Normas básicas a tener en cuenta</div>
+      <div class="card-desc">Hidratación, sal, qué beber, cómo cocinar, salsas, disciplina y tu día libre. La guía esencial para empezar bien.</div>
+      <a class="card-btn" href="pdfs/normas-basicas.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <!-- MUJERES -->
+  <div class="section-label" data-cat="mujeres"><span class="label-text">Para mujeres</span></div>
+
+  <div class="card" data-cat="mujeres" onclick="abrirPDF('pdfs/dieta-mujeres.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 12v8M9 18h6"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Mujeres</div>
+      <div class="card-title">Dieta antiinflamatoria para mujeres</div>
+      <div class="card-desc">Más allá de la estética. Microbiota, fitoestrógenos, huesos, energía y salud cardiovascular — todo conectado.</div>
+      <a class="card-btn" href="pdfs/dieta-mujeres.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <!-- MENOPAUSIA -->
+  <div class="section-label" data-cat="menopausia"><span class="label-text">Menopausia · Perimenopausia</span></div>
+
+  <div class="card" data-cat="menopausia" onclick="abrirPDF('pdfs/dieta-menopausia.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Menopausia</div>
+      <div class="card-title">Dieta antiinflamatoria en peri o menopausia</div>
+      <div class="card-desc">Microbiota, fitoestrógenos, huesos, estado de ánimo y estrés hormonal. Tu alimentación como gran aliada en esta etapa.</div>
+      <a class="card-btn" href="pdfs/dieta-menopausia.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <!-- HOMBRES -->
+  <div class="section-label" data-cat="hombres"><span class="label-text">Para hombres</span></div>
+
+  <div class="card" data-cat="hombres" onclick="abrirPDF('pdfs/dieta-hombres.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="10" cy="14" r="5"/><line x1="14" y1="10" x2="21" y2="3"/><polyline points="16 3 21 3 21 8"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Hombres</div>
+      <div class="card-title">Dieta antiinflamatoria para hombres</div>
+      <div class="card-desc">Más allá de ganar músculo y perder grasa. Corazón, metabolismo, hígado e inflamación silenciosa.</div>
+      <a class="card-btn" href="pdfs/dieta-hombres.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <!-- SUPLEMENTACIÓN -->
+  <div class="section-label" data-cat="suplementacion"><span class="label-text">Suplementación</span></div>
+
+  <div class="card" data-cat="suplementacion" onclick="abrirPDF('pdfs/guia-suplementacion.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zM12 8v8M8 12h8"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Suplementación</div>
+      <div class="card-title">Guía de suplementación</div>
+      <div class="card-desc">Omega 3, Magnesio, Cúrcuma, Colágeno, Probióticos, Creatina y más. Qué tomar, para qué y dónde comprarlo.</div>
+      <a class="card-btn" href="pdfs/guia-suplementacion.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="suplementacion menopausia" onclick="abrirPDF('pdfs/guia-suplementacion-v2.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zM12 8v8M8 12h8"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Suplementación</div>
+      <div class="card-title">Guía de suplementación ampliada</div>
+      <div class="card-desc">Versión extendida con 4Multibióticos, Butirato de Sodio y nuevos protocolos para salud intestinal y menopausia.</div>
+      <a class="card-btn" href="pdfs/guia-suplementacion-v2.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <!-- ALIMENTACIÓN -->
+  <div class="section-label" data-cat="alimentacion"><span class="label-text">Alimentación</span></div>
+
+  <div class="card" data-cat="alimentacion" onclick="abrirPDF('pdfs/frutos-secos.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="6" ry="9"/><path d="M12 3c0 0 3-2 6 2M12 3c0 0-3-2-6 2"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Alimentación</div>
+      <div class="card-title">Frutos secos: elegirlos, activarlos y conservarlos</div>
+      <div class="card-desc">Nueces, almendras y pistachos como prioridad. Por qué activarlos y qué pasa con el polvo de cacahuete desgrasado.</div>
+      <a class="card-btn" href="pdfs/frutos-secos.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="alimentacion menopausia" onclick="abrirPDF('pdfs/omega-7.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Alimentación</div>
+      <div class="card-title">Omega-7: tu aliado para una piel radiante</div>
+      <div class="card-desc">Especialmente valioso en peri y menopausia. Piel, mucosas, metabolismo e inflamación celular desde dentro.</div>
+      <a class="card-btn" href="pdfs/omega-7.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="alimentacion" onclick="abrirPDF('pdfs/semillas.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/><path d="M12 6v6l4 2"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Alimentación</div>
+      <div class="card-title">Semillas: poder en pequeño formato</div>
+      <div class="card-desc">Chía, lino, sésamo y calabaza. Cómo activarlas, molerlas, conservarlas y por qué no calentarlas.</div>
+      <a class="card-btn" href="pdfs/semillas.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="alimentacion" onclick="abrirPDF('pdfs/hidratos-carbono.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Alimentación</div>
+      <div class="card-title">Los hidratos de carbono: tus amigos</div>
+      <div class="card-desc">Avena, arroz integral, quinoa, boniato, legumbres. Cuáles comer, cuándo, cómo cocinarlos y el truco del almidón resistente.</div>
+      <a class="card-btn" href="pdfs/hidratos-carbono.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="alimentacion" onclick="abrirPDF('pdfs/grasas-saludables.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M12 6c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Alimentación</div>
+      <div class="card-title">Las grasas saludables que necesitas</div>
+      <div class="card-desc">AOVE, aguacate, nueces, pescado azul, omega-3. Por qué priorizarlas y cómo equilibrar omega-3 y omega-6.</div>
+      <a class="card-btn" href="pdfs/grasas-saludables.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="alimentacion" onclick="abrirPDF('pdfs/lacteos.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M8 2h8l2 6H6L8 2z"/><rect x="4" y="8" width="16" height="14" rx="2"/><path d="M9 14h6"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Alimentación</div>
+      <div class="card-title">Lácteos: cuáles incluir y por qué</div>
+      <div class="card-desc">Kéfir, yogur griego, cottage, queso proteico. Cuáles sí, cuáles no, y qué pasa con la leche y los quesos curados.</div>
+      <a class="card-btn" href="pdfs/lacteos.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="alimentacion" onclick="abrirPDF('pdfs/verduras.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6 2 3 7 3 12c0 3 1.5 5.5 4 7l1-4h8l1 4c2.5-1.5 4-4 4-7 0-5-3-10-9-10z"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Alimentación</div>
+      <div class="card-title">Verduras que debes priorizar en tu plan</div>
+      <div class="card-desc">Fitoestrógenos, crucíferas, aromáticas y de bulbo. Qué verduras priorizar, cómo prepararlas y los trucos de cocción.</div>
+      <a class="card-btn" href="pdfs/verduras.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="alimentacion" onclick="abrirPDF('pdfs/proteinas.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><polyline points="14 2 14 8 20 8"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Alimentación</div>
+      <div class="card-title">Otras fuentes de proteína que debes conocer</div>
+      <div class="card-desc">Pescado blanco, moluscos, mariscos, huevo de codorniz y carnes magras. Cuáles elegir y cómo combinarlos.</div>
+      <a class="card-btn" href="pdfs/proteinas.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="alimentacion" onclick="abrirPDF('pdfs/pescado-azul.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M2 12s4-8 10-8 10 8 10 8-4 8-10 8S2 12 2 12z"/><path d="M18 12c0 0 2-2 4-2"/><circle cx="9" cy="12" r="1"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Alimentación</div>
+      <div class="card-title">¿Por qué te recomiendo pescado azul?</div>
+      <div class="card-desc">Caballa, sardinas y salmón salvaje como estrellas. Omega-3, vitamina D, proteínas y minerales clave para tu salud.</div>
+      <a class="card-btn" href="pdfs/pescado-azul.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <!-- DEPORTE -->
+  <div class="section-label" data-cat="deporte"><span class="label-text">Deporte y rendimiento</span></div>
+
+  <div class="card" data-cat="deporte alimentacion" onclick="abrirPDF('pdfs/verduras-deporte.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Deporte</div>
+      <div class="card-title">Si además haces deporte… ¡saber esto te va a encantar!</div>
+      <div class="card-desc">Verduras con nitratos naturales para mejorar tu rendimiento. Remolacha, espinacas, rúcula y más — tu ventaja secreta.</div>
+      <a class="card-btn" href="pdfs/verduras-deporte.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <!-- CONDICIONES ESPECÍFICAS -->
+  <div class="section-label" data-cat="condiciones"><span class="label-text">Condiciones específicas</span></div>
+
+  <div class="card" data-cat="condiciones" onclick="abrirPDF('pdfs/hipoglucemia.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Condiciones</div>
+      <div class="card-title">Alimentos para regular la hipoglucemia</div>
+      <div class="card-desc">Carbohidratos de absorción lenta, proteínas estabilizadoras y frutas de bajo índice glucémico. Cómo mantener la glucosa estable.</div>
+      <a class="card-btn" href="pdfs/hipoglucemia.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+  <div class="card" data-cat="condiciones" onclick="abrirPDF('pdfs/intolerancia-fructosa.pdf')">
+    <div class="card-left"><div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div></div>
+    <div class="card-right">
+      <div class="card-tag">Condiciones</div>
+      <div class="card-title">Intolerancia a la fructosa: keep calm & sigue tu plan</div>
+      <div class="card-desc">Qué es, por qué se produce y cómo mejorarla. Verduras, frutas e hidratos permitidos con estrategia paso a paso.</div>
+      <a class="card-btn" href="pdfs/intolerancia-fructosa.pdf" target="_blank">Ver anexo <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© Cristina Uceda · Documento privado · Todos los derechos reservados</p>
+</footer>
+
+<script>
+function abrirPDF(url) { window.open(url,'_blank'); }
+function filtrar(cat, btn) {
+  document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cards = document.querySelectorAll('.card');
+  const labels = document.querySelectorAll('.section-label');
+  if (cat === 'todos') {
+    cards.forEach(c => c.classList.remove('hidden'));
+    labels.forEach(l => l.classList.remove('hidden'));
+  } else {
+    cards.forEach(c => c.classList.add('hidden'));
+    labels.forEach(l => l.classList.add('hidden'));
+    cards.forEach(c => { if ((c.dataset.cat||'').includes(cat)) c.classList.remove('hidden'); });
+    labels.forEach(l => { if ((l.dataset.cat||'') === cat) l.classList.remove('hidden'); });
+  }
+  const v = document.querySelectorAll('.card:not(.hidden)').length;
+  document.getElementById('contador').textContent = v + ' anexo' + (v!==1?'s':'');
+}
+</script>
+</body>
+</html>
