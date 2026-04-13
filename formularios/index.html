@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Formulario de Valoración Nutricional – Cristina Uceda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #faf7f4;
+  --white: #ffffff;
+  --rosa: #d4879a;
+  --rosa-light: #f0d5dc;
+  --rosa-pale: #fbeef1;
+  --mauve: #9e6070;
+  --mauve-dark: #7a4555;
+  --text: #3d2b32;
+  --text-light: #9a7d85;
+  --border: #ecdde2;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Montserrat',sans-serif; background:var(--cream); color:var(--text); min-height:100vh; }
+
+/* ── HEADER (igual que anexos) ── */
+header {
+  background:var(--mauve-dark);
+  padding:28px 20px 24px;
+  text-align:center;
+  position:relative;
+}
+.logo-wrap {
+  display:flex; flex-direction:row;
+  align-items:center; justify-content:center;
+  gap:18px; flex-wrap:wrap;
+}
+.logo-img { width:110px; height:110px; object-fit:contain; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15)); }
+.logo-placeholder {
+  width:110px; height:110px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.5);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; color:rgba(255,255,255,0.9);
+}
+.logo-placeholder .script { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.6rem; line-height:1; }
+.logo-placeholder .caps { font-size:0.6rem; font-weight:600; letter-spacing:4px; }
+
+.header-titles { text-align:left; }
+.header-titles h1 { font-family:'Cormorant Garamond',serif; font-size:2.1rem; font-weight:300; color:var(--white); line-height:1.15; }
+.header-titles h1 em { font-style:italic; color:var(--rosa-light); }
+.header-sub { margin-top:8px; font-size:0.62rem; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.55); }
+
+@media(max-width:480px){
+  .logo-wrap { flex-direction:column; gap:12px; }
+  .header-titles { text-align:center; }
+}
+
+/* ── FORM WRAPPER ── */
+.form-outer { max-width:760px; margin:40px auto 60px; padding:0 16px; }
+
+/* ── INFO BOX (por qué te pido datos) ── */
+.info-box {
+  background:var(--white);
+  border:1px solid var(--border);
+  border-left: 3px solid var(--rosa);
+  border-radius:12px;
+  padding:22px 24px;
+  margin-bottom:32px;
+}
+.info-box .info-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem;
+  font-weight:400;
+  color:var(--mauve-dark);
+  margin-bottom:10px;
+}
+.info-box p {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;
+  font-style:italic;
+  color:var(--text-light);
+  line-height:1.9;
+}
+
+/* ── SECTION TITLE ── */
+.section-title {
+  display:flex; align-items:center; gap:12px;
+  margin:36px 0 20px;
+}
+.section-title .label-text {
+  font-size:0.6rem; font-weight:600; letter-spacing:3px;
+  text-transform:uppercase; color:var(--mauve); white-space:nowrap;
+}
+.section-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
+
+/* ── CARD (contenedor de campos) ── */
+.card {
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:22px 22px 18px;
+  margin-bottom:12px;
+}
+
+/* ── GRID ── */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+.grid-1 { display:grid; grid-template-columns:1fr; gap:16px; }
+@media(max-width:560px){
+  .grid-2, .grid-3 { grid-template-columns:1fr; }
+}
+
+/* ── FIELDS ── */
+.field { display:flex; flex-direction:column; gap:6px; }
+
+.field label {
+  font-size:0.65rem; font-weight:600;
+  letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--mauve);
+}
+.field label .req { color:var(--rosa); margin-left:2px; }
+
+input[type=text], input[type=email], input[type=tel], input[type=date],
+select, textarea {
+  width:100%;
+  padding:10px 13px;
+  border:1.5px solid var(--border);
+  border-radius:6px;
+  font-family:'Montserrat',sans-serif;
+  font-size:0.82rem;
+  color:var(--text);
+  background:var(--cream);
+  transition:border-color .2s, box-shadow .2s;
+  outline:none;
+  -webkit-appearance:none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color:var(--rosa);
+  box-shadow:0 0 0 3px rgba(212,135,154,0.15);
+  background:var(--white);
+}
+textarea { resize:vertical; min-height:100px; line-height:1.6; }
+
+.sublabel {
+  font-size:0.68rem;
+  color:var(--text-light);
+  margin-top:2px;
+  font-style:italic;
+}
+
+/* ── ADDR ── */
+.addr-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+.addr-grid .full { grid-column:1/-1; }
+@media(max-width:560px){ .addr-grid { grid-template-columns:1fr; } }
+
+/* ── PRIVACY ── */
+.privacy-box {
+  background:var(--cream);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:16px 18px;
+  font-size:0.75rem;
+  color:var(--text-light);
+  line-height:1.7;
+  max-height:180px;
+  overflow-y:auto;
+  margin-bottom:14px;
+  font-family:'Montserrat',sans-serif;
+}
+.privacy-box h3 { color:var(--mauve-dark); font-size:0.78rem; margin-bottom:8px; letter-spacing:1px; text-transform:uppercase; }
+
+.radio-label {
+  display:flex; align-items:flex-start; gap:10px;
+  cursor:pointer; font-size:0.78rem; font-weight:600;
+  color:var(--mauve-dark);
+  font-family:'Montserrat',sans-serif;
+}
+.radio-label input[type=radio] {
+  width:18px; height:18px; margin-top:1px;
+  accent-color:var(--mauve-dark); flex-shrink:0;
+}
+
+/* ── SUBMIT ── */
+.btn-submit {
+  display:block; width:100%; margin-top:28px;
+  padding:14px;
+  background:var(--mauve-dark);
+  color:var(--white);
+  font-family:'Montserrat',sans-serif;
+  font-size:0.72rem; font-weight:600;
+  letter-spacing:2.5px; text-transform:uppercase;
+  border:none; border-radius:6px;
+  cursor:pointer; transition:background .2s, transform .1s;
+}
+.btn-submit:hover { background:var(--mauve); transform:translateY(-1px); }
+.btn-submit:active { transform:translateY(0); }
+
+/* ── SUCCESS ── */
+.success-msg {
+  display:none; text-align:center; padding:80px 40px;
+}
+.success-msg .emoji { font-size:3rem; margin-bottom:16px; }
+.success-msg h2 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem; font-weight:300;
+  color:var(--mauve-dark); margin-bottom:12px;
+}
+.success-msg p { font-size:0.85rem; color:var(--text-light); line-height:1.8; }
+
+/* ── FOOTER ── */
+footer { background:var(--white); border-top:1px solid var(--border); padding:20px; text-align:center; }
+footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <img src="logo.png" alt="Cristina Uceda" class="logo-img">   
+    <div class="header-titles">
+      <h1><em>Formulario</em> de Valoración</h1>
+      <div class="header-sub">Cristina Uceda Entrenadora Personal &amp; Asesora Nutricional</div>
+    </div>
+  </div>
+</header>
+
+<div class="form-outer">
+
+  <!-- INFO BOX -->
+      <div class="info-box">
+    <div class="info-title">¿Por qué te pido tantos datos?</div>
+    <p>Cada cuerpo cuenta una historia distinta: tus horarios, gustos, alergias, medicación, nivel de estrés o calidad de sueño influyen en cómo metabolizas los alimentos. Cuanto más te conozca, más precisa podré ser al ajustar calorías, macros y horarios para que te sientas con energía, mejores tu salud y alcances tu objetivo. Toda la información es estrictamente confidencial. <strong style="font-style:normal;color:var(--mauve)">Será tu plan.</strong></p>
+  </div>
+
+  <form id="mainForm" name="valoracion-nutricional" action="gracias_cris.html" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <input type="hidden" name="form-name" value="valoracion-nutricional">
+    <p style="display:none"><label>No rellenar: <input name="bot-field"></label></p>
+
+    <!-- DATOS PERSONALES -->
+    <div class="section-title"><span class="label-text">👤 Datos Personales</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="field">
+          <label>Nombre <span class="req">*</span></label>
+          <input type="text" name="nombre" placeholder="Tu nombre" required>
+        </div>
+        <div class="field">
+          <label>Apellidos <span class="req">*</span></label>
+          <input type="text" name="apellidos" placeholder="Tus apellidos" required>
+        </div>
+        <div class="field">
+          <label>Fecha de Nacimiento <span class="req">*</span></label>
+          <input type="date" name="fechaNacimiento" required>
+        </div>
+        <div class="field">
+          <label>Edad <span class="req">*</span></label>
+          <input type="text" name="edad" placeholder="Ej: 35" required>
+        </div>
+        <div class="field">
+          <label>Teléfono <span class="req">*</span></label>
+          <input type="tel" name="telefono" placeholder="600 000 000" required>
+        </div>
+        <div class="field">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" name="email" placeholder="ejemplo@email.com" required>
+        </div>
+        <div class="field">
+          <label>Estado Civil</label>
+          <input type="text" name="estadoCivil" placeholder="Soltera, casada...">
+        </div>
+        <div class="field">
+          <label>Hijos</label>
+          <input type="text" name="hijos" placeholder="Nº y edades">
+        </div>
+        <div class="field">
+          <label>Profesión / Ocupación</label>
+          <input type="text" name="profesion" placeholder="Tu trabajo">
+        </div>
+        <div class="field">
+          <label>Tipo de Sangre <span class="req">*</span></label>
+          <input type="text" name="tipoSangre" placeholder="Ej: A+, O-..." required>
+        </div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Dirección <span class="req">*</span></label>
+        <div class="addr-grid">
+          <input class="full" type="text" name="direccion" placeholder="Calle y número" required>
+          <input type="text" name="ciudad" placeholder="Ciudad" required>
+          <input type="text" name="provincia" placeholder="Provincia" required>
+          <input type="text" name="cp" placeholder="Código Postal" required>
+        </div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>¿Vienes recomendada por alguien?</label>
+        <input type="text" name="recomendada" placeholder="Nombre de quien te recomendó">
+      </div>
+    </div>
+
+    <!-- ESTILO DE VIDA -->
+    <div class="section-title"><span class="label-text">🌿 Estilo de Vida</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="field">
+          <label>¿Fumas?</label>
+          <input type="text" name="fumas" placeholder="Sí / No / Ocasionalmente">
+        </div>
+        <div class="field">
+          <label>¿Bebes alcohol?</label>
+          <input type="text" name="alcohol" placeholder="Sí / No">
+        </div>
+        <div class="field">
+          <label>¿Con qué frecuencia? (alcohol)</label>
+          <input type="text" name="alcoholFrecuencia" placeholder="Ej: fines de semana ocasionalmente">
+        </div>
+        <div class="field">
+          <label>¿Realizas alguna actividad física?</label>
+          <input type="text" name="actividadFisica" placeholder="Sí / No">
+        </div>
+        <div class="field">
+          <label>¿Cuántos días entrenas por semana?</label>
+          <input type="text" name="diasEntrena" placeholder="Ej: 3 días">
+        </div>
+        <div class="field">
+          <label>¿Desde cuándo entrenas?</label>
+          <input type="text" name="desdeEntrenamiento" placeholder="Ej: hace 2 años">
+        </div>
+        <div class="field">
+          <label>¿Cuántas horas duermes? ¿Duermes bien?</label>
+          <input type="text" name="sueno" placeholder="Ej: 7h, sí duermo bien">
+        </div>
+        <div class="field">
+          <label>¿Cuál es tu NEAT actual?</label>
+          <input type="text" name="neat" placeholder="Pasos/día, tareas del hogar...">
+          <span class="sublabel">Actividad fuera del ejercicio programado</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Detalla tipo de entrenamiento, días, horario y duración</label>
+        <textarea name="detalleEntrenamiento" placeholder="Ej: Musculación lunes/miércoles/viernes por la mañana, 1h..."></textarea>
+      </div>
+    </div>
+
+    <!-- COMPOSICIÓN CORPORAL -->
+    <div class="section-title"><span class="label-text">📏 Composición Corporal</span></div>
+    <div class="card">
+      <div class="grid-3">
+        <div class="field">
+          <label>Altura (cm)</label>
+          <input type="text" name="altura" placeholder="Ej: 165">
+        </div>
+        <div class="field">
+          <label>Peso (kg)</label>
+          <input type="text" name="peso" placeholder="Ej: 65">
+        </div>
+        <div class="field">
+          <label>% Grasa</label>
+          <input type="text" name="grasa" placeholder="Si lo conoces">
+        </div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>% Masa Muscular</label>
+        <input type="text" name="masaMuscular" placeholder="Si lo conoces">
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Objetivo principal</label>
+        <textarea name="objetivo" placeholder="Pérdida de grasa, aumento de masa muscular, salud general..."></textarea>
+      </div>
+    </div>
+
+    <!-- SALUD -->
+    <div class="section-title"><span class="label-text">🩺 Salud</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="field"><label>¿Hipotiroidismo?</label><input type="text" name="hipotiroidismo" placeholder="Sí / No / Controlado con..."></div>
+        <div class="field"><label>¿Diabetes?</label><input type="text" name="diabetes" placeholder="Sí / No / Tipo..."></div>
+        <div class="field"><label>¿Hígado Graso?</label><input type="text" name="higadoGraso" placeholder="Sí / No"></div>
+        <div class="field"><label>¿Dislipidemia? (HDL bajo, LDL alto, triglicéridos)</label><input type="text" name="dislipidemia" placeholder="Sí / No / Cuál"></div>
+        <div class="field"><label>¿Hipertensión?</label><input type="text" name="hipertension" placeholder="Sí / No"></div>
+        <div class="field"><label>¿Colon Irritable / SIBO?</label><input type="text" name="colonSibo" placeholder="Sí / No"></div>
+        <div class="field"><label>¿Infecciones de orina recurrentes?</label><input type="text" name="infeccionOrina" placeholder="Sí / No"></div>
+        <div class="field"><label>Otros problemas de salud</label><input type="text" name="otrosSalud" placeholder="Especifica..."></div>
+        <div class="field"><label>¿Has tenido operaciones o lesiones relevantes?</label><input type="text" name="operaciones" placeholder="Sí / No / Cuáles"></div>
+        <div class="field"><label>¿Tomas medicación? ¿Cuáles y por qué?</label><input type="text" name="medicacion" placeholder="Nombre y motivo"></div>
+        <div class="field"><label>¿Tránsito intestinal?</label><input type="text" name="transito" placeholder="Regular / estreñimiento / episodios de diarrea..."></div>
+        <div class="field"><label>¿Gases, hinchazón o digestiones pesadas?</label><input type="text" name="digestiones" placeholder="Sí / No / Con qué frecuencia"></div>
+        <div class="field"><label>¿Sufres estrés / ansiedad?</label><input type="text" name="estres" placeholder="Sí / No / Nivel"></div>
+        <div class="field"><label>¿Cómo es tu ciclo menstrual?</label><input type="text" name="cicloMenstrual" placeholder="Aún la tienes / casi terminando / ya acabada"></div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>¿Cómo es tu relación con la comida?</label>
+        <textarea name="relacionComida" placeholder="Cuéntame cómo te sientes frente a la comida, si hay ansiedad, restricciones..."></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>¿Estás en peri o menopausia? ¿Qué síntomas notas? ¿Cómo te sientes de energía?</label>
+        <textarea name="menopausia" placeholder="Describe tu situación actual..."></textarea>
+      </div>
+    </div>
+
+    <!-- ANAMNESIS ALIMENTARIA -->
+    <div class="section-title"><span class="label-text">🥗 Anamnesis Alimentaria</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="field"><label>¿Alergias o intolerancias alimentarias?</label><input type="text" name="alergias" placeholder="Ej: intolerancia a la lactosa..."></div>
+        <div class="field"><label>¿Cuántas piezas de fruta al día?</label><input type="text" name="fruta" placeholder="Ej: 2"></div>
+        <div class="field"><label>¿Cuántos vasos de agua al día?</label><input type="text" name="agua" placeholder="Ej: 1.5 litros"></div>
+        <div class="field"><label>¿Tomas té o infusiones? ¿Cuáles y cuántos?</label><input type="text" name="te" placeholder="Ej: 2 tés verdes al día"></div>
+        <div class="field"><label>¿Tomas café? ¿Cuántos al día?</label><input type="text" name="cafe" placeholder="Ej: 2 cafés con leche"></div>
+        <div class="field"><label>¿Incluyes fibra (verdura o suplementos)?</label><input type="text" name="fibra" placeholder="Sí / No / Cómo"></div>
+        <div class="field"><label>¿Has realizado ayunos prolongados?</label><input type="text" name="ayunos" placeholder="Sí / No / Tipo y duración"></div>
+        <div class="field"><label>¿Has hecho alguna dieta anteriormente?</label><input type="text" name="dietaAnterior" placeholder="Sí / No / Cuál (Keto, mediterránea...)"></div>
+        <div class="field"><label>¿Te gusta el pescado azul / latas de salmón?</label><input type="text" name="pescadoAzul" placeholder="Sí / No / Cuál"></div>
+        <div class="field"><label>¿Te gusta el aguacate?</label><input type="text" name="aguacate" placeholder="Sí / No / Mucho"></div>
+        <div class="field"><label>¿Sufres hambre emocional?</label><input type="text" name="hambreEmocional" placeholder="Sí / No / A veces"></div>
+        <div class="field"><label>¿Cuándo ocurre?</label><input type="text" name="cuandoHambreEmocional" placeholder="Ej: por las tardes, cuando estoy estresada..."></div>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>¿Cómo describirías tu alimentación actual?</label>
+        <textarea name="alimentacionActual" placeholder="Ej: equilibrada pero con muchos ultraprocesados..."></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Describe tu alimentación diaria (desde que te levantas hasta que te acuestas)</label>
+        <textarea name="alimentacionDiaria" style="min-height:130px" placeholder="Desayuno: ...&#10;Media mañana: ...&#10;Comida: ...&#10;Merienda: ...&#10;Cena: ..."></textarea>
+      </div>
+    </div>
+
+    <!-- PREFERENCIAS ALIMENTARIAS -->
+    <div class="section-title"><span class="label-text">🍽️ Preferencias Alimentarias</span></div>
+    <div class="card">
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.95rem;color:var(--text-light);margin-bottom:18px;line-height:1.7">
+        Recuerda: no significa que todo lo que pongas vaya a estar en tu plan, pero me basaré en tus preferencias para ajustarlo a tus objetivos y perfil metabólico.
+      </p>
+      <div class="field">
+        <label>Frutas — Ordena por preferencia tus favoritas</label>
+        <textarea name="frutas" style="min-height:80px" placeholder="Ej: fresas, plátano, manzana, naranja..."></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Lácteos — Ordena por preferencia</label>
+        <textarea name="lacteos" style="min-height:80px" placeholder="Yogur griego light / Kéfir desnatado / Yogur proteico natural / Queso batido desnatado"></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Quesos — Ordena por preferencia</label>
+        <textarea name="quesos" style="min-height:80px" placeholder="Queso Eatlean / Cottage Light / Requesón light / Fresco de Burgos desnatado"></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Proteínas magras — Ordena y especifica tus favoritas</label>
+        <textarea name="proteinas" style="min-height:100px" placeholder="Atún al natural / Pollo o pavo / Cerdo / Conejo / Ternera magra / Pescado blanco (especifica cuáles) / Mariscos (especifica cuáles) / Claras de huevo / Tofu"></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Alimentos que NO te gustan 🙅‍♀️</label>
+        <textarea name="alimentosNoGustan" placeholder="Escribe aquí todos los que quieras evitar..."></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>Alimentos que no toleras o te causan molestias ⚠️</label>
+        <textarea name="alimentosNoTolera" placeholder="Ej: las legumbres me generan mucho gas..."></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>¿Tomas suplementos actualmente? ¿Cuáles y por qué?</label>
+        <textarea name="suplementos" placeholder="Ej: proteína whey post-entreno, magnesio por las noches..."></textarea>
+      </div>
+    </div>
+
+    <!-- FLEXIBILIDAD SOCIAL -->
+    <div class="section-title"><span class="label-text">🥂 Flexibilidad Social y Hábitos</span></div>
+    <div class="card">
+      <div class="grid-2">
+        <div class="field"><label>¿Eventos familiares o sociales frecuentes?</label><input type="text" name="eventosSociales" placeholder="Sí / No / Con qué frecuencia"></div>
+        <div class="field"><label>¿Comes fuera de casa frecuentemente?</label><input type="text" name="comesFuera" placeholder="Sí / No / Cuántas veces por semana"></div>
+        <div class="field"><label>¿En qué contexto? (trabajo, restaurantes...)</label><input type="text" name="contextoComer" placeholder="Ej: menú del trabajo 3 veces por semana"></div>
+        <div class="field"><label>¿Qué día prefieres como día más flexible?</label><input type="text" name="diaLibre" placeholder="Ej: sábado"></div>
+      </div>
+    </div>
+
+    <!-- OTROS DETALLES -->
+    <div class="section-title"><span class="label-text">💬 Otros Detalles Relevantes</span></div>
+    <div class="card">
+      <div class="field">
+        <label>¿Hay algo que quieras contarme para que tu plan sea lo más efectivo posible?</label>
+        <textarea name="otrosDetalles" placeholder="Todo lo que creas importante y que no hayas podido contar antes..."></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>¿Qué esperas de este acompañamiento y del Reto?</label>
+        <textarea name="expectativas" placeholder="Cuéntame tus expectativas y lo que buscas conseguir..."></textarea>
+      </div>
+      <div class="field" style="margin-top:16px">
+        <label>¿Estás motivada para comenzar? 💪</label>
+        <input type="text" name="motivacion" placeholder="¡Cuéntame!">
+      </div>
+    </div>
+
+    <!-- POLÍTICA DE PRIVACIDAD -->
+    <div class="section-title"><span class="label-text">🔒 Política de Privacidad</span></div>
+    <div class="card">
+      <div class="privacy-box">
+        <h3>Información sobre el tratamiento de datos</h3>
+        De conformidad con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD), los datos personales facilitados serán tratados por <strong>Cristina Uceda</strong> (Entrenadora Personal y Asesora Nutricional) con la finalidad de gestionar los servicios solicitados, elaborar planes personalizados y realizar el seguimiento de su evolución.<br><br>
+        Sus datos se tratarán de forma confidencial y no se cederán a terceros salvo obligación legal. Puede ejercer sus derechos enviando una solicitud a: <strong>cris_tnfe@hotmail.com</strong>.<br><br>
+        📝 <strong>Importante:</strong> Las recomendaciones de este reto están diseñadas para fomentar hábitos saludables y no sustituyen el diagnóstico, tratamiento ni seguimiento médico profesional. Si tienes alguna condición médica, consulta con tu profesional sanitario antes de realizar cambios en tu rutina.
+      </div>
+      <label class="radio-label">
+        <input type="radio" name="privacidad" value="acepto" required>
+        <span>Acepto la Política de Privacidad <span style="color:var(--rosa)">*</span></span>
+      </label>
+    </div>
+
+    <button type="submit" class="btn-submit">Enviar formulario</button>
+
+  </form>
+
+  <!-- SUCCESS -->
+  <div class="success-msg" id="successMsg">
+    <div class="emoji">🌸</div>
+    <h2>¡Formulario enviado!</h2>
+    <p>Gracias por completar tu valoración.<br>Cristina revisará toda la información y se pondrá en contacto contigo muy pronto para comenzar tu plan personalizado.<br><br>¡Mucho ánimo! 💪</p>
+  </div>
+
+</div>
+
+<footer>
+  <p>Cristina Uceda · Entrenadora Personal &amp; Asesora Nutricional   by BHG 2026</p>
+</footer>
+
+<script>
+  document.getElementById('mainForm').addEventListener('submit', function(e) {
+    const reqs = this.querySelectorAll('[required]');
+    let ok = true;
+    reqs.forEach(el => {
+      el.style.borderColor = '';
+      if (el.type === 'radio') {
+        const checked = document.querySelector(`input[name="${el.name}"]:checked`);
+        if (!checked) ok = false;
+      } else if (!el.value.trim()) {
+        el.style.borderColor = '#e05c6e';
+        if (ok) el.focus();
+        ok = false;
+      }
+    });
+    if (!document.querySelector('input[name="privacidad"]:checked')) {
+      e.preventDefault();
+      alert('Debes aceptar la Política de Privacidad para continuar.');
+      return;
+    }
+    if (!ok) {
+      e.preventDefault();
+      alert('Por favor, completa todos los campos obligatorios (*)');
+      return;
+    }
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString()
+    })
+    .then(() => window.location.href = 'gracias_cris.html')
+    .catch(() => alert('Error al enviar. Inténtalo de nuevo.'));
+  });
+</script>
+
+
+</body>
+</html>

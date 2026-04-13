@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mi Reto | Cristina Uceda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --cream: #faf7f4;
+  --white: #ffffff;
+  --rosa: #d4879a;
+  --rosa-light: #f0d5dc;
+  --rosa-pale: #fbeef1;
+  --mauve: #9e6070;
+  --mauve-dark: #7a4555;
+  --text: #3d2b32;
+  --text-light: #9a7d85;
+  --border: #ecdde2;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Montserrat',sans-serif; background:var(--cream); color:var(--text); min-height:100vh; }
+
+/* ── LOADING ── */
+#loading {
+  position:fixed; inset:0;
+  background:var(--cream);
+  display:flex; align-items:center; justify-content:center;
+  z-index:999;
+  flex-direction:column; gap:16px;
+}
+#loading p {
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  color:var(--text-light);
+  font-size:1.1rem;
+}
+.spinner-lg {
+  width:36px; height:36px;
+  border:3px solid var(--rosa-light);
+  border-top-color:var(--rosa);
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── HEADER ── */
+header {
+  background:var(--mauve-dark);
+  padding:28px 20px 24px;
+  text-align:center;
+  position:relative;
+}
+.logo-wrap {
+  display:flex; flex-direction:row;
+  align-items:center; justify-content:center;
+  gap:18px; flex-wrap:wrap;
+}
+.logo-img { width:110px; height:110px; object-fit:contain; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15)); }
+.header-titles { text-align:left; }
+.header-titles h1 { font-family:'Cormorant Garamond',serif; font-size:2.1rem; font-weight:300; color:var(--white); line-height:1.15; }
+.header-titles h1 em { font-style:italic; color:var(--rosa-light); }
+.header-sub { margin-top:8px; font-size:0.62rem; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.55); }
+
+.btn-logout {
+  position:absolute; top:16px; right:16px;
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.7);
+  padding:6px 14px;
+  border-radius:4px;
+  font-family:'Montserrat',sans-serif;
+  font-size:0.58rem;
+  font-weight:600;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-logout:hover { background:rgba(255,255,255,0.2); color:white; }
+
+@media(max-width:480px){
+  .logo-wrap { flex-direction:column; gap:12px; }
+  .header-titles { text-align:center; }
+  .btn-logout { top:12px; right:12px; }
+}
+
+/* ── BIENVENIDA ── */
+.bienvenida {
+  max-width:580px; margin:36px auto 0; padding:0 20px; text-align:center;
+}
+.bienvenida p {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;
+  font-style:italic;
+  color:var(--text-light);
+  line-height:1.9;
+}
+.bienvenida strong { font-style:normal; color:var(--mauve); font-weight:600; }
+
+.divider {
+  max-width:220px; margin:24px auto 0;
+  display:flex; align-items:center; gap:14px;
+  color:var(--rosa); font-size:0.75rem; letter-spacing:3px;
+}
+.divider::before, .divider::after { content:''; flex:1; height:1.5px; background:var(--border); }
+
+/* ── SECCIONES ── */
+.seccion {
+  max-width:900px; margin:36px auto 0; padding:0 20px;
+}
+.seccion-title {
+  display:flex; align-items:center; gap:12px; margin-bottom:20px;
+}
+.seccion-title .label-text {
+  font-size:0.6rem; font-weight:600; letter-spacing:3px;
+  text-transform:uppercase; color:var(--mauve); white-space:nowrap;
+}
+.seccion-title::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,var(--border),transparent);
+}
+
+/* ── GRID PLANES ── */
+.grid-planes {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+@media(min-width:600px){ .grid-planes { grid-template-columns:repeat(2,1fr); } }
+@media(min-width:900px){ .grid-planes { grid-template-columns:repeat(3,1fr); } }
+
+/* ── CARD PLAN ── */
+.card-plan {
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px 20px 20px;
+  display:flex; flex-direction:column;
+  gap:14px;
+  position:relative; overflow:hidden;
+  transition:box-shadow 0.2s, border-color 0.2s;
+}
+.card-plan:hover { box-shadow:0 4px 20px rgba(120,60,80,0.1); border-color:var(--rosa-light); }
+.card-plan::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,var(--rosa),var(--mauve));
+  transform:scaleX(0); transform-origin:left; transition:transform 0.25s;
+}
+.card-plan:hover::after { transform:scaleX(1); }
+
+.plan-numero {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--rosa-pale);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem; color:var(--mauve-dark); font-weight:600;
+}
+.plan-tag {
+  font-size:0.58rem; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; color:var(--rosa);
+}
+.plan-nombre {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem; font-weight:400; color:var(--mauve-dark);
+  line-height:1.3;
+}
+.plan-acciones {
+  display:flex; flex-direction:column; gap:8px;
+  margin-top:auto; padding-top:14px;
+  border-top:1px solid var(--border);
+}
+.btn-plan {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 14px; border-radius:8px;
+  font-family:'Montserrat',sans-serif;
+  font-size:0.62rem; font-weight:600;
+  letter-spacing:1.5px; text-transform:uppercase;
+  text-decoration:none; cursor:pointer;
+  transition:all 0.2s; border:none;
+}
+.btn-ver {
+  background:var(--mauve-dark); color:white;
+}
+.btn-ver:hover { background:var(--mauve); }
+
+.btn-pdf {
+  background:transparent;
+  border:1px solid var(--border) !important;
+  color:var(--mauve);
+  border:none;
+}
+.btn-pdf:hover { border-color:var(--rosa) !important; color:var(--rosa); }
+
+.btn-plan svg {
+  width:13px; height:13px;
+  stroke:currentColor; fill:none;
+  stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+  margin-left:auto;
+}
+
+/* ── GRID ANEXOS ── */
+.grid-anexos {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+@media(min-width:600px){ .grid-anexos { grid-template-columns:repeat(2,1fr); } }
+@media(min-width:900px){ .grid-anexos { grid-template-columns:repeat(3,1fr); } }
+
+/* ── CARD ANEXO ── */
+.card-anexo {
+  background:var(--white); border:1px solid var(--border); border-radius:12px;
+  padding:20px 18px 16px; display:flex; flex-direction:row;
+  align-items:flex-start; gap:14px;
+  position:relative; overflow:hidden;
+  transition:box-shadow 0.2s, border-color 0.2s; cursor:pointer;
+  text-decoration:none; color:inherit;
+}
+.card-anexo:hover { box-shadow:0 4px 20px rgba(120,60,80,0.1); border-color:var(--rosa-light); }
+.card-anexo::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,var(--rosa),var(--mauve));
+  transform:scaleX(0); transform-origin:left; transition:transform 0.25s;
+}
+.card-anexo:hover::after { transform:scaleX(1); }
+
+.anexo-icon {
+  width:40px; height:40px; border-radius:50%;
+  background:var(--rosa-pale);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.anexo-icon svg {
+  width:18px; height:18px; fill:none;
+  stroke:var(--mauve); stroke-width:1.5;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.anexo-info { flex:1; min-width:0; }
+.anexo-tag {
+  font-size:0.58rem; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; color:var(--rosa); margin-bottom:4px;
+}
+.anexo-titulo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem; font-weight:400; color:var(--mauve-dark); line-height:1.3;
+}
+.anexo-cta {
+  display:inline-flex; align-items:center; gap:6px;
+  color:var(--mauve-dark); font-size:0.62rem; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase;
+  margin-top:10px; padding-top:10px;
+  border-top:1px solid var(--border); width:100%;
+  transition:color 0.2s;
+}
+.anexo-cta:hover { color:var(--rosa); }
+.anexo-cta svg {
+  width:12px; height:12px; stroke:currentColor; fill:none;
+  stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-left:auto;
+}
+
+/* ── SIN PLANES ── */
+.empty-msg {
+  text-align:center; padding:40px 20px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem; font-style:italic; color:var(--text-light);
+}
+
+footer {
+  background:var(--white); border-top:1px solid var(--border);
+  padding:20px; text-align:center; margin-top:60px;
+}
+footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="spinner-lg"></div>
+  <p>Cargando tu espacio...</p>
+</div>
+
+<header>
+  <button class="btn-logout" onclick="handleLogout()">Cerrar sesión</button>
+  <div class="logo-wrap">
+    <img src="logo.png" alt="Cristina Uceda" class="logo-img">
+    <div class="header-titles">
+      <h1><em>Mi Reto</em> Personal</h1>
+      <p class="header-sub">Entrenamiento · Dietética · Nutrición</p>
+    </div>
+  </div>
+</header>
+
+<div class="bienvenida">
+  <p>Hola, <strong id="nombreClienta">...</strong> 💕<br>
+  Aquí tienes todo lo que necesitas para tu reto.</p>
+</div>
+<div class="divider"><span>✦</span></div>
+
+<!-- PLANES -->
+<section class="seccion">
+  <div class="seccion-title">
+    <span class="label-text">Mis Planes</span>
+  </div>
+  <div class="grid-planes" id="gridPlanes">
+    <div class="empty-msg">Cargando tus planes...</div>
+  </div>
+</section>
+
+<!-- ANEXOS -->
+<section class="seccion" style="margin-bottom:0">
+  <div class="seccion-title">
+    <span class="label-text">Mis Anexos</span>
+  </div>
+  <div class="grid-anexos">
+
+    <a href="anexos/index.html" class="card-anexo">
+      <div class="anexo-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      </div>
+      <div class="anexo-info">
+        <div class="anexo-tag">Guías · Recursos</div>
+        <div class="anexo-titulo">Todos mis anexos</div>
+        <div class="anexo-cta">Ver anexos
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <p>© Cristina Uceda · Área privada · Acceso exclusivo para clientas</p>
+</footer>
+
+<script>
+  // ── CONFIGURACIÓN SUPABASE ──
+  const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_apcmOtkjMewxZzZ_JC9gcQ_UPT38IWq';
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ── ICONOS SVG ──
+  const iconPlan = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/></svg>`;
+  const iconPDF  = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+  const iconArrow= `<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+
+  // ── NOMBRES DE PLANES ──
+  const nombresPlan = ['Primer Plan', 'Segundo Plan', 'Tercer Plan'];
+
+  // ── INIT ──
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession();
+
+    if (!session) {
+      window.location.href = 'index.html';
+      return;
+    }
+
+    // Cargar perfil
+    const { data: profile, error } = await sb
+      .from('profiles')
+      .select('*')
+      .eq('id', session.user.id)
+      .single();
+
+    if (error || !profile) {
+      await sb.auth.signOut();
+      window.location.href = 'index.html';
+      return;
+    }
+
+    // Si es admin, redirigir
+    if (profile.rol === 'admin') {
+      window.location.href = 'admin.html';
+      return;
+    }
+
+    // Mostrar nombre
+    document.getElementById('nombreClienta').textContent = profile.nombre;
+
+    // Renderizar planes
+    renderPlanes(profile);
+
+    // Ocultar loading
+    document.getElementById('loading').style.display = 'none';
+  }
+
+  // ── RENDERIZAR PLANES ──
+  function renderPlanes(profile) {
+    const grid = document.getElementById('gridPlanes');
+    const planes = [
+      { url: profile.plan1_url, pdf: profile.pdf1_url, num: 1 },
+      { url: profile.plan2_url, pdf: profile.pdf2_url, num: 2 },
+      { url: profile.plan3_url, pdf: profile.pdf3_url, num: 3 },
+    ].filter(p => p.url); // Solo los que tienen URL
+
+    if (planes.length === 0) {
+      grid.innerHTML = '<div class="empty-msg">Tu plan estará disponible muy pronto. 💕</div>';
+      return;
+    }
+
+    grid.innerHTML = planes.map(p => `
+      <div class="card-plan">
+        <div class="plan-numero">${p.num}</div>
+        <div class="plan-tag">Plan del Reto</div>
+        <div class="plan-nombre">${nombresPlan[p.num - 1]}</div>
+        <div class="plan-acciones">
+          <a href="${p.url}" class="btn-plan btn-ver">
+            Ver mi plan ${iconArrow}
+          </a>
+          ${p.pdf ? `
+          <a href="${p.pdf}" target="_blank" class="btn-plan btn-pdf">
+            Descargar PDF ${iconPDF}
+          </a>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── LOGOUT ──
+  async function handleLogout() {
+    await sb.auth.signOut();
+    window.location.href = 'index.html';
+  }
+
+  init();
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>¡Gracias! – Cristina Uceda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #faf7f4;
+  --white: #ffffff;
+  --rosa: #d4879a;
+  --rosa-light: #f0d5dc;
+  --rosa-pale: #fbeef1;
+  --mauve: #9e6070;
+  --mauve-dark: #7a4555;
+  --text: #3d2b32;
+  --text-light: #9a7d85;
+  --border: #ecdde2;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Montserrat',sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* HEADER */
+header {
+  background:var(--mauve-dark);
+  padding:28px 20px 24px;
+  text-align:center;
+}
+.logo-wrap {
+  display:flex; flex-direction:row;
+  align-items:center; justify-content:center;
+  gap:18px; flex-wrap:wrap;
+}
+.logo-img { width:110px; height:110px; object-fit:contain; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15)); }
+.header-titles { text-align:left; }
+.header-titles h1 { font-family:'Cormorant Garamond',serif; font-size:2.1rem; font-weight:300; color:var(--white); line-height:1.15; }
+.header-titles h1 em { font-style:italic; color:var(--rosa-light); }
+.header-sub { margin-top:8px; font-size:0.62rem; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.55); }
+@media(max-width:480px){
+  .logo-wrap { flex-direction:column; gap:12px; }
+  .header-titles { text-align:center; }
+}
+
+/* MAIN */
+main {
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 20px;
+}
+
+.card-gracias {
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:56px 48px;
+  max-width:560px;
+  width:100%;
+  text-align:center;
+  box-shadow:0 8px 40px rgba(122,69,85,0.08);
+}
+
+.flor {
+  font-size:4rem;
+  margin-bottom:8px;
+  display:block;
+  animation: flotar 3s ease-in-out infinite;
+}
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.card-gracias h2 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.4rem;
+  font-weight:300;
+  color:var(--mauve-dark);
+  margin-bottom:6px;
+  line-height:1.2;
+}
+.card-gracias h2 em {
+  font-style:italic;
+  color:var(--rosa);
+}
+
+.divider {
+  width:60px; height:1.5px;
+  background:linear-gradient(90deg, var(--rosa), var(--mauve));
+  margin:20px auto;
+  border-radius:2px;
+}
+
+.card-gracias p {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem;
+  font-style:italic;
+  color:var(--text-light);
+  line-height:1.9;
+  margin-bottom:14px;
+}
+
+.card-gracias p strong {
+  font-style:normal;
+  color:var(--mauve);
+  font-weight:600;
+}
+
+.detalle {
+  font-family:'Montserrat',sans-serif !important;
+  font-style:normal !important;
+  font-size:0.75rem !important;
+  letter-spacing:0.5px;
+  color:var(--text-light) !important;
+  margin-top:6px !important;
+}
+
+@media(max-width:480px){
+  .card-gracias { padding:40px 24px; }
+  .card-gracias h2 { font-size:1.9rem; }
+}
+
+/* FOOTER */
+footer { background:var(--white); border-top:1px solid var(--border); padding:20px; text-align:center; }
+footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <img src="logo.png" alt="Cristina Uceda" class="logo-img">
+    <div class="header-titles">
+      <h1><em>Formulario</em> de Valoración</h1>
+      <div class="header-sub">Cristina Uceda Entrenadora Personal &amp; Asesora Nutricional</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="card-gracias">
+    <span class="flor">🌸</span>
+    <h2>¡<em>Gracias</em> por confiar en mí!</h2>
+    <div class="divider"></div>
+    <p>He recibido tu valoración y en breve me pongo en contacto contigo para empezar a diseñar <strong>tu plan personalizado.</strong></p>
+    <p>Recuerda que cada cuerpo es único — y el tuyo merece una atención especial. <strong>¡Estoy deseando acompañarte en este camino!</strong></p>
+    <p class="detalle">Si tienes cualquier duda mientras tanto, puedes escribirme a<br><strong style="font-style:normal;color:var(--mauve)">cris_tnfe@hotmail.com</strong></p>
+  </div>
+</main>
+
+<footer>
+  <p>Cristina Uceda · Entrenadora Personal &amp; Asesora Nutricional &nbsp;·&nbsp; by BHG 2026</p>
+</footer>
+
+</body>
+</html>

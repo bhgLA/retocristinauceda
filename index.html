@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Acceso | Cristina Uceda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --cream: #faf7f4;
+  --white: #ffffff;
+  --rosa: #d4879a;
+  --rosa-light: #f0d5dc;
+  --rosa-pale: #fbeef1;
+  --mauve: #9e6070;
+  --mauve-dark: #7a4555;
+  --text: #3d2b32;
+  --text-light: #9a7d85;
+  --border: #ecdde2;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  font-family:'Montserrat',sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+header {
+  background:var(--mauve-dark);
+  padding:28px 20px 24px;
+  text-align:center;
+}
+.logo-wrap { display:flex; flex-direction:row; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap; }
+.logo-img { width:110px; height:110px; object-fit:contain; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15)); }
+.header-titles { text-align:left; }
+.header-titles h1 { font-family:'Cormorant Garamond',serif; font-size:2.1rem; font-weight:300; color:var(--white); line-height:1.15; }
+.header-titles h1 em { font-style:italic; color:var(--rosa-light); }
+.header-sub { margin-top:8px; font-size:0.62rem; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.55); }
+
+@media(max-width:480px){
+  .logo-wrap { flex-direction:column; gap:12px; }
+  .header-titles { text-align:center; }
+}
+
+main { flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px 60px; }
+.login-wrap { width:100%; max-width:420px; }
+
+.login-intro { text-align:center; margin-bottom:32px; }
+.login-intro p { font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-style:italic; color:var(--text-light); line-height:1.9; }
+.login-intro strong { font-style:normal; color:var(--mauve); font-weight:600; }
+
+.divider { display:flex; align-items:center; gap:14px; color:var(--rosa); font-size:0.75rem; letter-spacing:3px; margin-bottom:32px; }
+.divider::before, .divider::after { content:''; flex:1; height:1.5px; background:var(--border); }
+
+.login-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:36px 32px 32px; box-shadow:0 4px 24px rgba(120,60,80,0.07); }
+.login-card h2 { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; color:var(--mauve-dark); margin-bottom:6px; text-align:center; }
+.login-card .subtitle { font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); text-align:center; margin-bottom:28px; }
+
+.form-group { margin-bottom:18px; }
+.form-group label { display:block; font-size:0.62rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--mauve); margin-bottom:8px; }
+.form-group input {
+  width:100%; padding:12px 16px; border:1px solid var(--border); border-radius:8px;
+  font-family:'Montserrat',sans-serif; font-size:0.85rem; color:var(--text);
+  background:var(--cream); transition:border-color 0.2s, box-shadow 0.2s; outline:none;
+}
+.form-group input:focus { border-color:var(--rosa); box-shadow:0 0 0 3px rgba(212,135,154,0.12); background:var(--white); }
+.form-group input::placeholder { color:var(--text-light); font-weight:300; }
+
+.btn-login {
+  width:100%; padding:14px; margin-top:8px;
+  background:var(--mauve-dark); color:var(--white); border:none; border-radius:8px;
+  font-family:'Montserrat',sans-serif; font-size:0.65rem; font-weight:600;
+  letter-spacing:2.5px; text-transform:uppercase; cursor:pointer; transition:background 0.2s, transform 0.1s;
+}
+.btn-login:hover { background:var(--mauve); }
+.btn-login:active { transform:scale(0.98); }
+.btn-login:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+
+.msg { margin-top:16px; padding:12px 16px; border-radius:8px; font-size:0.75rem; text-align:center; display:none; }
+.msg.error { background:#fdecea; color:#c0392b; border:1px solid #f5c6c2; display:block; }
+.msg.success { background:#edf7f0; color:#27ae60; border:1px solid #c3e6cb; display:block; }
+
+.forgot { text-align:center; margin-top:18px; }
+.forgot a { font-size:0.65rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-light); text-decoration:none; transition:color 0.2s; }
+.forgot a:hover { color:var(--rosa); }
+
+footer { background:var(--white); border-top:1px solid var(--border); padding:20px; text-align:center; }
+footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); }
+
+.spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,0.4); border-top-color:white; border-radius:50%; animation:spin 0.7s linear infinite; margin-right:8px; vertical-align:middle; }
+@keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <img src="logo.png" alt="Cristina Uceda" class="logo-img">
+    <div class="header-titles">
+      <h1><em>Área Privada</em> del Reto</h1>
+      <p class="header-sub">Entrenamiento · Dietética · Nutrición</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="login-wrap">
+
+    <!-- VISTA LOGIN NORMAL -->
+    <div id="vistaLogin">
+      <div class="login-intro">
+        <p>Bienvenida a tu espacio personal.<br>
+        <strong>Accede con tus datos</strong> para ver tu plan. 💕</p>
+      </div>
+      <div class="divider"><span>✦</span></div>
+      <div class="login-card">
+        <h2>Acceder</h2>
+        <p class="subtitle">Introduce tus credenciales</p>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="tu@email.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-login" id="btnLogin" onclick="handleLogin()">Entrar</button>
+        <div class="msg" id="msgError"></div>
+        <div class="forgot">
+          <a href="#" onclick="handleForgot(event)">¿Olvidaste tu contraseña?</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA NUEVA CONTRASEÑA (reset) -->
+    <div id="vistaReset" style="display:none">
+      <div class="login-intro">
+        <p>Elige tu <strong>nueva contraseña</strong> para acceder a tu plan. 💕</p>
+      </div>
+      <div class="divider"><span>✦</span></div>
+      <div class="login-card">
+        <h2>Nueva contraseña</h2>
+        <p class="subtitle">Introduce tu nueva contraseña</p>
+        <div class="form-group">
+          <label for="newPassword">Nueva contraseña</label>
+          <input type="password" id="newPassword" placeholder="••••••••" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar contraseña</label>
+          <input type="password" id="confirmPassword" placeholder="••••••••" autocomplete="new-password">
+        </div>
+        <button class="btn-login" id="btnReset" onclick="handleReset()">Guardar contraseña</button>
+        <div class="msg" id="msgReset"></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p>© Cristina Uceda · Área privada · Acceso exclusivo para clientas</p>
+</footer>
+
+<script>
+  const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_apcmOtkjMewxZzZ_JC9gcQ_UPT38IWq';
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ── INIT — detectar si es recovery ──
+  async function init() {
+    const hash = window.location.hash;
+
+    if (hash.includes('type=recovery')) {
+      // Mostrar formulario de nueva contraseña
+      document.getElementById('vistaLogin').style.display = 'none';
+      document.getElementById('vistaReset').style.display = 'block';
+      return;
+    }
+
+    // Si hay sesión activa, redirigir directamente
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      await redirectByRole(session.user.id);
+    }
+  }
+  init();
+
+  // ── GUARDAR NUEVA CONTRASEÑA ──
+  async function handleReset() {
+    const newPass     = document.getElementById('newPassword').value;
+    const confirmPass = document.getElementById('confirmPassword').value;
+    const btn         = document.getElementById('btnReset');
+    const msg         = document.getElementById('msgReset');
+
+    msg.className = 'msg';
+
+    if (!newPass || newPass.length < 6) {
+      msg.className = 'msg error';
+      msg.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+      return;
+    }
+    if (newPass !== confirmPass) {
+      msg.className = 'msg error';
+      msg.textContent = 'Las contraseñas no coinciden. Revísalas.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Guardando...';
+
+    const { error } = await sb.auth.updateUser({ password: newPass });
+
+    if (error) {
+      btn.disabled = false;
+      btn.innerHTML = 'Guardar contraseña';
+      msg.className = 'msg error';
+      msg.textContent = 'Error al guardar. El enlace puede haber caducado — solicita uno nuevo.';
+      return;
+    }
+
+    msg.className = 'msg success';
+    msg.textContent = '✓ Contraseña guardada. Entrando a tu área...';
+
+    setTimeout(async () => {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) await redirectByRole(session.user.id);
+      else window.location.href = 'index.html';
+    }, 2000);
+  }
+
+  // ── LOGIN ──
+  async function handleLogin() {
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const btn      = document.getElementById('btnLogin');
+    const msgError = document.getElementById('msgError');
+
+    msgError.className = 'msg';
+
+    if (!email || !password) {
+      showError('Por favor, introduce tu email y contraseña.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Entrando...';
+
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      btn.disabled = false;
+      btn.innerHTML = 'Entrar';
+      showError('Email o contraseña incorrectos. Inténtalo de nuevo.');
+      return;
+    }
+
+    await redirectByRole(data.user.id);
+  }
+
+  // ── REDIRIGIR SEGÚN ROL ──
+  async function redirectByRole(userId) {
+    const { data: profile, error } = await sb
+      .from('profiles')
+      .select('rol')
+      .eq('id', userId)
+      .single();
+
+    if (error || !profile) {
+      showError('No se ha encontrado tu perfil. Contacta con Cristina.');
+      await sb.auth.signOut();
+      return;
+    }
+
+    if (profile.rol === 'admin') {
+      window.location.href = 'admin.html';
+    } else {
+      window.location.href = 'dashboard.html';
+    }
+  }
+
+  // ── OLVIDÉ MI CONTRASEÑA ──
+  async function handleForgot(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (!email) {
+      showError('Introduce tu email primero y pulsa "¿Olvidaste tu contraseña?"');
+      return;
+    }
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/index.html'
+    });
+    if (error) {
+      showError('Error al enviar el correo. Inténtalo de nuevo.');
+    } else {
+      const msgError = document.getElementById('msgError');
+      msgError.className = 'msg success';
+      msgError.textContent = '✓ Te hemos enviado un email para restablecer tu contraseña.';
+    }
+  }
+
+  // ── ENTER KEY ──
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      if (document.getElementById('vistaReset').style.display !== 'none') {
+        handleReset();
+      } else {
+        handleLogin();
+      }
+    }
+  });
+
+  function showError(msg) {
+    const el = document.getElementById('msgError');
+    el.className = 'msg error';
+    el.textContent = msg;
+  }
+</script>
+</body>
+</html>

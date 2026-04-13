@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Plan Nutrición · Stefany · Abril 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink:#e91e8c; --pink-dark:#b5156c; --pink-soft:#f8a8d4;
+    --pink-bg:#fff0f7; --pink-card:#fce4f3; --rose:#fdf0f8;
+    --text:#1a0a12; --text2:#7a4060; --text3:#b07090;
+    --green:#2e7d32; --green-bg:#e8f5e9;
+    --orange:#e65100; --orange-bg:#fff3e0;
+    --blue:#1565c0; --blue-bg:#e3f2fd;
+    --yellow-bg:#fffde7; --radius:18px; --radius-sm:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'DM Sans',sans-serif;background:#fdf5fa;color:var(--text);min-height:100vh;padding-bottom:100px}
+
+  /* HEADER */
+  .header{background:linear-gradient(135deg,var(--pink-dark) 0%,var(--pink) 60%,#f472b6 100%);padding:48px 20px 28px;text-align:center;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-40px;left:-40px;width:180px;height:180px;background:rgba(255,255,255,.07);border-radius:50%}
+  .header::after{content:'';position:absolute;bottom:-30px;right:-30px;width:140px;height:140px;background:rgba(255,255,255,.07);border-radius:50%}
+  .header-emoji{font-size:36px;display:block;margin-bottom:8px}
+  .header h1{font-family:'Playfair Display',serif;font-size:26px;color:#fff;line-height:1.2;position:relative}
+  .header p{font-size:12px;color:rgba(255,255,255,.82);margin-top:6px;letter-spacing:.06em;text-transform:uppercase;position:relative}
+  .header-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:14px;position:relative}
+  .hbadge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:11px;padding:4px 10px;border-radius:100px;font-weight:500}
+
+  /* TABS */
+  .tabs-wrap{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #f0d0e8;overflow-x:auto;scrollbar-width:none}
+  .tabs-wrap::-webkit-scrollbar{display:none}
+  .tabs{display:flex;padding:0 12px;gap:4px;min-width:max-content}
+  .tab-btn{padding:14px 14px 12px;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .tab-btn .tab-icon{font-size:16px}
+  .tab-btn.active{color:var(--pink);border-bottom-color:var(--pink);font-weight:600}
+  .tab-btn.rest.active{color:var(--text2);border-bottom-color:var(--text2)}
+
+  /* MAIN */
+  .main{padding:16px 14px;max-width:480px;margin:0 auto}
+  .day-page{display:none}
+  .day-page.active{display:block}
+
+  /* Day hero */
+  .day-hero{background:linear-gradient(135deg,var(--pink-dark),var(--pink));border-radius:var(--radius);padding:20px;margin-bottom:14px;color:white;display:flex;justify-content:space-between;align-items:center}
+  .day-hero.morado{background:linear-gradient(135deg,#7b1fa2,#ab47bc)}
+  .day-hero h2{font-family:'Playfair Display',serif;font-size:22px;line-height:1.2}
+  .day-hero p{font-size:12px;opacity:.85;margin-top:4px}
+  .obs-pill{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:8px 12px;text-align:center;flex-shrink:0;font-size:11px;color:#fff;max-width:100px;line-height:1.4}
+
+  /* Meal card */
+  .meal-card{background:#fff;border-radius:var(--radius);margin-bottom:12px;border:1px solid #f0d0e8;overflow:hidden}
+  .meal-header{padding:14px 16px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+  .meal-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .meal-icon.desayuno{background:#fff8e1}
+  .meal-icon.snack{background:#f3e5f5}
+  .meal-icon.comida{background:#e8f5e9}
+  .meal-icon.cena{background:#fce4ec}
+  .meal-title-wrap{flex:1}
+  .meal-title{font-size:14px;font-weight:600;color:var(--text)}
+  .meal-time{font-size:11px;color:var(--text3);margin-top:1px}
+  .meal-chevron{font-size:18px;color:var(--text3);transition:transform .25s}
+  .meal-card.open .meal-chevron{transform:rotate(180deg)}
+  .meal-body{display:none;padding:0 16px 16px;border-top:1px solid #fce4f3}
+  .meal-card.open .meal-body{display:block}
+
+  /* Food list */
+  .food-list{list-style:none;margin-top:12px}
+  .food-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #fce4f3;font-size:13px;line-height:1.5}
+  .food-item:last-child{border-bottom:none}
+  .food-dot{width:6px;height:6px;border-radius:50%;background:var(--pink-soft);flex-shrink:0;margin-top:6px}
+  .food-amount{color:var(--pink);font-weight:700}
+
+  /* Option tabs */
+  .opt-tabs{display:flex;gap:6px;margin:12px 0 10px}
+  .opt-btn{padding:6px 14px;border-radius:100px;border:1.5px solid var(--pink-soft);background:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .2s}
+  .opt-btn.active{background:var(--pink);border-color:var(--pink);color:#fff}
+  .opt-content{display:none}
+  .opt-content.active{display:block}
+
+  /* Cajas especiales */
+  .nota-box{background:var(--yellow-bg);border:1px solid #fff176;border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;font-size:13px;color:#5d4037;line-height:1.6}
+  .obs-box{background:var(--pink-bg);border:1px solid #f8a8d4;border-radius:var(--radius-sm);padding:12px 14px;margin:10px 0;font-size:13px;color:var(--text2);line-height:1.6;font-style:italic}
+  .alert-box{background:var(--orange-bg);border:1px solid #ffccbc;border-radius:var(--radius-sm);padding:14px;margin-bottom:12px;font-size:13px;color:#5d1b00;line-height:1.6}
+  .info-box{background:var(--pink-bg);border:1px solid #f8a8d4;border-radius:var(--radius-sm);padding:14px;margin-bottom:12px;font-size:13px;color:var(--text2);line-height:1.6}
+  .info-box strong, .alert-box strong{color:var(--pink-dark)}
+
+  /* Suplementos */
+  .suppl-card{background:#fff;border-radius:var(--radius);padding:16px;margin-bottom:12px;border:1px solid #f0d0e8;display:flex;gap:12px;align-items:flex-start}
+  .suppl-icon{font-size:26px;flex-shrink:0;margin-top:2px}
+  .suppl-name{font-size:14px;font-weight:700;color:var(--pink-dark)}
+  .suppl-dose{font-size:12px;color:var(--text2);margin-top:3px;font-weight:600}
+  .suppl-when{font-size:12px;color:var(--text3);margin-top:2px}
+  .suppl-body{font-size:12px;color:var(--text2);margin-top:8px;line-height:1.6}
+  .suppl-bullets{margin-top:6px;padding-left:16px;font-size:12px;color:var(--text2);line-height:1.8}
+  .suppl-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;margin-top:6px;letter-spacing:.04em}
+  .tag-keep{background:var(--green-bg);color:var(--green)}
+  .tag-change{background:var(--orange-bg);color:var(--orange)}
+  .tag-new{background:var(--pink-bg);color:var(--pink-dark)}
+  .tag-stop{background:#fce4ec;color:#c62828}
+
+  /* Notas page */
+  .nota-section{margin-bottom:20px}
+  .nota-title{font-size:13px;font-weight:700;color:var(--pink-dark);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .nota-content{font-size:13px;color:var(--text2);line-height:1.7}
+  .nota-content ul{padding-left:18px;margin-top:6px}
+  .nota-content li{margin-bottom:4px}
+  .nota-content strong{color:var(--text)}
+
+  /* Section label */
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:20px 0 10px}
+
+  /* Objetivos */
+  .obj-card{background:#fff;border-radius:var(--radius);padding:16px;margin-bottom:12px;border:1px solid #f0d0e8}
+  .obj-card p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+  .obj-card p:last-child{margin-bottom:0}
+  .obj-card strong{color:var(--text)}
+  .obj-bullets{padding-left:18px;font-size:13px;color:var(--text2);line-height:1.9}
+
+  /* Bottom nav */
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #f0d0e8;display:flex;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:100}
+  .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;border:none;background:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;color:var(--text3);font-weight:500;transition:color .2s}
+  .bnav-btn .bnav-icon{font-size:22px}
+  .bnav-btn.active{color:var(--pink);font-weight:700}
+  .page{display:none}
+  .page.active{display:block}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-emoji">🌸</span>
+  <h1>Plan Nutricional<br>Abril 2026</h1>
+  <p>Stefany · 7 de Abril 2026</p>
+  <div class="header-badges">
+    <span class="hbadge">Reducir inflamación</span>
+    <span class="hbadge">Gastritis · Hierro</span>
+    <span class="hbadge">Sin gluten · Sin lactosa</span>
+    <span class="hbadge">Hipotiroidismo subclínico</span>
+    <span class="hbadge">Detox estrogénico</span>
+  </div>
+</div>
+
+<!-- ══ PÁGINA: PLAN ══ -->
+<div class="page active" id="page-plan">
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showDay('lun',this)"><span class="tab-icon">📅</span>Lunes</button>
+      <button class="tab-btn" onclick="showDay('mar',this)"><span class="tab-icon">📅</span>Martes</button>
+      <button class="tab-btn" onclick="showDay('mie',this)"><span class="tab-icon">📅</span>Miérc.</button>
+      <button class="tab-btn" onclick="showDay('jue',this)"><span class="tab-icon">📅</span>Jueves</button>
+      <button class="tab-btn" onclick="showDay('vie',this)"><span class="tab-icon">📅</span>Viernes</button>
+      <button class="tab-btn rest" onclick="showDay('finde',this)"><span class="tab-icon">🛋️</span>S / D</button>
+      <button class="tab-btn" onclick="showDay('gym',this)"><span class="tab-icon">🏋️</span>¿Y si entreno?</button>
+    </div>
+  </div>
+  <div class="main">
+
+    <!-- ── LUNES ── -->
+    <div class="day-page active" id="day-lun">
+      <div class="day-hero">
+        <div><h2>Lunes</h2><p>📅 Día de semana</p></div>
+      </div>
+
+      <!-- DESAYUNO L -->
+      <div class="meal-card open">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon desayuno">☕</div>
+          <div class="meal-title-wrap"><div class="meal-title">Desayuno</div><div class="meal-time">Sobre las 8:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de lino molidas y <span class="food-amount">5gr</span> de chia molida previamente hidratadas en medio vaso de agua de coco. (en la mañana las puedes juntar en media vaso de agua de coco y bébetelo tal cual o puedes echar la mezcla por encima de la tortita y extenderlo)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Café o te con un poco de leche desnatada fortificada en calcio y vitamina D</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Tortita o bizcochito hech@ con <span class="food-amount">1 huevo completo</span>, <span class="food-amount">3 claras de huevo</span>, <span class="food-amount">15gr</span> de harina de avena integral sin gluten y <span class="food-amount">10gr</span> de colageno en polvo (puedes añadir una pizca de polvo de hornear y calabaza o zanahoria asada)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> de papaya y/o manzana o pera previamente cocinada + canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>(puedes diluirlo en un pelin de agua y hacer una especie de salsa)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla e hinojo con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- MEDIA MAÑANA L -->
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍎</div>
+          <div class="meal-title-wrap"><div class="meal-title">Media Mañana</div><div class="meal-time">Sobre las 11:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de fiambre de pollo / pavo</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Media manzana o pera asada (puedes hacerla al microondas) con canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">1</span> nuez de Brasil y <span class="food-amount">2</span> normales (masticadas super bien)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- COMIDA L -->
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon comida">🍽️</div>
+          <div class="meal-title-wrap"><div class="meal-title">Comida</div><div class="meal-time">Sobre las 14:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> de pechuga o solomillo de pollo, pavo o cerdo magro</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de pasta de garbanzos o lenteja roja ya cocida o hummus hecho con los <span class="food-amount">45gr</span> de garbanzos cocidos (leer observaciones)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aove</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de tahini negro → Preferir tahini negro por ser mas alto en calcio (puedes diluirlo en un pelin de agua y hacer una especie de salsa)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla e hinojo con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- MERIENDA L -->
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍓</div>
+          <div class="meal-title-wrap"><div class="meal-title">Merienda</div><div class="meal-time">Sobre las 17:30-18hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <div class="obs-box">Si no entrenas o haces pilates:</div>
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de kéfir desnatado mezclado con una bolsita de pure de manzana y plátano (de los bebes)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de arandanos</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de calabaza machacadas</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion de manzanilla</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CENA L -->
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon cena">🌙</div>
+          <div class="meal-title-wrap"><div class="meal-title">Cena</div><div class="meal-time">Noche</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">180gr</span> de pescado blanco (leer anexo de otras fuentes de proteína. Preferible bacalao o merluza)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aceite de lino</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">25gr</span> de aguacate</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">60gr</span> de guisantes cocidos (o <span class="food-amount">30gr</span> de guisantes cocidos y <span class="food-amount">20gr</span> de quinoa cocida)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla + valeriana o pasiflora (añadir <span class="food-amount">3gr</span> de glicina en polvo)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- fin lunes -->
+
+    <!-- ── MARTES ── Día de movilidad y suelo pelvico -->
+    <div class="day-page" id="day-mar">
+      <div class="day-hero morado">
+        <div><h2>Martes</h2><p>Dia de movilidad y suelo pelvico</p></div>
+      </div>
+
+      <div class="meal-card open">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon desayuno">☕</div>
+          <div class="meal-title-wrap"><div class="meal-title">Desayuno</div><div class="meal-time">Sobre las 8:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de lino molidas y <span class="food-amount">5gr</span> de chia molida previamente hidratadas en medio vaso de agua de coco. (en la mañana las puedes juntar en media vaso de agua de coco y bébetelo tal cual o puedes echar la mezcla por encima de la tortita y extenderlo)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Café o te con un poco de leche desnatada fortificada en calcio y vitamina D</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Tortita o bizcochito hech@ con <span class="food-amount">4 claras de huevo (no huevo completo)</span> <span class="food-amount">15gr</span> de harina de avena integral sin gluten y <span class="food-amount">10gr</span> de colageno en polvo (puedes añadir una pizca de polvo de hornear y calabaza o zanahoria asada)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> de papaya y/o manzana o pera previamente cocinada + canela</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍎</div>
+          <div class="meal-title-wrap"><div class="meal-title">Media Mañana</div><div class="meal-time">Sobre las 11:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de fiambre de pollo / pavo</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Media manzana o pera asada (puedes hacerla al microondas) con canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">1</span> nuez de Brasil y <span class="food-amount">2</span> normales (masticadas super bien)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon comida">🍽️</div>
+          <div class="meal-title-wrap"><div class="meal-title">Comida</div><div class="meal-time">Sobre las 14:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">80gr</span> de ternera magra o en forma de picada o de Burger casera</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5</span> huevos de codorniz a plancha o cocidos</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">40gr</span> de guisantes cocidos y <span class="food-amount">35gr</span> de arroz integral muy cocido (que esté muy cocido)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aove</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de tahini negro → Preferir tahini negro por ser mas alto en calcio (puedes diluirlo en un pelin de agua y hacer una especie de salsa)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla e hinojo con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍓</div>
+          <div class="meal-title-wrap"><div class="meal-title">Merienda</div><div class="meal-time">Sobre las 17:30-18hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <div class="opt-tabs">
+            <button class="opt-btn active" onclick="switchOpt(this,'mar-mer')">Si no entrenas o haces pilates</button>
+            <button class="opt-btn" onclick="switchOpt(this,'mar-mer')">Si vas a entrenar pesas 🏋️</button>
+          </div>
+          <div class="opt-content active">
+            <ul class="food-list">
+              <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de kéfir desnatado mezclado con una bolsita de pure de manzana y plátano (de los bebes)</span></li>
+              <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de arandanos + canela</span></li>
+              <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de calabaza machacadas</span></li>
+              <li class="food-item"><div class="food-dot"></div><span>Infusion de manzanilla</span></li>
+            </ul>
+          </div>
+          <div class="opt-content">
+            <ul class="food-list">
+              <li class="food-item"><div class="food-dot"></div><span>Un platano maduro</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon cena">🌙</div>
+          <div class="meal-title-wrap"><div class="meal-title">Cena</div><div class="meal-time">Noche</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">1 lata</span> de salmon o atun al natural</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de moluscos o marisco (preferir mejillones, almejas o berberechos)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">60gr</span> de guisantes cocidos (o <span class="food-amount">30gr</span> de guisantes cocidos y <span class="food-amount">20gr</span> de quinoa cocida)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aceite de lino</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla + valeriana o pasiflora (añadir <span class="food-amount">3gr</span> de glicina en polvo)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- fin martes -->
+
+    <!-- ── MIÉRCOLES ── Día de pilates maquina -->
+    <div class="day-page" id="day-mie">
+      <div class="day-hero morado">
+        <div><h2>Miércoles</h2><p>Dia de pilates maquina</p></div>
+      </div>
+
+      <div class="meal-card open">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon desayuno">☕</div>
+          <div class="meal-title-wrap"><div class="meal-title">Desayuno</div><div class="meal-time">Sobre las 8:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de lino molidas y <span class="food-amount">5gr</span> de chia molida previamente hidratadas en medio vaso de agua de coco. (en la mañana las puedes juntar en media vaso de agua de coco y bébetelo tal cual o puedes echar la mezcla por encima de la tortita y extenderlo)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Café o te con un poco de leche desnatada fortificada en calcio y vitamina D</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Tortita o bizcochito hech@ con <span class="food-amount">1 huevo completo</span>, <span class="food-amount">3 claras de huevo</span>, <span class="food-amount">15gr</span> de harina de avena integral sin gluten y <span class="food-amount">10gr</span> de colageno en polvo (puedes añadir una pizca de polvo de hornear y calabaza o zanahoria asada)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> de papaya y/o manzana o pera previamente cocinada + canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de calabaza machacadas</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍎</div>
+          <div class="meal-title-wrap"><div class="meal-title">Media Mañana</div><div class="meal-time">Sobre las 11:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de fiambre de pollo / pavo</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Media manzana o pera asada (puedes hacerla al microondas) con canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">1</span> nuez de Brasil y <span class="food-amount">2</span> normales (masticadas super bien)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon comida">🍽️</div>
+          <div class="meal-title-wrap"><div class="meal-title">Comida</div><div class="meal-time">Sobre las 14:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> de pechuga o solomillo de pollo, pavo o cerdo magro</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de pasta de garbanzos o lenteja roja ya cocida o hummus hecho con los <span class="food-amount">45gr</span> de garbanzos cocidos (leer observaciones)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aove</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de tahini negro → Preferir tahini negro por ser mas alto en calcio (puedes diluirlo en un pelin de agua y hacer una especie de salsa)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla e hinojo con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍓</div>
+          <div class="meal-title-wrap"><div class="meal-title">Merienda</div><div class="meal-time">Sobre las 17:30-18hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de kéfir desnatado mezclado con una bolsita de pure de manzana y plátano (de los bebes)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de uvas moradas sin piel + canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de crema de almendras al natural</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion de manzanilla</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon cena">🌙</div>
+          <div class="meal-title-wrap"><div class="meal-title">Cena</div><div class="meal-time">Noche</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">180gr</span> de pescado blanco (leer anexo de otras fuentes de proteína. Preferible bacalao o merluza)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aceite de lino</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">25gr</span> de aguacate</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">120gr</span> de patata y/o boniato o malanga o salteado rustico del Mercadona (pesado en crudo)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla + valeriana o pasiflora (añadir <span class="food-amount">3gr</span> de glicina en polvo)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- fin miercoles -->
+
+    <!-- ── JUEVES ── Día de pilates maquina -->
+    <div class="day-page" id="day-jue">
+      <div class="day-hero morado">
+        <div><h2>Jueves</h2><p>Dia de pilates maquina</p></div>
+      </div>
+
+      <div class="meal-card open">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon desayuno">☕</div>
+          <div class="meal-title-wrap"><div class="meal-title">Desayuno</div><div class="meal-time">Sobre las 8:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de lino molidas y <span class="food-amount">5gr</span> de chia molida previamente hidratadas en medio vaso de agua de coco. (en la mañana las puedes juntar en media vaso de agua de coco y bébetelo tal cual o puedes echar la mezcla por encima de la tortita y extenderlo)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Café o te con un poco de leche desnatada fortificada en calcio y vitamina D</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Tortita o bizcochito hech@ con <span class="food-amount">4 claras de huevo (no huevo completo)</span> <span class="food-amount">15gr</span> de harina de avena integral sin gluten y <span class="food-amount">10gr</span> de colageno en polvo (puedes añadir una pizca de polvo de hornear y calabaza o zanahoria asada)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> de papaya y/o manzana o pera previamente cocinada + canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de calabaza machacadas</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍎</div>
+          <div class="meal-title-wrap"><div class="meal-title">Media Mañana</div><div class="meal-time">Sobre las 11:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de fiambre de pollo / pavo</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Media manzana o pera asada (puedes hacerla al microondas) con canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">1</span> nuez de Brasil y <span class="food-amount">2</span> normales (masticadas super bien)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon comida">🍽️</div>
+          <div class="meal-title-wrap"><div class="meal-title">Comida</div><div class="meal-time">Sobre las 14:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">80gr</span> de ternera magra o en forma de picada o de Burger casera</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5</span> huevos de codorniz a plancha o cocidos</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">40gr</span> de guisantes cocidos y <span class="food-amount">35gr</span> de arroz integral muy cocido (que esté muy cocido)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aove</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de tahini negro → Preferir tahini negro por ser mas alto en calcio (puedes diluirlo en un pelin de agua y hacer una especie de salsa)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla e hinojo con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍓</div>
+          <div class="meal-title-wrap"><div class="meal-title">Merienda</div><div class="meal-time">Sobre las 17:30-18hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de kéfir desnatado mezclado con una bolsita de pure de manzana y plátano (de los bebes)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de uvas moradas sin piel + canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de crema de almendras al natural</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion de manzanilla</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon cena">🌙</div>
+          <div class="meal-title-wrap"><div class="meal-title">Cena</div><div class="meal-time">Noche</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">1 lata</span> de salmon o atun al natural</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de moluscos o marisco (preferir mejillones, almejas o berberechos)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">120gr</span> de patata y/o boniato o malanga o salteado rustico del Mercadona (pesado en crudo)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aceite de lino</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla + valeriana o pasiflora (añadir <span class="food-amount">3gr</span> de glicina en polvo)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- fin jueves -->
+
+    <!-- ── VIERNES ── -->
+    <div class="day-page" id="day-vie">
+      <div class="day-hero">
+        <div><h2>Viernes</h2><p>📅 Día de semana</p></div>
+      </div>
+
+      <div class="meal-card open">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon desayuno">☕</div>
+          <div class="meal-title-wrap"><div class="meal-title">Desayuno</div><div class="meal-time">Sobre las 8:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de lino molidas y <span class="food-amount">5gr</span> de chia molida previamente hidratadas en medio vaso de agua de coco. (en la mañana las puedes juntar en media vaso de agua de coco y bébetelo tal cual o puedes echar la mezcla por encima de la tortita y extenderlo)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Café o te con un poco de leche desnatada fortificada en calcio y vitamina D</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Tortita o bizcochito hech@ con <span class="food-amount">1 huevo completo</span>, <span class="food-amount">3 claras de huevo</span>, <span class="food-amount">15gr</span> de harina de avena integral sin gluten y <span class="food-amount">10gr</span> de colageno en polvo (puedes añadir una pizca de polvo de hornear y calabaza o zanahoria asada)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> de papaya y/o manzana o pera previamente cocinada + canela</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍎</div>
+          <div class="meal-title-wrap"><div class="meal-title">Media Mañana</div><div class="meal-time">Sobre las 11:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de fiambre de pollo / pavo</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Media manzana o pera asada (puedes hacerla al microondas) con canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">1</span> nuez de Brasil y <span class="food-amount">2</span> normales (masticadas super bien)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon comida">🍽️</div>
+          <div class="meal-title-wrap"><div class="meal-title">Comida</div><div class="meal-time">Sobre las 14:30hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> de pechuga o solomillo de pollo, pavo o cerdo magro</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de pasta de garbanzos o lenteja roja ya cocida o hummus hecho con los <span class="food-amount">45gr</span> de garbanzos cocidos (leer observaciones)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aove</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de tahini negro → Preferir tahini negro por ser mas alto en calcio (puedes diluirlo en un pelin de agua y hacer una especie de salsa)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla e hinojo con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍓</div>
+          <div class="meal-title-wrap"><div class="meal-title">Merienda</div><div class="meal-time">Sobre las 17:30-18hs</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <div class="obs-box">Si no entrenas o haces pilates:</div>
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de kéfir desnatado mezclado con una bolsita de pure de manzana y plátano (de los bebes)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de arandanos + canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de calabaza machacadas</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion de manzanilla</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon cena">🌙</div>
+          <div class="meal-title-wrap"><div class="meal-title">Cena</div><div class="meal-time">Noche</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">180gr</span> de pescado blanco (leer anexo de otras fuentes de proteína. Preferible bacalao o merluza)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aceite de lino</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">25gr</span> de aguacate</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">60gr</span> de guisantes cocidos (o <span class="food-amount">30gr</span> de guisantes cocidos y <span class="food-amount">20gr</span> de quinoa cocida)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla + valeriana o pasiflora (añadir <span class="food-amount">3gr</span> de glicina en polvo)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- fin viernes -->
+
+    <!-- ── SÁBADO / DOMINGO ── -->
+    <div class="day-page" id="day-finde">
+      <div class="day-hero morado">
+        <div><h2>Sábado / Domingo</h2><p>🛋️ Descanso</p></div>
+      </div>
+
+      <div class="meal-card open">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon desayuno">☕</div>
+          <div class="meal-title-wrap"><div class="meal-title">Desayuno</div><div class="meal-time">Más tarde de lo habitual</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de semillas de lino molidas y <span class="food-amount">5gr</span> de chia molida previamente hidratadas en medio vaso de agua de coco (en la mañana las puedes juntar en media vaso de agua de coco y bébetelo tal cual y añades aquí <span class="food-amount">5gr</span> de colageno en polvo pautado)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Café o te con un poco de leche desnatada fortificada en calcio y vitamina D</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Dos tortitas de arroz integral</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de fiambre de pollo o pavo &gt;90%</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">20gr</span> de aguacate</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> a elegir entre papaya manzana o pera previamente cocinada (puedes combinarlas al gusto hasta sumar la cantidad)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">2</span> de Brasil</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍎</div>
+          <div class="meal-title-wrap"><div class="meal-title">Media Mañana</div><div class="meal-time">Si te levantas tarde y comes pronto, no hace falta</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <div class="obs-box">Si te levantas mas tarde y comes pronto pues no hace falta que la hagas. Pero Si comes tarde:</div>
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de fiambre de pollo/pavo &gt;90%</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Media manzana o pera asada (puedes hacerla al microondas) con canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon comida">🍽️</div>
+          <div class="meal-title-wrap"><div class="meal-title">Comida</div><div class="meal-time">Alternando cada día</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <div class="opt-tabs">
+            <button class="opt-btn active" onclick="switchOpt(this,'finde-com')">Uno de los dos días</button>
+            <button class="opt-btn" onclick="switchOpt(this,'finde-com')">Otro de los dos días</button>
+          </div>
+          <div class="opt-content active">
+            <ul class="food-list">
+              <li class="food-item"><div class="food-dot"></div><span>Eliges entre <span class="food-amount">80gr</span> de ternera magra, en forma de Burger o picada o pollo, pavo o cerdo magro (puede ser pollo asado sin piel)</span></li>
+              <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5</span> huevos de codorniz o uno normal (preferir los de codorniz por ser mas ricos en hierro)</span></li>
+              <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+              <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aove</span></li>
+              <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de tahini negro → Preferir tahini negro por ser mas alto en calcio (puedes diluirlo en un pelin de agua y hacer una especie de salsa)</span></li>
+              <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla e hinojo con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+            </ul>
+          </div>
+          <div class="opt-content">
+            <ul class="food-list">
+              <li class="food-item"><div class="food-dot"></div><span>Eliges entre <span class="food-amount">100gr</span> de pescado blanco, moluscos o marisco</span></li>
+              <li class="food-item"><div class="food-dot"></div><span>Un huevo a plancha o cocido o <span class="food-amount">5</span> de codorniz</span></li>
+              <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+              <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aove</span></li>
+              <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de tahini negro → Preferir tahini negro por ser mas alto en calcio (puedes diluirlo en un pelin de agua y hacer una especie de salsa)</span></li>
+              <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla e hinojo con <span class="food-amount">3gr</span> de glicina en polvo</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍓</div>
+          <div class="meal-title-wrap"><div class="meal-title">Merienda</div><div class="meal-time">Tarde</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">100gr</span> de kéfir desnatado mezclado con una bolsita de pure de manzana y plátano (de los bebes)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">30gr</span> de arandanos y <span class="food-amount">60gr</span> de papaya + canela</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">5gr</span> de pipas de girasol machacadas</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion de manzanilla</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon cena">🌙</div>
+          <div class="meal-title-wrap"><div class="meal-title">Cena</div><div class="meal-time">Noche</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <div class="obs-box">Si un dia elijes dorada o lubina,….el otro que sea salmon caballa o sardinas</div>
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">150gr</span> de pescado azul (salmon salvaje - caballa o sardinas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Verdura cocinada (leer notas)</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">10ml</span> de aceite de lino</span></li>
+            <li class="food-item"><div class="food-dot"></div><span><span class="food-amount">50gr</span> de guisantes cocidos</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Infusion doble de manzanilla + valeriana o pasiflora (añadir <span class="food-amount">3gr</span> de glicina en polvo)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- fin finde -->
+
+    <!-- ── ¿Y SI UN DIA ENTRE SEMANA ENTRENO EN LA MAÑANA? ── -->
+    <div class="day-page" id="day-gym">
+      <div class="day-hero">
+        <div><h2>¿Y si un día entre semana entreno en la mañana?</h2></div>
+      </div>
+
+      <div class="meal-card open">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon desayuno">☕</div>
+          <div class="meal-title-wrap"><div class="meal-title">Desayuno</div><div class="meal-time">Antes del gym</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span>Mismo desayuno pautado pero sustituyes la fruta por <span class="food-amount">100gr</span> de plátano maduro</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon snack">🍎</div>
+          <div class="meal-title-wrap"><div class="meal-title">Media Mañana</div><div class="meal-time">Después del gym</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <div class="obs-box">Si llegas tarde del gym y comes pronto pues no hace falta que la hagas. Pero Si comes tarde: Misma media mañana pautada</div>
+        </div>
+      </div>
+
+      <div class="meal-card">
+        <div class="meal-header" onclick="toggleMeal(this)">
+          <div class="meal-icon comida">🍽️</div>
+          <div class="meal-title-wrap"><div class="meal-title">Comida · Merienda · Cena</div><div class="meal-time">Sin cambios</div></div>
+          <div class="meal-chevron">⌄</div>
+        </div>
+        <div class="meal-body">
+          <ul class="food-list">
+            <li class="food-item"><div class="food-dot"></div><span>Lo pautado ese dia</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Lo pautado ese dia</span></li>
+            <li class="food-item"><div class="food-dot"></div><span>Lo pautado ese dia</span></li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- fin gym -->
+
+  </div>
+</div><!-- fin page-plan -->
+
+<!-- ══ PÁGINA: SUPLEMENTACIÓN ══ -->
+<div class="page" id="page-suppl">
+  <div class="header" style="padding:36px 20px 24px">
+    <span class="header-emoji">💊</span>
+    <h1>Suplementación</h1>
+    <p>Actualizada según analítica · Abril 2026</p>
+  </div>
+  <div class="main">
+    <div class="info-box">Stefany, este nuevo plan está ajustado a lo que hemos visto en tus análisis recientes. Ahora que conocemos mejor cómo está tu tiroides, tu inflamación, tu glucosa y tu absorción, vamos a introducir suplementos que te ayuden de forma más específica y efectiva.</div>
+
+    <div class="section-label">Mantenemos ✅</div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">🌿</div>
+      <div>
+        <div class="suppl-name">CURCUMA C3 PLUS (Marca Nutrigel)</div>
+        <div class="suppl-dose">Una capsula en comida y cena</div>
+        <div class="suppl-body"><strong>Por qué la mantenemos:</strong> Tu PCR está en 3,9 y tu fibrinógeno muy elevado. Esto indica inflamación sistémica. La curcumina C3 es una de las formas más estudiadas y efectivas para:
+          <ul class="suppl-bullets">
+            <li>Reducir inflamación digestiva y articular</li>
+            <li>Mejorar dolor muscular (fibromialgia)</li>
+            <li>Apoyar al hígado en detoxificación</li>
+            <li>Proteger mucosa digestiva (gastritis)</li>
+          </ul>
+          Es un pilar clave en tu caso.
+        </div>
+        <span class="suppl-tag tag-keep">MANTENEMOS</span>
+      </div>
+    </div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">🐟</div>
+      <div>
+        <div class="suppl-name">OMEGA 3 (Kobho Labs)</div>
+        <div class="suppl-dose">Una capsula en comida y cena</div>
+        <div class="suppl-body"><strong>Por qué lo mantenemos:</strong> Tu HDL está bajo y tu inflamación alta. El omega 3 te ayuda a:
+          <ul class="suppl-bullets">
+            <li>Bajar inflamación sistémica</li>
+            <li>Mejorar dolor articular y muscular</li>
+            <li>Regular hormonas</li>
+            <li>Mejorar perfil lipídico (subir HDL)</li>
+            <li>Apoyar sistema nervioso (fibromialgia, ansiedad)</li>
+          </ul>
+          Es imprescindible para ti.
+        </div>
+        <span class="suppl-tag tag-keep">MANTENEMOS</span>
+      </div>
+    </div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">✨</div>
+      <div>
+        <div class="suppl-name">GLICINA EN POLVO (Vegavero)</div>
+        <div class="suppl-dose">Cuando se señala en el plan</div>
+        <div class="suppl-body"><strong>Por qué la mantenemos:</strong> La glicina es muy útil en tu caso porque:
+          <ul class="suppl-bullets">
+            <li>Mejora sueño profundo (clave en fibromialgia)</li>
+            <li>Reduce rigidez muscular</li>
+            <li>Calma sistema nervioso</li>
+            <li>Ayuda a regular glucosa (la tienes baja)</li>
+            <li>Apoya producción de colágeno y reparación tisular</li>
+          </ul>
+          La usaremos estratégicamente.
+        </div>
+        <span class="suppl-tag tag-keep">MANTENEMOS</span>
+      </div>
+    </div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">🦠</div>
+      <div>
+        <div class="suppl-name">4MULTIBIÓTIS PROBIÓTICOS</div>
+        <div class="suppl-dose">1 Capsula en ayunas media hora antes del desayuno/café</div>
+        <div class="suppl-body"><strong>Por qué los mantenemos:</strong> Con gastritis, intolerancias y mala absorción, tu microbiota necesita apoyo:
+          <ul class="suppl-bullets">
+            <li>Reduce gases y fermentación</li>
+            <li>Mejora digestiones</li>
+            <li>Ayuda a regular hormonas</li>
+            <li>Refuerza sistema inmune</li>
+            <li>Mejora absorción de nutrientes</li>
+          </ul>
+          Son esenciales en tu recuperación digestiva.
+        </div>
+        <span class="suppl-tag tag-keep">MANTENEMOS</span>
+      </div>
+    </div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">💪</div>
+      <div>
+        <div class="suppl-name">L-GLUTAMINA</div>
+        <div class="suppl-dose">8gr en vaso de agua en la mañana (Subimos dosis)</div>
+        <div class="suppl-body"><strong>Por qué subimos dosis:</strong> Tu gastritis y tu absorción necesitan un apoyo más fuerte. La glutamina:
+          <ul class="suppl-bullets">
+            <li>Repara mucosa intestinal</li>
+            <li>Reduce inflamación digestiva</li>
+            <li>Mejora absorción de hierro, B12 y folato</li>
+            <li>Reduce distensión y molestias</li>
+            <li>Ayuda a restaurar barrera intestinal</li>
+          </ul>
+          Es uno de los suplementos más importantes para ti ahora mismo.
+        </div>
+        <span class="suppl-tag tag-keep">MANTENEMOS · SUBIMOS DOSIS</span>
+      </div>
+    </div>
+
+    <div class="section-label">Cambiamos 🔄</div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">🧴</div>
+      <div>
+        <div class="suppl-name">MULTI COLAGENO EN POLVO — cambiamos de marca</div>
+        <div class="suppl-dose">Tenias pautado MULTI COLAGENO EN POLVO (INCITE NUTRITION) 5gr en el desayuno</div>
+        <div class="suppl-body">Cuando acabes el anterior Incorporamos ahora <strong>MULTI COLAGENO EN POLVO (Nature diet Multi colageno)</strong> Cuando en el plan se indique.<br><br>
+          <strong>Por qué cambiamos:</strong> Esta marca tiene mejor combinación de tipos de colágeno y mejor biodisponibilidad. El colágeno te ayuda a:
+          <ul class="suppl-bullets">
+            <li>Reducir dolor articular y muscular</li>
+            <li>Mejorar piel, uñas y cabello</li>
+            <li>Apoyar reparación intestinal</li>
+            <li>Mejorar movilidad y rigidez</li>
+          </ul>
+          En fibromialgia y gastritis es un apoyo muy valioso.
+        </div>
+        <span class="suppl-tag tag-change">CAMBIAMOS MARCA</span>
+      </div>
+    </div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">🌙</div>
+      <div>
+        <div class="suppl-name">MAGNESIO — cambiamos a Triple Magnesio + D3/K2</div>
+        <div class="suppl-dose">Tenias pautado MAGNESIO (D3+K2+B6) (Marca Nutrigel) 2 capsulas en cena junto con el Omega 3</div>
+        <div class="suppl-body">Cuando lo acabes Incorporamos ahora:<br>
+          <strong>TRIPLE MAGNESIO (N2 NATURAL NUTRITION)</strong> 2 capsulas en cena<br>
+          + <strong>Vitamina D3+k2 (Soria Natural)</strong> 1 capsula DURANTE LA CENA junto al magnesio<br><br>
+          <strong>Por qué cambiamos:</strong> Tu vitamina D está baja funcionalmente y tu TSH elevada. El triple magnesio combina formas más biodisponibles y suaves para tu gastritis. La vitamina D3 + K2 es clave para inmunidad, hormonas, energía y absorción de calcio.
+        </div>
+        <span class="suppl-tag tag-change">CAMBIAMOS</span>
+      </div>
+    </div>
+
+    <div class="section-label">Suspendemos temporalmente ❌</div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">⏸️</div>
+      <div>
+        <div class="suppl-name">GLUTATION COMPLEX (VEGAVERO)</div>
+        <div class="suppl-dose">Una capsula en la mañana al despertar y otra en la cena</div>
+        <div class="suppl-body">Lo pausamos temporalmente porque ahora vamos a priorizar:
+          <ul class="suppl-bullets">
+            <li>Tiroides</li>
+            <li>Glucosa</li>
+            <li>Inflamación</li>
+            <li>Absorción</li>
+          </ul>
+          Más adelante lo retomaremos si lo necesitas.
+        </div>
+        <span class="suppl-tag tag-stop">DE MOMENTO SUSPENDEMOS</span>
+      </div>
+    </div>
+
+    <div class="section-label">Incorporamos 🆕</div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">🔬</div>
+      <div>
+        <div class="suppl-name">BE ESSENTIAL THYRO BOOSTER</div>
+        <div class="suppl-dose">3 capsulas en cena (Tendrás para un mes. Cuando se te acabe lo compras de nuevo pero tomando solo 2 al dia ok?)</div>
+        <div class="suppl-body"><strong>Por qué lo incorporamos:</strong> Tu TSH está elevada funcionalmente (5,01). Esto indica hipotiroidismo subclínico. Este suplemento ayuda a:
+          <ul class="suppl-bullets">
+            <li>Mejorar conversión T4 → T3</li>
+            <li>Reducir fatiga</li>
+            <li>Mejorar metabolismo</li>
+            <li>Regular temperatura corporal</li>
+            <li>Reducir dolor muscular</li>
+            <li>Apoyar estado de ánimo</li>
+            <li>Mejorar caída de cabello</li>
+          </ul>
+          Es un apoyo natural para tu tiroides sin ser medicación.
+        </div>
+        <span class="suppl-tag tag-new">NUEVO</span>
+      </div>
+    </div>
+
+    <div class="suppl-card">
+      <div class="suppl-icon">🌱</div>
+      <div>
+        <div class="suppl-name">BERBERINA (LIFE PRO HEALTHY)</div>
+        <div class="suppl-dose">1 capsula media hora antes de comida y cena</div>
+        <div class="suppl-body"><strong>Por qué la incorporamos:</strong> Tu glucosa está baja y tu tiroides necesita estabilidad metabólica. La berberina te ayuda a:
+          <ul class="suppl-bullets">
+            <li>Regular glucosa (evita bajones)</li>
+            <li>Reducir inflamación</li>
+            <li>Mejorar sensibilidad a la insulina</li>
+            <li>Apoyar tiroides indirectamente</li>
+            <li>Mejorar perfil lipídico (subir HDL)</li>
+            <li>Reducir inflamación digestiva</li>
+            <li>Apoyar pérdida de peso saludable</li>
+          </ul>
+          En tu caso es una herramienta muy potente.
+        </div>
+        <span class="suppl-tag tag-new">NUEVO</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PÁGINA: OBJETIVOS ══ -->
+<div class="page" id="page-obj">
+  <div class="header" style="padding:36px 20px 24px">
+    <span class="header-emoji">🎯</span>
+    <h1>Objetivos del Plan</h1>
+    <p>Abril 2026 · Stefany</p>
+  </div>
+  <div class="main">
+    <div class="obj-card">
+      <p>✨ <strong>Stefany, antes de nada: quiero felicitarte de verdad.</strong></p>
+      <p>Sé que este proceso no está siendo fácil para ti. Venías de un estilo de alimentación muy diferente, con horarios, costumbres y elecciones que llevabas años haciendo… y aun así estás aquí, avanzando, esforzándote y demostrando que sí puedes.</p>
+      <p>Y eso tiene muchísimo mérito. Muchísimo. No todo el mundo es capaz de cambiar cuando algo le cuesta, y tú lo estás haciendo.</p>
+      <p>Quiero que te sientas orgullosa, porque yo lo estoy por ti.</p>
+    </div>
+
+    <div class="section-label">Seguimos avanzando, pero ahora con más precisión</div>
+    <div class="obj-card">
+      <p>En este nuevo plan vamos a dar un paso importante: <strong>no solo seguir bajando peso</strong>, sino trabajar a fondo varios frentes que ahora mismo están frenando tu pérdida de grasa y tu bienestar.</p>
+      <p>Porque sí, tú quieres seguir bajando, y lo vas a conseguir. Pero antes necesitamos <strong>ordenar lo que está pasando dentro de tu cuerpo</strong>, porque tu analítica nos ha dado información muy valiosa.</p>
+    </div>
+
+    <div class="section-label">¿Qué hemos visto en tu analítica?</div>
+    <div class="obj-card">
+      <p>Hay varios puntos que explican por qué tu cuerpo está más "bloqueado":</p>
+      <ul class="obj-bullets">
+        <li><strong>Gastritis + mala absorción:</strong> Esto hace que no estés absorbiendo bien nutrientes clave. Por eso tienes vitamina D, B12, folato y hierro funcional en rangos bajos, aunque comas bien.</li>
+        <li><strong>TSH en 5,01:</strong> Es un valor fuera del rango óptimo funcional, lo que indica que tu tiroides está trabajando más de lo que debería. Esto afecta a tu energía, tu metabolismo y tu capacidad de quemar grasa.</li>
+        <li><strong>PCR en 3,9:</strong> Es un marcador de inflamación sistémica. Cuando hay inflamación, el cuerpo retiene líquidos, baja el metabolismo y se defiende en vez de quemar grasa.</li>
+        <li><strong>Problemas de coagulación / fibrinógeno alto:</strong> Esto también está relacionado con inflamación y con cómo circula el oxígeno y los nutrientes.</li>
+        <li><strong>Fibromialgia, intolerancias, digestión sensible…:</strong> Todo suma. Todo influye. Y por eso necesitamos un plan que no solo te haga perder peso, sino que te repare por dentro.</li>
+      </ul>
+    </div>
+
+    <div class="section-label">¿Qué vamos a hacer ahora?</div>
+    <div class="obj-card">
+      <p>Este plan está diseñado para:</p>
+      <ul class="obj-bullets">
+        <li>Reparar tu mucosa digestiva</li>
+        <li>Mejorar tu gastritis</li>
+        <li>Aumentar absorción de nutrientes</li>
+        <li>Reducir inflamación sistémica</li>
+        <li>Apoyar tu tiroides</li>
+        <li>Regular glucosa (la tienes baja)</li>
+        <li>Seguir bajando grasa de forma saludable</li>
+      </ul>
+      <p style="margin-top:10px">Cuando tu digestión mejore y tu tiroides esté más equilibrada, tu cuerpo va a responder mucho mejor. Y ahí sí veremos una pérdida de grasa más constante y más fácil.</p>
+    </div>
+
+    <div class="alert-box">
+      <strong>Necesito que este mes y medio seas lo más estricta posible.</strong> No para exigirte más. No para agobiarte. Sino porque <strong>tu cuerpo lo necesita</strong> para poder reparar, absorber y regularse. Este mes y medio es clave. Es tu base. Es tu "reset". Al mes y medio me escribes, vemos cómo vas, y si tienes nuevas pruebas me las pasas para ajustar todo aún más.
+    </div>
+
+    <div class="obj-card">
+      <p>✨ <strong>Stefany, este plan está hecho con estrategia.</strong> Todo lo que ves aquí tiene un porqué.</p>
+      <p>💚 <strong>Vamos a por ello, que lo estás haciendo muy bien.</strong> Cualquier duda, cualquier cosa que no entiendas o que necesites ajustar, me escribes siempre.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PÁGINA: NOTAS ══ -->
+<div class="page" id="page-notas">
+  <div class="header" style="padding:36px 20px 24px">
+    <span class="header-emoji">📌</span>
+    <h1>Notas</h1>
+    <p>Abril 2026 · Indicaciones importantes</p>
+  </div>
+  <div class="main">
+
+    <div class="nota-section">
+      <div class="nota-title">1. Sobre la gastritis: aquí sí necesitamos ser estrictas</div>
+      <div class="nota-content">
+        <p>Para reparar la mucosa digestiva hay alimentos que <strong>tenemos que evitar sí o sí</strong> durante este mes y medio:</p>
+        <br>
+        <p><strong>Café y té</strong></p>
+        <p>El café irrita muchísimo la mucosa. Si cuesta mucho quitarlo, porque lo necesites para despertarte, te dejo una opción intermedia:</p>
+        <ul>
+          <li>Si necesitas uno por la mañana, <strong>solo uno. No más.</strong></li>
+          <li>Si puedes prescindir, mejor.</li>
+          <li>Puedes usar <strong>achicoria</strong>, que sabe parecido, no tiene cafeína y además es prebiótica.</li>
+        </ul>
+        <p>El resto del día tienes pautadas infusiones suaves: <strong>manzanilla, hinojo o digestiva</strong>. La manzanilla es maravillosa en hipotiroidismo.</p>
+      </div>
+    </div>
+
+    <div class="nota-section">
+      <div class="nota-title">2. Lácteos: solo los que te ayudan, no los que te inflaman</div>
+      <div class="nota-content">
+        <p>Los lácteos irritan la mucosa, pero necesitas probióticos. Por eso tendrás estos dos en forma muy controlada:</p>
+        <ul>
+          <li><strong>100 ml de kéfir desnatado al día</strong> → por los probióticos. En este caso como se que no te gusta, te añadi una bolsita de pure de manzana y plátano, para que lo mezcles y no te sepa mal 😊</li>
+          <li><strong>Un chorrito de leche desnatada fortificada</strong> para tu café o infusión de la mañana si lo necesitas.</li>
+        </ul>
+        <p>Nada más. <strong>Ni yogures normales, ni lácteos enteros, ni saborizados.</strong></p>
+      </div>
+    </div>
+
+    <div class="nota-section">
+      <div class="nota-title">3. Frutas: priorizamos las que calman y reparan</div>
+      <div class="nota-content">
+        <p>Sé que te encantan la piña, la naranja y la mandarina… pero ahora mismo <strong>son muy irritantes</strong> para tu estómago.</p>
+        <p>Durante este mes y medio vamos a priorizar:</p>
+        <ul>
+          <li><strong>Papaya</strong></li>
+          <li><strong>Manzana cocinada</strong> (asada o microondas)</li>
+          <li><strong>Pera cocinada</strong></li>
+          <li><strong>Plátano</strong> (en días sobre todo de pilates)</li>
+          <li><strong>Uvas moradas sin piel ni pepitas</strong> (solo los días de pilates)</li>
+          <li><strong>Arándanos 50g</strong> → por los polifenoles que necesitas</li>
+        </ul>
+        <p>Si algún día puntual quieres mandarina, que sea solo <strong>50g</strong>, y solo una vez a la semana, por ejemplo en el finde, sustituyendo 50g de otra fruta. <strong>Piña no</strong>, porque irrita demasiado.</p>
+      </div>
+    </div>
+
+    <div class="nota-section">
+      <div class="nota-title">4. Verduras: muy importantes y muy controladas</div>
+      <div class="nota-content">
+        <p>Aquí necesito que hagas un esfuerzo, porque las verduras son clave para: tu digestión, tu microbiota, tus hormonas, tu tiroides, tu inflamación y tu pérdida de grasa.</p>
+        <p>Pero deben ser <strong>suaves y digestivas</strong>:</p>
+        <p><strong>Verduras permitidas (siempre cocinadas; cocidas o al vapor):</strong></p>
+        <ul>
+          <li>Calabacín</li>
+          <li>Nabo</li>
+          <li>Zanahoria</li>
+          <li>Calabaza</li>
+          <li>Judías verdes</li>
+          <li>Cebolla muy cocinada (nunca cruda)</li>
+        </ul>
+        <p><strong>Crucíferas en poca cantidad (100g al día repartidas en comida y cena):</strong></p>
+        <ul>
+          <li>Prioridad al Brócoli / Coliflor</li>
+          <li>No muy cocinadas para que mantengan su capacidad detox.</li>
+        </ul>
+        <p><strong>Verduras ricas en folatos (muy importantes para ti):</strong></p>
+        <ul>
+          <li>Espinacas cocinadas</li>
+          <li>Acelgas cocinadas</li>
+        </ul>
+        <p>Evitamos ensaladas y verduras crudas. Mejor cocidas, al vapor o salteadas suave. Los purés están bien, pero sacian menos.</p>
+      </div>
+    </div>
+
+    <div class="nota-section">
+      <div class="nota-title">5. Nuevos alimentos que incorporamos</div>
+      <div class="nota-content">
+        <p><strong>Chía molida:</strong> Como el lino: molida para que puedas absorberla y no te caiga mal. Te ayudará con tránsito, inflamación y hormonas.</p>
+        <br>
+        <p><strong>Tahini negro:</strong> Mucho más biodisponible en calcio. Perfecto para ti por tu tiroides y tu absorción.</p>
+      </div>
+    </div>
+
+    <div class="nota-section">
+      <div class="nota-title">6. El agua sigue siendo imprescindible</div>
+      <div class="nota-content">
+        <p>Tus <strong>2,5–3 litros al día</strong> son clave para: depurar, reducir inflamación, mejorar digestión, evitar retención, regular sistema nervioso y apoyar pérdida de grasa.</p>
+        <p>Tu cuerpo lo necesita para que todo lo que estamos trabajando funcione.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="bnav-btn active" onclick="showPage('plan',this)"><span class="bnav-icon">📅</span>Plan</button>
+  <button class="bnav-btn" onclick="showPage('suppl',this)"><span class="bnav-icon">💊</span>Suplementos</button>
+  <button class="bnav-btn" onclick="showPage('obj',this)"><span class="bnav-icon">🎯</span>Objetivos</button>
+  <button class="bnav-btn" onclick="showPage('notas',this)"><span class="bnav-icon">📌</span>Notas</button>
+</div>
+
+<script>
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+function showDay(id,btn){
+  document.querySelectorAll('.day-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('day-'+id).classList.add('active');
+  btn.classList.add('active');
+  btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleMeal(header){
+  header.parentElement.classList.toggle('open');
+}
+function switchOpt(btn,groupId){
+  const card=btn.closest('.meal-body');
+  const buttons=card.querySelectorAll('.opt-btn');
+  const contents=card.querySelectorAll('.opt-content');
+  const idx=Array.from(buttons).indexOf(btn);
+  buttons.forEach(b=>b.classList.remove('active'));
+  contents.forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  contents[idx].classList.add('active');
+}
+</script>
+</body>
+</html>

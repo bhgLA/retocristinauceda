@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel Cris | Cristina Uceda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --cream: #faf7f4;
+  --white: #ffffff;
+  --rosa: #d4879a;
+  --rosa-light: #f0d5dc;
+  --rosa-pale: #fbeef1;
+  --mauve: #9e6070;
+  --mauve-dark: #7a4555;
+  --text: #3d2b32;
+  --text-light: #9a7d85;
+  --border: #ecdde2;
+  --green: #27ae60;
+  --green-light: #edf7f0;
+  --green-border: #c3e6cb;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'Montserrat',sans-serif; background:var(--cream); color:var(--text); min-height:100vh; }
+
+#loading {
+  position:fixed; inset:0; background:var(--cream);
+  display:flex; align-items:center; justify-content:center;
+  z-index:999; flex-direction:column; gap:16px;
+}
+#loading p { font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--text-light); font-size:1.1rem; }
+.spinner-lg { width:36px; height:36px; border:3px solid var(--rosa-light); border-top-color:var(--rosa); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+header {
+  background:var(--mauve-dark);
+  padding:28px 20px 24px;
+  text-align:center;
+  position:relative;
+}
+.logo-wrap { display:flex; flex-direction:row; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap; }
+.logo-img { width:90px; height:90px; object-fit:contain; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15)); }
+.header-titles { text-align:left; }
+.header-titles h1 { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; color:var(--white); line-height:1.15; }
+.header-titles h1 em { font-style:italic; color:var(--rosa-light); }
+.header-sub { margin-top:8px; font-size:0.62rem; font-weight:500; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.55); }
+
+.btn-logout {
+  position:absolute; top:16px; right:16px;
+  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.7); padding:6px 14px; border-radius:4px;
+  font-family:'Montserrat',sans-serif; font-size:0.58rem; font-weight:600;
+  letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s;
+}
+.btn-logout:hover { background:rgba(255,255,255,0.2); color:white; }
+
+@media(max-width:480px){
+  .logo-wrap { flex-direction:column; gap:12px; }
+  .header-titles { text-align:center; }
+  .btn-logout { top:12px; right:12px; }
+}
+
+main { max-width:860px; margin:0 auto; padding:36px 20px 60px; }
+
+/* ── MENÚ ACCESOS RÁPIDOS ── */
+.menu-rapido {
+  display:flex; gap:12px; margin-bottom:32px; flex-wrap:wrap;
+}
+.menu-btn {
+  display:flex; align-items:center; gap:10px;
+  background:var(--white); border:1px solid var(--border);
+  border-radius:12px; padding:16px 20px;
+  text-decoration:none; color:var(--text);
+  transition:all 0.2s; flex:1; min-width:180px;
+}
+.menu-btn:hover { border-color:var(--rosa); box-shadow:0 4px 16px rgba(120,60,80,0.08); }
+.menu-btn:hover .menu-btn-titulo { color:var(--rosa); }
+.menu-btn-icon {
+  width:40px; height:40px; border-radius:50%;
+  background:var(--rosa-pale); display:flex;
+  align-items:center; justify-content:center;
+  font-size:1.1rem; flex-shrink:0;
+}
+.menu-btn-texto { display:flex; flex-direction:column; gap:2px; }
+.menu-btn-titulo {
+  font-size:0.7rem; font-weight:600; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--mauve-dark); transition:color 0.2s;
+}
+.menu-btn-sub { font-size:0.62rem; color:var(--text-light); }
+
+/* ── STATS ── */
+.stats { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:36px; }
+@media(max-width:480px){ .stats { grid-template-columns:1fr; } }
+
+.stat-card { background:var(--white); border:1px solid var(--border); border-radius:12px; padding:20px; text-align:center; }
+.stat-num { font-family:'Cormorant Garamond',serif; font-size:2.8rem; font-weight:600; color:var(--mauve-dark); line-height:1; }
+.stat-label { font-size:0.6rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); margin-top:6px; }
+
+.seccion-title { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.seccion-title .label-text { font-size:0.6rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--mauve); white-space:nowrap; }
+.seccion-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
+
+.tabs { display:flex; gap:8px; margin-bottom:24px; }
+.tab {
+  padding:8px 18px; border-radius:4px; cursor:pointer;
+  font-family:'Montserrat',sans-serif; font-size:0.62rem; font-weight:600;
+  letter-spacing:1.5px; text-transform:uppercase; transition:all 0.2s;
+  border:1px solid var(--border); background:transparent; color:var(--text-light);
+}
+.tab.active { background:var(--mauve-dark); border-color:var(--mauve-dark); color:white; }
+.tab:hover:not(.active) { border-color:var(--rosa); color:var(--rosa); }
+
+.clientas-list { display:flex; flex-direction:column; gap:12px; }
+
+.clienta-card {
+  background:var(--white); border:1px solid var(--border); border-radius:12px;
+  padding:22px; display:flex; flex-direction:column; gap:16px; transition:box-shadow 0.2s;
+}
+.clienta-card:hover { box-shadow:0 4px 16px rgba(120,60,80,0.08); }
+.clienta-card.inactiva { opacity:0.6; }
+
+.clienta-header { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.clienta-info { display:flex; flex-direction:column; gap:4px; }
+.clienta-nombre { font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:var(--mauve-dark); }
+.clienta-email { font-size:0.68rem; color:var(--text-light); }
+
+.badge-activa { font-size:0.55rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:4px 10px; border-radius:20px; background:var(--green-light); color:var(--green); border:1px solid var(--green-border); }
+.badge-inactiva { font-size:0.55rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:4px 10px; border-radius:20px; background:var(--rosa-pale); color:var(--mauve); border:1px solid var(--rosa-light); }
+
+.planes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+@media(max-width:580px){ .planes-grid { grid-template-columns:1fr; } }
+
+.plan-badge { background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:10px 12px; display:flex; flex-direction:column; gap:8px; }
+.plan-badge .plan-num { font-size:0.58rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--mauve); }
+.plan-badge .plan-url { font-size:0.62rem; line-height:1.5; }
+.plan-badge .plan-url.asignado { color:var(--green); }
+.plan-badge .plan-url.vacio { color:var(--border); font-style:italic; }
+
+.plan-links { display:flex; gap:6px; flex-wrap:wrap; }
+.btn-ver-plan { font-size:0.55rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:4px 8px; border-radius:4px; text-decoration:none; background:var(--mauve-dark); color:white; transition:background 0.2s; }
+.btn-ver-plan:hover { background:var(--mauve); }
+.btn-ver-pdf { font-size:0.55rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:4px 8px; border-radius:4px; text-decoration:none; background:transparent; border:1px solid var(--border); color:var(--mauve); transition:all 0.2s; }
+.btn-ver-pdf:hover { border-color:var(--rosa); color:var(--rosa); }
+
+.clienta-footer { display:flex; justify-content:flex-end; padding-top:12px; border-top:1px solid var(--border); }
+.btn-desactivar { padding:7px 16px; border-radius:6px; background:transparent; border:1px solid var(--rosa-light); color:var(--mauve); font-family:'Montserrat',sans-serif; font-size:0.58rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s; }
+.btn-desactivar:hover { background:var(--rosa-pale); border-color:var(--rosa); }
+.btn-activar { padding:7px 16px; border-radius:6px; background:transparent; border:1px solid var(--green-border); color:var(--green); font-family:'Montserrat',sans-serif; font-size:0.58rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s; }
+.btn-activar:hover { background:var(--green-light); }
+
+.empty-list { text-align:center; padding:48px 20px; font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--text-light); }
+
+footer { background:var(--white); border-top:1px solid var(--border); padding:20px; text-align:center; margin-top:40px; }
+footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); }
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner-lg"></div>
+  <p>Cargando panel...</p>
+</div>
+
+<header>
+  <button class="btn-logout" onclick="handleLogout()">Cerrar sesión</button>
+  <div class="logo-wrap">
+    <img src="logo.png" alt="Cristina Uceda" class="logo-img">
+    <div class="header-titles">
+      <h1><em>Panel</em> de Cristina</h1>
+      <p class="header-sub">Gestión de clientas · Reto Cristina Uceda</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- MENÚ ACCESOS RÁPIDOS -->
+  <div class="menu-rapido">
+    <a href="formularios/index.html" target="_blank" class="menu-btn">
+      <div class="menu-btn-icon">📋</div>
+      <div class="menu-btn-texto">
+        <div class="menu-btn-titulo">Formularios</div>
+        <div class="menu-btn-sub">Ver respuestas de clientas</div>
+      </div>
+    </a>
+    <a href="anexos/index.html" target="_blank" class="menu-btn">
+      <div class="menu-btn-icon">📎</div>
+      <div class="menu-btn-texto">
+        <div class="menu-btn-titulo">Anexos</div>
+        <div class="menu-btn-sub">Gestionar anexos del reto</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" id="statActivas">—</div>
+      <div class="stat-label">Clientas activas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statInactivas">—</div>
+      <div class="stat-label">Retos completados</div>
+    </div>
+  </div>
+
+  <div class="seccion-title"><span class="label-text">Mis clientas</span></div>
+  <div class="tabs">
+    <button class="tab active" onclick="cambiarTab('activas', this)">Activas</button>
+    <button class="tab" onclick="cambiarTab('inactivas', this)">Reto completado</button>
+  </div>
+
+  <div class="clientas-list" id="clientasList"></div>
+</main>
+
+<footer>
+  <p>© Cristina Uceda · Panel privado · Acceso restringido</p>
+</footer>
+
+<script>
+  const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_apcmOtkjMewxZzZ_JC9gcQ_UPT38IWq';
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let clientasData = [];
+  let tabActual = 'activas';
+
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { window.location.href = 'index.html'; return; }
+
+    const { data: profile } = await sb.from('profiles').select('rol').eq('id', session.user.id).single();
+    if (!profile || profile.rol !== 'admin') { window.location.href = 'dashboard.html'; return; }
+
+    await cargarClientas();
+    document.getElementById('loading').style.display = 'none';
+  }
+
+  async function cargarClientas() {
+    const { data, error } = await sb.rpc('get_clientas');
+    if (error) { console.error('Error cargando clientas:', error); return; }
+    clientasData = data || [];
+    renderStats();
+    renderClientas();
+  }
+
+  function renderStats() {
+    const activas   = clientasData.filter(c => c.activa !== false).length;
+    const inactivas = clientasData.filter(c => c.activa === false).length;
+    document.getElementById('statActivas').textContent   = activas;
+    document.getElementById('statInactivas').textContent = inactivas;
+  }
+
+  function cambiarTab(tab, btn) {
+    tabActual = tab;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderClientas();
+  }
+
+  function renderClientas() {
+    const list = document.getElementById('clientasList');
+    const filtradas = clientasData.filter(c =>
+      tabActual === 'activas' ? c.activa !== false : c.activa === false
+    );
+
+    if (filtradas.length === 0) {
+      list.innerHTML = `<div class="empty-list">${
+        tabActual === 'activas'
+          ? 'No hay clientas activas en este momento.'
+          : 'Ninguna clienta ha completado el reto todavía.'
+      }</div>`;
+      return;
+    }
+
+    list.innerHTML = filtradas.map(c => `
+      <div class="clienta-card ${c.activa === false ? 'inactiva' : ''}">
+        <div class="clienta-header">
+          <div class="clienta-info">
+            <div class="clienta-nombre">${c.nombre}</div>
+            <div class="clienta-email">${c.email}</div>
+          </div>
+          <span class="${c.activa !== false ? 'badge-activa' : 'badge-inactiva'}">
+            ${c.activa !== false ? '✓ Activa' : 'Reto completado'}
+          </span>
+        </div>
+        <div class="planes-grid">
+          ${[1,2,3].map(n => {
+            const planUrl = c['plan'+n+'_url'];
+            const pdfUrl  = c['pdf'+n+'_url'];
+            return `
+              <div class="plan-badge">
+                <div class="plan-num">Plan ${n}</div>
+                <div class="plan-url ${planUrl ? 'asignado' : 'vacio'}">
+                  ${planUrl ? '✓ Asignado' : 'Sin asignar'}
+                </div>
+                ${planUrl || pdfUrl ? `
+                  <div class="plan-links">
+                    ${planUrl ? `<a href="${planUrl}" target="_blank" class="btn-ver-plan">👁 Ver</a>` : ''}
+                    ${pdfUrl  ? `<a href="${pdfUrl}"  target="_blank" class="btn-ver-pdf">📄 PDF</a>`  : ''}
+                  </div>` : ''}
+              </div>`;
+          }).join('')}
+        </div>
+        <div class="clienta-footer">
+          ${c.activa !== false
+            ? `<button class="btn-desactivar" onclick="toggleActiva('${c.id}', '${c.nombre}', false)">
+                Marcar reto completado
+               </button>`
+            : `<button class="btn-activar" onclick="toggleActiva('${c.id}', '${c.nombre}', true)">
+                Reactivar clienta
+               </button>`
+          }
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function toggleActiva(id, nombre, activar) {
+    const msg = activar
+      ? `¿Reactivar a ${nombre}?`
+      : `¿Marcar el reto de ${nombre} como completado? Dejará de tener acceso.`;
+    if (!confirm(msg)) return;
+
+    const { error } = await sb.rpc('toggle_clienta_activa', {
+      p_id: id,
+      p_activa: activar
+    });
+    if (error) { alert('Error al actualizar. Inténtalo de nuevo.'); return; }
+    await cargarClientas();
+  }
+
+  async function handleLogout() {
+    await sb.auth.signOut();
+    window.location.href = 'index.html';
+  }
+
+  init();
+</script>
+</body>
+</html>
