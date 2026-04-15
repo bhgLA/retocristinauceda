@@ -403,7 +403,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
         ${p.fecha ? `<div style="font-size:0.6rem;color:var(--text-light);margin-top:-8px">${p.fecha}</div>` : ''}
         <div class="plan-acciones">
           ${p.plan_url ? `
-          <a href="${p.plan_url}" class="btn-plan btn-ver">
+          <a href="visor.html?url=${encodeURIComponent(p.plan_url)}" class="btn-plan btn-ver">
             Ver mi plan ${iconArrow}
           </a>` : '<span style="font-size:0.62rem;color:var(--text-light);font-style:italic">Disponible pronto 💕</span>'}
           ${p.pdf_url ? `
