@@ -775,8 +775,8 @@ async function guardarEnSupabase() {
     const nombre  = g('nombre').toLowerCase().replace(/\s+/g,'_') || 'clienta';
     const numP    = g('numPlan').toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'') || 'plan';
     const fileName = `${clientaId}/${nombre}_${numP}.html`;
-    const blob = new Blob([htmlMovil], {type:'text/html;charset=utf-8'});
-    await sb.storage.from('planes').upload(fileName, blob, {contentType:'text/html', upsert:true});
+    const blob = new Blob(['\uFEFF' + htmlMovil], {type:'text/html;charset=utf-8'});
+    await sb.storage.from('planes').upload(fileName, blob, {contentType:'text/html; charset=utf-8', upsert:true});
     const { data: urlData } = sb.storage.from('planes').getPublicUrl(fileName);
     const planUrl = urlData.publicUrl;
     setModalStatus('⏳ Guardando en base de datos...');
