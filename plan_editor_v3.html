@@ -337,6 +337,53 @@
   if (!profile || profile.rol !== 'admin') { window.location.href = 'index.html'; }
 })();
 
+
+// ── Cargar plan existente si viene ?plan_id=xxx ──
+async function cargarPlanExistente() {
+  const params  = new URLSearchParams(window.location.search);
+  const planId  = params.get('plan_id');
+  if (!planId) return; // Editor vacío normal
+
+  try {
+    const { data: plan, error } = await sb.from('planes')
+      .select('*')
+      .eq('id', planId)
+      .single();
+
+    if (error || !plan) { console.warn('Plan no encontrado'); return; }
+
+    // Rellenar cabecera
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    // Cargar nombre desde profiles
+    const { data: prof } = await sb.from('profiles').select('nombre').eq('id', plan.clienta_id).single();
+    set('nombre', prof?.nombre || '');
+    set('fecha',         plan.fecha);
+    set('numPlan',       plan.num_plan);
+    set('objetivo',      plan.objetivo);
+    set('afecciones',    plan.afecciones);
+
+    // Rellenar días
+    const dias = ['L','M','X','J','V','SD'];
+    const keys = ['desayuno','mediaman','comida','merienda','cena','obs'];
+    dias.forEach(d => {
+      keys.forEach(k => set(d+'_'+k, plan[d.toLowerCase()+'_'+k]));
+    });
+
+    // No entreno
+    keys.forEach(k => set('ne_'+k, plan['ne_'+k]));
+
+    // Secciones finales
+    set('suplementacion', plan.suplementacion);
+    set('objetivos',      plan.objetivos);
+    set('notas',          plan.notas);
+
+    // Mostrar aviso
+    const bar = document.querySelector('.top-bar p');
+    if (bar) bar.innerHTML = '✏️ Editando plan existente · <span style="color:#27ae60;font-weight:700">Datos cargados</span>';
+
+  } catch(e) { console.warn('Error cargando plan:', e); }
+}
+
 const dias      = ['L','M','X','J','V','SD'];
 const diasLabel = {L:'Lunes',M:'Martes',X:'Miércoles',J:'Jueves',V:'Viernes',SD:'Sábado / Domingo'};
 const comidas   = ['Desayuno ☕','Media Mañana','Comida 🍽️','Merienda','Cena 🥗','Observaciones 📌'];
@@ -367,6 +414,9 @@ dias.forEach((d,i) => {
   panel.innerHTML = html;
   panelsDiv.appendChild(panel);
 });
+
+// Cargar plan si viene por URL
+cargarPlanExistente();
 
 function g(id){ return (document.getElementById(id)||{value:''}).value.trim(); }
 function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -793,7 +843,21 @@ async function guardarEnSupabase() {
       suplementacion:g('suplementacion'), objetivos:g('objetivos'), notas:g('notas'),
       plan_url:planUrl, pdf_url:null,
     };
-    const { error } = await sb.from('planes').insert(planData);
+    // Buscar si ya existe un plan con mismo clienta + num_plan
+    const { data: existe } = await sb.from('planes')
+      .select('id')
+      .eq('clienta_id', clientaId)
+      .eq('num_plan', g('numPlan'))
+      .single();
+
+    let error;
+    if (existe) {
+      // Actualizar el existente
+      ({ error } = await sb.from('planes').update(planData).eq('id', existe.id));
+    } else {
+      // Crear nuevo
+      ({ error } = await sb.from('planes').insert(planData));
+    }
     if (error) throw new Error(error.message);
     setModalStatus('✅ Guardado y publicado correctamente.', 'ok');
     btn.disabled = false;
@@ -855,6 +919,10 @@ function generarHTMLMovilString() {
 <div class="page active" id="page-plan"><div class="tabs-wrap"><div class="tabs">${tabsBtns}<\/div><\/div><div class="main">${dayPages}<\/div><\/div>
 <div class="page" id="page-supl"><div class="main" style="padding-top:24px"><div class="section-label">💊 Suplementación recomendada<\/div>${suplHTML||'<p style="color:#b07090;font-size:13px;text-align:center;padding:20px">Sin suplementación<\/p>'}<\/div><\/div>
 <div class="page" id="page-obj"><div class="main" style="padding-top:24px"><div class="section-label">🌿 Objetivos del plan<\/div>${objHTML||'<p style="color:#b07090;font-size:13px;text-align:center">Sin objetivos<\/p>'} ${notasHTML}<\/div><\/div>
+<div id="top-btns" style="position:fixed;top:10px;right:10px;z-index:9999;display:flex;gap:6px">
+  <button onclick="window.history.back()" style="background:rgba(181,21,108,0.85);color:white;border:none;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;backdrop-filter:blur(4px)">← Volver<\/button>
+  <button onclick="window.print()" style="background:rgba(122,69,85,0.85);color:white;border:none;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;backdrop-filter:blur(4px)">🖨️ PDF<\/button>
+</div>
 <nav class="bottom-nav"><button class="bnav-btn active" id="bnav-plan" onclick="showPage('plan',this)"><span class="bnav-icon">🌸<\/span>Mi Plan<\/button><button class="bnav-btn" id="bnav-supl" onclick="showPage('supl',this)"><span class="bnav-icon">💊<\/span>Suplementos<\/button><button class="bnav-btn" id="bnav-obj" onclick="showPage('obj',this)"><span class="bnav-icon">✨<\/span>Objetivos<\/button><\/nav>
 <script>function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');btn.classList.add('active');}function showDay(id,btn){document.querySelectorAll('.day-page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('day-'+id).classList.add('active');btn.classList.add('active');}function toggleMeal(h){h.closest('.meal-card').classList.toggle('open');}<\/script>
 <\/body><\/html>`;

@@ -253,6 +253,8 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     const { data, error } = await sb.rpc('get_clientas');
     if (error) { console.error('Error cargando clientas:', error); return; }
     clientasData = data || [];
+    const ids = clientasData.map(c => c.id);
+    await cargarPlanesClientas(ids);
     renderStats();
     renderClientas();
   }
@@ -271,6 +273,23 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     renderClientas();
   }
 
+  // Planes por clienta
+  let planesPorClienta = {};
+
+  async function cargarPlanesClientas(ids) {
+    if (!ids.length) return;
+    const { data } = await sb
+      .from('planes')
+      .select('id, clienta_id, num_plan, fecha, plan_url, pdf_url')
+      .in('clienta_id', ids)
+      .order('created_at', { ascending: true });
+    planesPorClienta = {};
+    (data || []).forEach(p => {
+      if (!planesPorClienta[p.clienta_id]) planesPorClienta[p.clienta_id] = [];
+      planesPorClienta[p.clienta_id].push(p);
+    });
+  }
+
   function renderClientas() {
     const list = document.getElementById('clientasList');
     const filtradas = clientasData.filter(c =>
@@ -286,47 +305,47 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       return;
     }
 
-    list.innerHTML = filtradas.map(c => `
-      <div class="clienta-card ${c.activa === false ? 'inactiva' : ''}">
-        <div class="clienta-header">
-          <div class="clienta-info">
-            <div class="clienta-nombre">${c.nombre}</div>
-            <div class="clienta-email">${c.email}</div>
+    list.innerHTML = filtradas.map(c => {
+      const planes = planesPorClienta[c.id] || [];
+      const planesHTML = planes.length
+        ? planes.map((p, i) => `
+            <div class="plan-badge">
+              <div class="plan-num">${p.num_plan || 'Plan '+(i+1)}</div>
+              <div class="plan-url asignado">✓ ${p.fecha || 'Sin fecha'}</div>
+              <div class="plan-links">
+                ${p.plan_url ? `<a href="${p.plan_url}" target="_blank" class="btn-ver-plan">👁 Ver</a>` : ''}
+                ${p.pdf_url  ? `<a href="${p.pdf_url}"  target="_blank" class="btn-ver-pdf">📄 PDF</a>`  : ''}
+                <a href="plan_editor_v3.html?plan_id=${p.id}" class="btn-ver-plan" style="background:#27ae60;">✏️ Editar</a>
+              </div>
+            </div>`).join('')
+        : `<div class="plan-badge" style="grid-column:1/-1">
+             <div class="plan-url vacio">Sin planes asignados todavía</div>
+           </div>`;
+
+      return `
+        <div class="clienta-card ${c.activa === false ? 'inactiva' : ''}">
+          <div class="clienta-header">
+            <div class="clienta-info">
+              <div class="clienta-nombre">${c.nombre}</div>
+              <div class="clienta-email">${c.email}</div>
+            </div>
+            <span class="${c.activa !== false ? 'badge-activa' : 'badge-inactiva'}">
+              ${c.activa !== false ? '✓ Activa' : 'Reto completado'}
+            </span>
           </div>
-          <span class="${c.activa !== false ? 'badge-activa' : 'badge-inactiva'}">
-            ${c.activa !== false ? '✓ Activa' : 'Reto completado'}
-          </span>
-        </div>
-        <div class="planes-grid">
-          ${[1,2,3].map(n => {
-            const planUrl = c['plan'+n+'_url'];
-            const pdfUrl  = c['pdf'+n+'_url'];
-            return `
-              <div class="plan-badge">
-                <div class="plan-num">Plan ${n}</div>
-                <div class="plan-url ${planUrl ? 'asignado' : 'vacio'}">
-                  ${planUrl ? '✓ Asignado' : 'Sin asignar'}
-                </div>
-                ${planUrl || pdfUrl ? `
-                  <div class="plan-links">
-                    ${planUrl ? `<a href="${planUrl}" target="_blank" class="btn-ver-plan">👁 Ver</a>` : ''}
-                    ${pdfUrl  ? `<a href="${pdfUrl}"  target="_blank" class="btn-ver-pdf">📄 PDF</a>`  : ''}
-                  </div>` : ''}
-              </div>`;
-          }).join('')}
-        </div>
-        <div class="clienta-footer">
-          ${c.activa !== false
-            ? `<button class="btn-desactivar" onclick="toggleActiva('${c.id}', '${c.nombre}', false)">
-                Marcar reto completado
-               </button>`
-            : `<button class="btn-activar" onclick="toggleActiva('${c.id}', '${c.nombre}', true)">
-                Reactivar clienta
-               </button>`
-          }
-        </div>
-      </div>
-    `).join('');
+          <div class="planes-grid">${planesHTML}</div>
+          <div class="clienta-footer">
+            ${c.activa !== false
+              ? `<button class="btn-desactivar" onclick="toggleActiva('${c.id}', '${c.nombre}', false)">
+                  Marcar reto completado
+                 </button>`
+              : `<button class="btn-activar" onclick="toggleActiva('${c.id}', '${c.nombre}', true)">
+                  Reactivar clienta
+                 </button>`
+            }
+          </div>
+        </div>`;
+    }).join('');
   }
 
   async function toggleActiva(id, nombre, activar) {
