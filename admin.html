@@ -313,7 +313,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
               <div class="plan-num">${p.num_plan || 'Plan '+(i+1)}</div>
               <div class="plan-url asignado">✓ ${p.fecha || 'Sin fecha'}</div>
               <div class="plan-links">
-                ${p.plan_url ? `<a href="${p.plan_url}" target="_blank" class="btn-ver-plan">👁 Ver</a>` : ''}
+                ${p.plan_url ? `<a href="visor.html?url=${encodeURIComponent(p.plan_url)}" target="_blank" class="btn-ver-plan">👁 Ver</a>` : ''}
                 ${p.pdf_url  ? `<a href="${p.pdf_url}"  target="_blank" class="btn-ver-pdf">📄 PDF</a>`  : ''}
                 <a href="plan_editor_v3.html?plan_id=${p.id}" class="btn-ver-plan" style="background:#27ae60;">✏️ Editar</a>
               </div>

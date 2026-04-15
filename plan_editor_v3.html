@@ -415,9 +415,6 @@ dias.forEach((d,i) => {
   panelsDiv.appendChild(panel);
 });
 
-// Cargar plan si viene por URL
-cargarPlanExistente();
-
 function g(id){ return (document.getElementById(id)||{value:''}).value.trim(); }
 function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function nl2br(s){ return esc(s).replace(/\n/g,'<br>'); }
@@ -787,6 +784,9 @@ const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_apcmOtkjMewxZzZ_JC9gcQ_UPT38IWq';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Cargar plan si viene por URL
+cargarPlanExistente();
 
 async function abrirModalGuardar() {
   document.getElementById('inputNumPlanModal').value = g('numPlan') || '';
