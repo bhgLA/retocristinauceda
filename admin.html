@@ -161,6 +161,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 </head>
 <body>
 
+<input type="file" id="inputPDF" accept=".pdf" style="display:none" onchange="subirPDF(this)">
 <div id="loading">
   <div class="spinner-lg"></div>
   <p>Cargando panel...</p>
@@ -314,8 +315,9 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
               <div class="plan-url asignado">✓ ${p.fecha || 'Sin fecha'}</div>
               <div class="plan-links">
                 ${p.plan_url ? `<a href="visor.html?url=${encodeURIComponent(p.plan_url)}" target="_blank" class="btn-ver-plan">👁 Ver</a>` : ''}
-                ${p.pdf_url  ? `<a href="${p.pdf_url}"  target="_blank" class="btn-ver-pdf">📄 PDF</a>`  : ''}
+                ${p.pdf_url  ? `<a href="${p.pdf_url}" target="_blank" class="btn-ver-pdf">📄 PDF</a>` : ''}
                 <a href="plan_editor_v3.html?plan_id=${p.id}" class="btn-ver-plan" style="background:#27ae60;">✏️ Editar</a>
+                <button data-pdf-btn="${p.id}" onclick="abrirSubirPDF('${p.id}')" class="btn-ver-pdf" style="background:#9e6070;color:white;border:none;cursor:pointer;">📄 ${p.pdf_url ? 'Cambiar PDF' : 'Subir PDF'}</button>
               </div>
             </div>`).join('')
         : `<div class="plan-badge" style="grid-column:1/-1">
@@ -368,6 +370,45 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   }
 
   init();
+
+// ── Subir PDF ──
+let planIdParaPDF = null;
+
+function abrirSubirPDF(planId) {
+  planIdParaPDF = planId;
+  document.getElementById('inputPDF').click();
+}
+
+async function subirPDF(input) {
+  if (!input.files || !input.files[0]) return;
+  const file     = input.files[0];
+  const plan     = Object.values(planesPorClienta).flat().find(p => p.id === planIdParaPDF);
+  if (!plan) return;
+
+  const fileName = `${plan.clienta_id}/pdf_${planIdParaPDF}.pdf`;
+  const btn      = document.querySelector(`[data-pdf-btn="${planIdParaPDF}"]`);
+  if (btn) { btn.textContent = '⏳ Subiendo...'; btn.disabled = true; }
+
+  try {
+    await sb.storage.from('planes').upload(fileName, file, {contentType:'application/pdf', upsert:true});
+    const { data: urlData } = sb.storage.from('planes').getPublicUrl(fileName);
+    const pdfUrl = urlData.publicUrl;
+
+    const { error } = await sb.from('planes').update({ pdf_url: pdfUrl }).eq('id', planIdParaPDF);
+    if (error) throw new Error(error.message);
+
+    // Actualizar en memoria y re-renderizar
+    Object.values(planesPorClienta).flat().forEach(p => {
+      if (p.id === planIdParaPDF) p.pdf_url = pdfUrl;
+    });
+    renderClientas();
+  } catch(err) {
+    alert('Error al subir el PDF: ' + err.message);
+    if (btn) { btn.textContent = '📄 Subir PDF'; btn.disabled = false; }
+  }
+  input.value = '';
+}
+
 </script>
 </body>
 </html>
