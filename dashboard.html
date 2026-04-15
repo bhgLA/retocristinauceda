@@ -357,16 +357,11 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   // ── INIT ──
   async function init() {
     const { data: { session } } = await sb.auth.getSession();
+    if (!session) { window.location.href = 'index.html'; return; }
 
-    if (!session) {
-      window.location.href = 'index.html';
-      return;
-    }
-
-    // Cargar perfil
     const { data: profile, error } = await sb
       .from('profiles')
-      .select('*')
+      .select('id, nombre, rol')
       .eq('id', session.user.id)
       .single();
 
@@ -376,47 +371,43 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       return;
     }
 
-    // Si es admin, redirigir
-    if (profile.rol === 'admin') {
-      window.location.href = 'admin.html';
-      return;
-    }
+    if (profile.rol === 'admin') { window.location.href = 'admin.html'; return; }
 
-    // Mostrar nombre
     document.getElementById('nombreClienta').textContent = profile.nombre;
 
-    // Renderizar planes
-    renderPlanes(profile);
+    // Cargar planes desde tabla planes
+    const { data: planes } = await sb
+      .from('planes')
+      .select('id, num_plan, fecha, plan_url, pdf_url')
+      .eq('clienta_id', profile.id)
+      .order('created_at', { ascending: true });
 
-    // Ocultar loading
+    renderPlanes(planes || []);
     document.getElementById('loading').style.display = 'none';
   }
 
   // ── RENDERIZAR PLANES ──
-  function renderPlanes(profile) {
+  function renderPlanes(planes) {
     const grid = document.getElementById('gridPlanes');
-    const planes = [
-      { url: profile.plan1_url, pdf: profile.pdf1_url, num: 1 },
-      { url: profile.plan2_url, pdf: profile.pdf2_url, num: 2 },
-      { url: profile.plan3_url, pdf: profile.pdf3_url, num: 3 },
-    ].filter(p => p.url); // Solo los que tienen URL
 
-    if (planes.length === 0) {
+    if (!planes || planes.length === 0) {
       grid.innerHTML = '<div class="empty-msg">Tu plan estará disponible muy pronto. 💕</div>';
       return;
     }
 
-    grid.innerHTML = planes.map(p => `
+    grid.innerHTML = planes.map((p, i) => `
       <div class="card-plan">
-        <div class="plan-numero">${p.num}</div>
+        <div class="plan-numero">${i + 1}</div>
         <div class="plan-tag">Plan del Reto</div>
-        <div class="plan-nombre">${nombresPlan[p.num - 1]}</div>
+        <div class="plan-nombre">${p.num_plan || nombresPlan[i] || 'Plan ' + (i+1)}</div>
+        ${p.fecha ? `<div style="font-size:0.6rem;color:var(--text-light);margin-top:-8px">${p.fecha}</div>` : ''}
         <div class="plan-acciones">
-          <a href="${p.url}" class="btn-plan btn-ver">
+          ${p.plan_url ? `
+          <a href="${p.plan_url}" class="btn-plan btn-ver">
             Ver mi plan ${iconArrow}
-          </a>
-          ${p.pdf ? `
-          <a href="${p.pdf}" target="_blank" class="btn-plan btn-pdf">
+          </a>` : '<span style="font-size:0.62rem;color:var(--text-light);font-style:italic">Disponible pronto 💕</span>'}
+          ${p.pdf_url ? `
+          <a href="${p.pdf_url}" target="_blank" class="btn-plan btn-pdf">
             Descargar PDF ${iconPDF}
           </a>` : ''}
         </div>
