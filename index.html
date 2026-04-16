@@ -175,15 +175,23 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Flag para evitar redirección automática durante el flujo de reset
-  let isRecovering = false;
+  // Detectar recovery ANTES de que Supabase procese nada
+  // — funciona tanto con flujo PKCE (?code=) como con flujo implícito (#type=recovery)
+  const isRecoveryLanding = new URLSearchParams(window.location.search).get('recovery') === '1'
+                         || new URLSearchParams(window.location.hash.slice(1)).get('type') === 'recovery';
 
-  // ── INIT — detectar si es recovery ──
+  let isRecovering = isRecoveryLanding;
+
+  if (isRecoveryLanding) {
+    document.getElementById('vistaLogin').style.display = 'none';
+    document.getElementById('vistaReset').style.display = 'block';
+  }
+
+  // ── INIT ──
   async function init() {
-    // Escuchar evento de recovery ANTES de cualquier otra cosa
     sb.auth.onAuthStateChange(async (event, session) => {
       if (event === 'PASSWORD_RECOVERY') {
-        // Token válido — activar flag y mostrar formulario de nueva contraseña
+        // Por si llega el evento (belt-and-suspenders)
         isRecovering = true;
         document.getElementById('vistaLogin').style.display = 'none';
         document.getElementById('vistaReset').style.display = 'block';
@@ -197,9 +205,9 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       }
     });
 
-    // Si hay sesión activa ya (recarga de página), redirigir
+    // Si hay sesión activa ya (recarga normal), redirigir — pero no durante recovery
     const { data: { session } } = await sb.auth.getSession();
-    if (session && !window.location.hash.includes('type=recovery')) {
+    if (session && !isRecovering) {
       await redirectByRole(session.user.id);
     }
   }
@@ -309,7 +317,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       return;
     }
     const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/index.html'
+      redirectTo: window.location.origin + '/index.html?recovery=1'
     });
     if (error) {
       showError('Error al enviar el correo. Inténtalo de nuevo.');
