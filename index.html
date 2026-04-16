@@ -320,11 +320,9 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       showError('Introduce tu email primero y pulsa "¿Olvidaste tu contraseña?"');
       return;
     }
-    const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/index.html'
-    });
+    const { error } = await sb.auth.resetPasswordForEmail(email);
     if (error) {
-      showError('Error al enviar el correo. Inténtalo de nuevo.');
+      showError('Error: ' + error.message);
     } else {
       const msgError = document.getElementById('msgError');
       msgError.className = 'msg success';
