@@ -237,13 +237,15 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     }
 
     msg.className = 'msg success';
-    msg.textContent = '✓ Contraseña guardada. Entrando a tu área...';
+    msg.textContent = '✓ Contraseña guardada correctamente. Ya puedes iniciar sesión.';
 
-    setTimeout(async () => {
-      const { data: { session } } = await sb.auth.getSession();
-      if (session) await redirectByRole(session.user.id);
-      else window.location.href = 'index.html';
-    }, 2000);
+    // Cerrar sesión — no redirigir automáticamente
+    await sb.auth.signOut();
+
+    setTimeout(() => {
+      // Volver al login limpio
+      window.location.href = 'index.html';
+    }, 2500);
   }
 
   // ── LOGIN ──
