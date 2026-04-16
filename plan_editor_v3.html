@@ -437,6 +437,7 @@ const CSS = `
   /* ── Cada sección = nueva página ── */
   .seccion {
     position: relative;
+    z-index: 1;
     padding: 6mm 8mm 10mm 8mm;
     break-before: page;
     page-break-before: always;
@@ -448,9 +449,9 @@ const CSS = `
     page-break-before: auto;
   }
 
-  /* ── Marca de agua ── */
+  /* ── Marca de agua: fija para repetirse en cada página impresa ── */
   .watermark {
-    position: absolute;
+    position: fixed;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     opacity: 0.06;
@@ -460,8 +461,6 @@ const CSS = `
     user-select: none;
   }
   .watermark img { width: 400px; height: 400px; }
-
-  .seccion > *:not(.watermark) { position: relative; z-index: 1; }
 
   /* ── Header (solo pág 1) ── */
   .hdr {
@@ -521,9 +520,9 @@ const CSS = `
   }
   .comidas-table td {
     border: 1px solid #e8c4d8;
-    padding: 7px 9px;
+    padding: 5px 7px;
     font-size: 9.5pt;
-    line-height: 1.55;
+    line-height: 1.5;
     vertical-align: top;
     color: #333;
   }
@@ -590,15 +589,20 @@ const CSS = `
   .btn-back  { background: #999; }
   .btn-print { background: #d4608a; }
 
+  @page {
+    size: A4 landscape;
+    margin: 8mm 8mm 14mm 8mm;
+    @bottom-center {
+      content: "Página " counter(page) " / " counter(pages);
+      font-size: 8pt;
+      color: #bbb;
+      letter-spacing: 0.04em;
+      font-family: 'Segoe UI', Calibri, sans-serif;
+    }
+  }
   @media print {
     .no-print { display: none !important; }
-    @page {
-      size: A4 landscape;
-      margin: 10mm 8mm;
-      /* Elimina cabeceras y pies del navegador */
-      margin-top: 8mm;
-      margin-bottom: 8mm;
-    }
+    .page-footer { display: none !important; }
     .seccion { min-height: auto; padding: 0; }
   }
   /* Fuerza ocultar header/footer del navegador en Chromium */
@@ -698,7 +702,6 @@ function generarPDF() {
   // ── Página 1: Header + Lunes ──
   const valsL = comidaKey.map(k => g(`L_${k}`));
   body += `<div class="seccion">
-  ${watermark()}
   ${buildHdr(nombre, fecha, objetivo, afecciones, numPlan)}
   <div class="dia-titulo">📅 Lunes</div>
   ${buildComidasTable(valsL)}
@@ -709,7 +712,6 @@ function generarPDF() {
   ['M','X','J','V','SD'].forEach(d => {
     const vals = comidaKey.map(k => g(`${d}_${k}`));
     body += `<div class="seccion">
-  ${watermark()}
   <div class="dia-titulo">📅 ${diasLabel[d]}</div>
   ${buildComidasTable(vals)}
   <div class="page-footer">Página ${pageNum++} / ${totalPages}</div>
@@ -719,7 +721,6 @@ function generarPDF() {
   // ── No entreno ──
   const neVals = comidaKey.map(k => g('ne_'+k));
   body += `<div class="seccion">
-  ${watermark()}
   <div class="dia-titulo">🏃‍♀️ ¿Y si un día que pretendo entrenar, NO entreno?</div>
   ${buildComidasTable(neVals)}
   <div class="page-footer">Página ${pageNum++} / ${totalPages}</div>
@@ -727,7 +728,6 @@ function generarPDF() {
 
   // ── Suplementación ──
   body += `<div class="seccion">
-  ${watermark()}
   <div class="seccion-titulo">💊 Suplementación Recomendada Clave</div>
   <table class="content-table"><tbody><tr>
     <td class="label-col">SUPLEMENTACIÓN<br>RECOMENDADA<br>CLAVE</td>
@@ -738,7 +738,6 @@ function generarPDF() {
 
   // ── Objetivos ──
   body += `<div class="seccion">
-  ${watermark()}
   <div class="seccion-titulo">🌿 Objetivos del Plan</div>
   <table class="content-table"><tbody><tr>
     <td class="label-col">OBJETIVOS /<br>NOTAS DEL PLAN</td>
@@ -749,7 +748,6 @@ function generarPDF() {
 
   // ── Notas generales ──
   body += `<div class="seccion">
-  ${watermark()}
   <div class="seccion-titulo">📌 Notas Generales</div>
   <table class="content-table"><tbody><tr>
     <td class="label-col">NOTAS<br>GENERALES</td>
@@ -760,13 +758,11 @@ function generarPDF() {
 
   const fullHTML = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <style>${CSS}</style></head><body>
+<div class="watermark"><img src="data:image/jpeg;base64,${LOGO_B64}" alt=""></div>
 <div class="no-print" style="flex-direction:column; align-items:flex-end; gap:6px;">
   <div style="display:flex; gap:8px;">
     <button class="btn-back" onclick="document.getElementById('pdfOutput').style.display='none';document.getElementById('editorWrap').style.display='block';">← Volver al editor</button>
     <button class="btn-print" onclick="window.print()">🖨️ Imprimir / PDF</button>
-  </div>
-  <div style="background:white; color:#c06090; font-size:11px; font-weight:600; padding:5px 10px; border-radius:6px; border:1px solid #f4a7c3; max-width:280px; text-align:right; line-height:1.4;">
-    ⚠️ En el diálogo de impresión, desactiva<br><strong>"Encabezados y pies de página"</strong>
   </div>
 </div>
 ${body}
