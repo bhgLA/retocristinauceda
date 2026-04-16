@@ -175,21 +175,23 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  // Flag para evitar redirección automática durante el flujo de reset
+  let isRecovering = false;
+
   // ── INIT — detectar si es recovery ──
   async function init() {
     // Escuchar evento de recovery ANTES de cualquier otra cosa
     sb.auth.onAuthStateChange(async (event, session) => {
       if (event === 'PASSWORD_RECOVERY') {
-        // Token válido — mostrar formulario de nueva contraseña
+        // Token válido — activar flag y mostrar formulario de nueva contraseña
+        isRecovering = true;
         document.getElementById('vistaLogin').style.display = 'none';
         document.getElementById('vistaReset').style.display = 'block';
         return;
       }
       if (event === 'SIGNED_IN' && session) {
-        // Login normal — redirigir según rol
-        // Solo redirigir si NO estamos en modo recovery
-        const hash = window.location.hash;
-        if (!hash.includes('type=recovery')) {
+        // updateUser() también dispara SIGNED_IN — ignorarlo si estamos en recovery
+        if (!isRecovering) {
           await redirectByRole(session.user.id);
         }
       }
