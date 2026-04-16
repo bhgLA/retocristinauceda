@@ -175,10 +175,14 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Detectar recovery ANTES de que Supabase procese nada
-  // — funciona tanto con flujo PKCE (?code=) como con flujo implícito (#type=recovery)
-  const isRecoveryLanding = new URLSearchParams(window.location.search).get('recovery') === '1'
-                         || new URLSearchParams(window.location.hash.slice(1)).get('type') === 'recovery';
+  // Detectar recovery ANTES de que Supabase procese nada.
+  // PKCE manda el enlace como ?code=xxx (sin tipo en hash).
+  // Implícito manda #access_token=xxx&type=recovery en el hash.
+  // En este proyecto solo se usa email+contraseña, así que ?code= solo aparece en recovery.
+  const _sp   = new URLSearchParams(window.location.search);
+  const _hash = new URLSearchParams(window.location.hash.slice(1));
+  const isRecoveryLanding = _sp.get('code') !== null
+                         || _hash.get('type') === 'recovery';
 
   let isRecovering = isRecoveryLanding;
 
@@ -317,7 +321,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       return;
     }
     const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/index.html?recovery=1'
+      redirectTo: window.location.origin + '/index.html'
     });
     if (error) {
       showError('Error al enviar el correo. Inténtalo de nuevo.');
