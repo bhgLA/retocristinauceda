@@ -513,7 +513,12 @@ async function crearClienta() {
     });
 
     if (fnError) {
-      setNcMsg('error', fnError.message ?? 'Error desconocido.');
+      let msg = fnError.message ?? 'Error desconocido.';
+      try {
+        const errBody = await fnError.context?.json();
+        if (errBody?.error) msg = errBody.error;
+      } catch { /* ignorar */ }
+      setNcMsg('error', msg);
       btn.disabled  = false;
       btn.innerHTML = 'Crear clienta';
       return;
