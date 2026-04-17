@@ -27,39 +27,20 @@ body { font-family:'Montserrat',sans-serif; background:var(--cream); color:var(-
 
 /* ── LOADING ── */
 #loading {
-  position:fixed; inset:0;
-  background:var(--cream);
+  position:fixed; inset:0; background:var(--cream);
   display:flex; align-items:center; justify-content:center;
-  z-index:999;
-  flex-direction:column; gap:16px;
+  z-index:999; flex-direction:column; gap:16px;
 }
-#loading p {
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;
-  color:var(--text-light);
-  font-size:1.1rem;
-}
-.spinner-lg {
-  width:36px; height:36px;
-  border:3px solid var(--rosa-light);
-  border-top-color:var(--rosa);
-  border-radius:50%;
-  animation:spin 0.8s linear infinite;
-}
+#loading p { font-family:'Cormorant Garamond',serif; font-style:italic; color:var(--text-light); font-size:1.1rem; }
+.spinner-lg { width:36px; height:36px; border:3px solid var(--rosa-light); border-top-color:var(--rosa); border-radius:50%; animation:spin 0.8s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
 
 /* ── HEADER ── */
 header {
-  background:var(--mauve-dark);
-  padding:28px 20px 24px;
-  text-align:center;
-  position:relative;
+  background:var(--mauve-dark); padding:28px 20px 24px;
+  text-align:center; position:relative;
 }
-.logo-wrap {
-  display:flex; flex-direction:row;
-  align-items:center; justify-content:center;
-  gap:18px; flex-wrap:wrap;
-}
+.logo-wrap { display:flex; flex-direction:row; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap; }
 .logo-img { width:110px; height:110px; object-fit:contain; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15)); }
 .header-titles { text-align:left; }
 .header-titles h1 { font-family:'Cormorant Garamond',serif; font-size:2.1rem; font-weight:300; color:var(--white); line-height:1.15; }
@@ -68,18 +49,10 @@ header {
 
 .btn-logout {
   position:absolute; top:16px; right:16px;
-  background:rgba(255,255,255,0.1);
-  border:1px solid rgba(255,255,255,0.2);
-  color:rgba(255,255,255,0.7);
-  padding:6px 14px;
-  border-radius:4px;
-  font-family:'Montserrat',sans-serif;
-  font-size:0.58rem;
-  font-weight:600;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  cursor:pointer;
-  transition:all 0.2s;
+  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.7); padding:6px 14px; border-radius:4px;
+  font-family:'Montserrat',sans-serif; font-size:0.58rem; font-weight:600;
+  letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s;
 }
 .btn-logout:hover { background:rgba(255,255,255,0.2); color:white; }
 
@@ -89,191 +62,122 @@ header {
   .btn-logout { top:12px; right:12px; }
 }
 
-/* ── BIENVENIDA ── */
-.bienvenida {
-  max-width:580px; margin:36px auto 0; padding:0 20px; text-align:center;
+/* ── SALUDO COMPACTO ── */
+.saludo {
+  text-align:center; padding:18px 20px 0;
+  font-size:0.7rem; color:var(--text-light); letter-spacing:0.5px;
 }
-.bienvenida p {
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.25rem;
-  font-style:italic;
-  color:var(--text-light);
-  line-height:1.9;
+.saludo em {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:1rem; color:var(--mauve); font-weight:600;
 }
-.bienvenida strong { font-style:normal; color:var(--mauve); font-weight:600; }
-
-.divider {
-  max-width:220px; margin:24px auto 0;
-  display:flex; align-items:center; gap:14px;
-  color:var(--rosa); font-size:0.75rem; letter-spacing:3px;
-}
-.divider::before, .divider::after { content:''; flex:1; height:1.5px; background:var(--border); }
 
 /* ── SECCIONES ── */
-.seccion {
-  max-width:900px; margin:36px auto 0; padding:0 20px;
-}
-.seccion-title {
-  display:flex; align-items:center; gap:12px; margin-bottom:20px;
-}
-.seccion-title .label-text {
-  font-size:0.6rem; font-weight:600; letter-spacing:3px;
-  text-transform:uppercase; color:var(--mauve); white-space:nowrap;
-}
-.seccion-title::after {
-  content:''; flex:1; height:1px;
-  background:linear-gradient(90deg,var(--border),transparent);
-}
+.seccion { max-width:860px; margin:28px auto 0; padding:0 20px; }
+.seccion-title { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
+.seccion-title .label-text { font-size:0.6rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--mauve); white-space:nowrap; }
+.seccion-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
 
-/* ── GRID PLANES ── */
-.grid-planes {
-  display:grid;
-  grid-template-columns:1fr;
-  gap:16px;
-}
-@media(min-width:600px){ .grid-planes { grid-template-columns:repeat(2,1fr); } }
-@media(min-width:900px){ .grid-planes { grid-template-columns:repeat(3,1fr); } }
-
-/* ── CARD PLAN ── */
-.card-plan {
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:24px 20px 20px;
-  display:flex; flex-direction:column;
-  gap:14px;
+/* ── CARD PLAN ACTUAL ── */
+.card-plan-actual {
+  background:var(--white); border:1px solid var(--border); border-radius:16px;
+  padding:24px 28px; display:flex; align-items:center;
+  justify-content:space-between; gap:24px;
   position:relative; overflow:hidden;
   transition:box-shadow 0.2s, border-color 0.2s;
 }
-.card-plan:hover { box-shadow:0 4px 20px rgba(120,60,80,0.1); border-color:var(--rosa-light); }
-.card-plan::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+.card-plan-actual:hover { box-shadow:0 4px 20px rgba(120,60,80,0.1); border-color:var(--rosa-light); }
+.card-plan-actual::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
   background:linear-gradient(90deg,var(--rosa),var(--mauve));
-  transform:scaleX(0); transform-origin:left; transition:transform 0.25s;
+  transform:scaleX(0); transform-origin:left; transition:transform 0.3s;
 }
-.card-plan:hover::after { transform:scaleX(1); }
+.card-plan-actual:hover::after { transform:scaleX(1); }
 
-.plan-numero {
-  width:36px; height:36px; border-radius:50%;
-  background:var(--rosa-pale);
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.1rem; color:var(--mauve-dark); font-weight:600;
+.plan-actual-left { display:flex; align-items:center; gap:16px; flex:1; min-width:0; }
+.plan-actual-num {
+  width:52px; height:52px; border-radius:50%; flex-shrink:0;
+  background:var(--rosa-pale); display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:var(--mauve-dark); font-weight:600;
 }
-.plan-tag {
-  font-size:0.58rem; font-weight:600; letter-spacing:2px;
-  text-transform:uppercase; color:var(--rosa);
+.plan-actual-info { display:flex; flex-direction:column; gap:4px; min-width:0; }
+.plan-actual-tag { font-size:0.58rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--rosa); }
+.plan-actual-nombre { font-family:'Cormorant Garamond',serif; font-size:1.45rem; font-weight:400; color:var(--mauve-dark); line-height:1.2; }
+.plan-actual-fecha { font-size:0.6rem; color:var(--text-light); margin-top:2px; }
+
+.plan-actual-acciones { display:flex; flex-direction:column; gap:8px; flex-shrink:0; min-width:160px; }
+.plan-actual-acciones .btn-plan { width:100%; justify-content:space-between; }
+
+@media(max-width:600px){
+  .card-plan-actual { flex-direction:column; align-items:flex-start; }
+  .plan-actual-acciones { width:100%; min-width:unset; }
 }
-.plan-nombre {
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.2rem; font-weight:400; color:var(--mauve-dark);
-  line-height:1.3;
+
+/* ── PLANES ANTERIORES ── */
+.planes-anteriores {
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  margin-top:14px; padding:12px 16px;
+  background:var(--white); border:1px solid var(--border); border-radius:10px;
 }
-.plan-acciones {
-  display:flex; flex-direction:column; gap:8px;
-  margin-top:auto; padding-top:14px;
-  border-top:1px solid var(--border);
+.planes-ant-label {
+  font-size:0.57rem; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; color:var(--text-light); white-space:nowrap; flex-shrink:0;
 }
+.planes-ant-sep { width:1px; height:14px; background:var(--border); flex-shrink:0; }
+.plan-pill {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:4px 11px; border-radius:20px;
+  background:var(--cream); border:1px solid var(--border);
+  text-decoration:none; color:var(--mauve);
+  font-size:0.6rem; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+  transition:all 0.2s;
+}
+.plan-pill:hover { border-color:var(--rosa); color:var(--rosa); }
+
+/* ── BOTONES PLAN ── */
 .btn-plan {
   display:inline-flex; align-items:center; gap:8px;
-  padding:10px 14px; border-radius:8px;
-  font-family:'Montserrat',sans-serif;
-  font-size:0.62rem; font-weight:600;
+  padding:10px 16px; border-radius:8px;
+  font-family:'Montserrat',sans-serif; font-size:0.62rem; font-weight:600;
   letter-spacing:1.5px; text-transform:uppercase;
-  text-decoration:none; cursor:pointer;
-  transition:all 0.2s; border:none;
+  text-decoration:none; cursor:pointer; transition:all 0.2s; border:none;
 }
-.btn-ver {
-  background:var(--mauve-dark); color:white;
-}
+.btn-ver  { background:var(--mauve-dark); color:white; }
 .btn-ver:hover { background:var(--mauve); }
-
-.btn-pdf {
-  background:transparent;
-  border:1px solid var(--border) !important;
-  color:var(--mauve);
-  border:none;
-}
+.btn-pdf  { background:transparent; border:1px solid var(--border) !important; color:var(--mauve); }
 .btn-pdf:hover { border-color:var(--rosa) !important; color:var(--rosa); }
+.btn-plan svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 
-.btn-plan svg {
-  width:13px; height:13px;
-  stroke:currentColor; fill:none;
-  stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
-  margin-left:auto;
-}
-
-/* ── GRID ANEXOS ── */
-.grid-anexos {
-  display:grid;
-  grid-template-columns:1fr;
-  gap:12px;
-}
-@media(min-width:600px){ .grid-anexos { grid-template-columns:repeat(2,1fr); } }
-@media(min-width:900px){ .grid-anexos { grid-template-columns:repeat(3,1fr); } }
-
-/* ── CARD ANEXO ── */
-.card-anexo {
+/* ── ANEXOS STRIP ── */
+.anexos-strip {
+  display:flex; align-items:center; gap:14px;
   background:var(--white); border:1px solid var(--border); border-radius:12px;
-  padding:20px 18px 16px; display:flex; flex-direction:row;
-  align-items:flex-start; gap:14px;
-  position:relative; overflow:hidden;
-  transition:box-shadow 0.2s, border-color 0.2s; cursor:pointer;
-  text-decoration:none; color:inherit;
+  padding:16px 20px; text-decoration:none; color:inherit;
+  transition:border-color 0.2s, box-shadow 0.2s; position:relative; overflow:hidden;
 }
-.card-anexo:hover { box-shadow:0 4px 20px rgba(120,60,80,0.1); border-color:var(--rosa-light); }
-.card-anexo::after {
+.anexos-strip:hover { border-color:var(--rosa-light); box-shadow:0 2px 12px rgba(120,60,80,0.07); }
+.anexos-strip::after {
   content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
   background:linear-gradient(90deg,var(--rosa),var(--mauve));
   transform:scaleX(0); transform-origin:left; transition:transform 0.25s;
 }
-.card-anexo:hover::after { transform:scaleX(1); }
+.anexos-strip:hover::after { transform:scaleX(1); }
 
-.anexo-icon {
-  width:40px; height:40px; border-radius:50%;
-  background:var(--rosa-pale);
-  display:flex; align-items:center; justify-content:center;
-  flex-shrink:0;
+.anexos-strip-icon {
+  width:42px; height:42px; border-radius:50%; flex-shrink:0;
+  background:var(--rosa-pale); display:flex; align-items:center; justify-content:center;
 }
-.anexo-icon svg {
-  width:18px; height:18px; fill:none;
-  stroke:var(--mauve); stroke-width:1.5;
-  stroke-linecap:round; stroke-linejoin:round;
-}
-.anexo-info { flex:1; min-width:0; }
-.anexo-tag {
-  font-size:0.58rem; font-weight:600; letter-spacing:2px;
-  text-transform:uppercase; color:var(--rosa); margin-bottom:4px;
-}
-.anexo-titulo {
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.05rem; font-weight:400; color:var(--mauve-dark); line-height:1.3;
-}
-.anexo-cta {
-  display:inline-flex; align-items:center; gap:6px;
-  color:var(--mauve-dark); font-size:0.62rem; font-weight:600;
-  letter-spacing:2px; text-transform:uppercase;
-  margin-top:10px; padding-top:10px;
-  border-top:1px solid var(--border); width:100%;
-  transition:color 0.2s;
-}
-.anexo-cta:hover { color:var(--rosa); }
-.anexo-cta svg {
-  width:12px; height:12px; stroke:currentColor; fill:none;
-  stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-left:auto;
-}
+.anexos-strip-icon svg { width:18px; height:18px; fill:none; stroke:var(--mauve); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.anexos-strip-texto { flex:1; display:flex; flex-direction:column; gap:2px; }
+.anexos-strip-tag { font-size:0.58rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--rosa); }
+.anexos-strip-titulo { font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:var(--mauve-dark); }
+.anexos-strip-arrow { width:16px; height:16px; flex-shrink:0; fill:none; stroke:var(--text-light); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; transition:stroke 0.2s; }
+.anexos-strip:hover .anexos-strip-arrow { stroke:var(--rosa); }
 
 /* ── SIN PLANES ── */
-.empty-msg {
-  text-align:center; padding:40px 20px;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.1rem; font-style:italic; color:var(--text-light);
-}
+.empty-msg { text-align:center; padding:40px 20px; font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--text-light); }
 
-footer {
-  background:var(--white); border-top:1px solid var(--border);
-  padding:20px; text-align:center; margin-top:60px;
-}
+footer { background:var(--white); border-top:1px solid var(--border); padding:20px; text-align:center; margin-top:52px; }
 footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); }
 </style>
 </head>
@@ -296,18 +200,15 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   </div>
 </header>
 
-<div class="bienvenida">
-  <p>Hola, <strong id="nombreClienta">...</strong> 💕<br>
-  Aquí tienes todo lo que necesitas para tu reto.</p>
-</div>
-<div class="divider"><span>✦</span></div>
+<!-- SALUDO COMPACTO -->
+<div class="saludo">Hola, <em id="nombreClienta">...</em> — aquí tienes todo lo que necesitas 💕</div>
 
 <!-- PLANES -->
 <section class="seccion">
   <div class="seccion-title">
     <span class="label-text">Mis Planes</span>
   </div>
-  <div class="grid-planes" id="gridPlanes">
+  <div id="gridPlanes">
     <div class="empty-msg">Cargando tus planes...</div>
   </div>
 </section>
@@ -317,22 +218,16 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   <div class="seccion-title">
     <span class="label-text">Mis Anexos</span>
   </div>
-  <div class="grid-anexos">
-
-    <a href="anexos/index.html" class="card-anexo">
-      <div class="anexo-icon">
-        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-      </div>
-      <div class="anexo-info">
-        <div class="anexo-tag">Guías · Recursos</div>
-        <div class="anexo-titulo">Todos mis anexos</div>
-        <div class="anexo-cta">Ver anexos
-          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </div>
-    </a>
-
-  </div>
+  <a href="anexos/index.html" class="anexos-strip">
+    <div class="anexos-strip-icon">
+      <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+    </div>
+    <div class="anexos-strip-texto">
+      <div class="anexos-strip-tag">Guías · Recursos</div>
+      <div class="anexos-strip-titulo">Mis anexos del reto</div>
+    </div>
+    <svg class="anexos-strip-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
 </section>
 
 <footer>
@@ -340,21 +235,14 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 </footer>
 
 <script>
-  // ── CONFIGURACIÓN SUPABASE ──
   const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_apcmOtkjMewxZzZ_JC9gcQ_UPT38IWq';
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // ── ICONOS SVG ──
-  const iconPlan = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/></svg>`;
-  const iconPDF  = `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
-  const iconArrow= `<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+  const iconArrow = `<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+  const iconPDF   = `<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
 
-  // ── NOMBRES DE PLANES ──
-  const nombresPlan = ['Primer Plan', 'Segundo Plan', 'Tercer Plan'];
-
-  // ── INIT ──
   async function init() {
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'index.html'; return; }
@@ -365,17 +253,11 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       .eq('id', session.user.id)
       .single();
 
-    if (error || !profile) {
-      await sb.auth.signOut();
-      window.location.href = 'index.html';
-      return;
-    }
-
+    if (error || !profile) { await sb.auth.signOut(); window.location.href = 'index.html'; return; }
     if (profile.rol === 'admin') { window.location.href = 'admin.html'; return; }
 
     document.getElementById('nombreClienta').textContent = profile.nombre;
 
-    // Cargar planes desde tabla planes
     const { data: planes } = await sb
       .from('planes')
       .select('id, num_plan, fecha, plan_url, pdf_url')
@@ -386,36 +268,60 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     document.getElementById('loading').style.display = 'none';
   }
 
-  // ── RENDERIZAR PLANES ──
   function renderPlanes(planes) {
-    const grid = document.getElementById('gridPlanes');
+    const container = document.getElementById('gridPlanes');
 
     if (!planes || planes.length === 0) {
-      grid.innerHTML = '<div class="empty-msg">Tu plan estará disponible muy pronto. 💕</div>';
+      container.innerHTML = '<div class="empty-msg">Tu plan estará disponible muy pronto. 💕</div>';
       return;
     }
 
-    grid.innerHTML = planes.map((p, i) => `
-      <div class="card-plan">
-        <div class="plan-numero">${i + 1}</div>
-        <div class="plan-tag">Plan del Reto</div>
-        <div class="plan-nombre">${p.num_plan || nombresPlan[i] || 'Plan ' + (i+1)}</div>
-        ${p.fecha ? `<div style="font-size:0.6rem;color:var(--text-light);margin-top:-8px">${p.fecha}</div>` : ''}
-        <div class="plan-acciones">
-          ${p.plan_url ? `
-          <a href="visor.html?url=${encodeURIComponent(p.plan_url)}" class="btn-plan btn-ver">
-            Ver mi plan ${iconArrow}
-          </a>` : '<span style="font-size:0.62rem;color:var(--text-light);font-style:italic">Disponible pronto 💕</span>'}
-          ${p.pdf_url ? `
-          <a href="${p.pdf_url}" target="_blank" class="btn-plan btn-pdf">
-            Descargar PDF ${iconPDF}
-          </a>` : ''}
+    // Más reciente = el actual; el resto = historial
+    const actual     = planes[planes.length - 1];
+    const anteriores = planes.slice(0, -1);
+    const numActual  = planes.length;
+
+    const botonesActual = actual.plan_url
+      ? `<a href="visor.html?url=${encodeURIComponent(actual.plan_url)}" class="btn-plan btn-ver">Ver mi plan ${iconArrow}</a>
+         ${actual.pdf_url ? `<a href="${actual.pdf_url}" target="_blank" class="btn-plan btn-pdf">Descargar PDF ${iconPDF}</a>` : ''}`
+      : `<span style="font-size:0.62rem;color:var(--text-light);font-style:italic">Disponible pronto 💕</span>`;
+
+    let html = `
+      <div class="card-plan-actual">
+        <div class="plan-actual-left">
+          <div class="plan-actual-num">${numActual}</div>
+          <div class="plan-actual-info">
+            <div class="plan-actual-tag">Plan activo</div>
+            <div class="plan-actual-nombre">${actual.num_plan || 'Plan ' + numActual}</div>
+            ${actual.fecha ? `<div class="plan-actual-fecha">${actual.fecha}</div>` : ''}
+          </div>
         </div>
-      </div>
-    `).join('');
+        <div class="plan-actual-acciones">${botonesActual}</div>
+      </div>`;
+
+    if (anteriores.length > 0) {
+      const pillsHTML = anteriores.map((p, i) => {
+        const label = p.num_plan || ('Plan ' + (i + 1));
+        const fecha  = p.fecha ? ' · ' + p.fecha : '';
+        const href   = p.plan_url
+          ? `visor.html?url=${encodeURIComponent(p.plan_url)}`
+          : p.pdf_url || null;
+        return href
+          ? `<a href="${href}" ${p.pdf_url && !p.plan_url ? 'target="_blank"' : ''} class="plan-pill">${label}${fecha}</a>`
+          : `<span class="plan-pill" style="opacity:0.5;cursor:default">${label}${fecha}</span>`;
+      }).join('');
+
+      html += `
+        <div class="planes-anteriores">
+          <span class="planes-ant-label">Anteriores</span>
+          <span class="planes-ant-sep"></span>
+          ${pillsHTML}
+        </div>`;
+    }
+
+    container.innerHTML = html;
   }
 
-  // ── LOGOUT ──
   async function handleLogout() {
     await sb.auth.signOut();
     window.location.href = 'index.html';
