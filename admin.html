@@ -93,19 +93,20 @@ main { max-width:860px; margin:0 auto; padding:36px 20px 60px; }
 }
 .menu-btn-sub { font-size:0.62rem; color:var(--text-light); }
 
-/* ── STATS ── */
-.stats { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:36px; }
-@media(max-width:480px){ .stats { grid-template-columns:1fr; } }
+/* ── CABECERA SECCIÓN CLIENTAS ── */
+.seccion-header {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; margin-bottom:20px; padding-bottom:16px;
+  border-bottom:1px solid var(--border); flex-wrap:wrap;
+}
+.seccion-title-left { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.label-text { font-size:0.6rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--mauve); }
 
-.stat-card { background:var(--white); border:1px solid var(--border); border-radius:12px; padding:20px; text-align:center; }
-.stat-num { font-family:'Cormorant Garamond',serif; font-size:2.8rem; font-weight:600; color:var(--mauve-dark); line-height:1; }
-.stat-label { font-size:0.6rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); margin-top:6px; }
+.stat-badge { font-size:0.58rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:3px 9px; border-radius:20px; }
+.stat-badge.activas   { background:var(--green-light); color:var(--green);  border:1px solid var(--green-border); }
+.stat-badge.completadas { background:var(--rosa-pale);  color:var(--mauve); border:1px solid var(--rosa-light); }
 
-.seccion-title { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
-.seccion-title .label-text { font-size:0.6rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--mauve); white-space:nowrap; }
-.seccion-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
-
-.tabs { display:flex; gap:8px; margin-bottom:24px; }
+.tabs { display:flex; gap:8px; margin-bottom:16px; }
 .tab {
   padding:8px 18px; border-radius:4px; cursor:pointer;
   font-family:'Montserrat',sans-serif; font-size:0.62rem; font-weight:600;
@@ -115,22 +116,65 @@ main { max-width:860px; margin:0 auto; padding:36px 20px 60px; }
 .tab.active { background:var(--mauve-dark); border-color:var(--mauve-dark); color:white; }
 .tab:hover:not(.active) { border-color:var(--rosa); color:var(--rosa); }
 
-.clientas-list { display:flex; flex-direction:column; gap:12px; }
+.clientas-list { display:flex; flex-direction:column; gap:10px; }
 
-.clienta-card {
-  background:var(--white); border:1px solid var(--border); border-radius:12px;
-  padding:22px; display:flex; flex-direction:column; gap:16px; transition:box-shadow 0.2s;
+/* ── FILA COMPACTA ── */
+.clienta-item { display:flex; flex-direction:column; }
+
+.clienta-row {
+  background:var(--white); border:1px solid var(--border); border-radius:10px;
+  padding:13px 16px; display:flex; align-items:center; gap:12px;
+  cursor:pointer; transition:border-color 0.2s, box-shadow 0.2s; user-select:none;
 }
-.clienta-card:hover { box-shadow:0 4px 16px rgba(120,60,80,0.08); }
-.clienta-card.inactiva { opacity:0.6; }
+.clienta-row:hover { border-color:var(--rosa-light); box-shadow:0 2px 10px rgba(120,60,80,0.07); }
+.clienta-row.open { border-radius:10px 10px 0 0; border-color:var(--rosa-light); }
+.clienta-row.inactiva { opacity:0.6; }
 
-.clienta-header { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-.clienta-info { display:flex; flex-direction:column; gap:4px; }
-.clienta-nombre { font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:var(--mauve-dark); }
-.clienta-email { font-size:0.68rem; color:var(--text-light); }
+.row-info { flex:1; min-width:0; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+.row-nombre { font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--mauve-dark); white-space:nowrap; }
+.row-email  { font-size:0.63rem; color:var(--text-light); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-.badge-activa { font-size:0.55rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:4px 10px; border-radius:20px; background:var(--green-light); color:var(--green); border:1px solid var(--green-border); }
-.badge-inactiva { font-size:0.55rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:4px 10px; border-radius:20px; background:var(--rosa-pale); color:var(--mauve); border:1px solid var(--rosa-light); }
+.row-meta { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.row-planes-count { font-size:0.6rem; color:var(--text-light); white-space:nowrap; }
+
+.badge-activa   { font-size:0.55rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:3px 9px; border-radius:20px; background:var(--green-light); color:var(--green);  border:1px solid var(--green-border); white-space:nowrap; }
+.badge-inactiva { font-size:0.55rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:3px 9px; border-radius:20px; background:var(--rosa-pale);  color:var(--mauve); border:1px solid var(--rosa-light);  white-space:nowrap; }
+
+.row-toggle {
+  background:none; border:1px solid var(--border); color:var(--text-light);
+  border-radius:4px; padding:3px 7px; font-size:0.7rem; cursor:pointer;
+  transition:all 0.2s; line-height:1.2; flex-shrink:0;
+}
+.row-toggle:hover { border-color:var(--rosa); color:var(--rosa); }
+
+/* ── MENÚ ··· ── */
+.row-menu-wrap { position:relative; }
+.row-menu-btn {
+  background:none; border:1px solid var(--border); border-radius:4px;
+  padding:3px 8px; font-size:1rem; color:var(--text-light); cursor:pointer;
+  transition:all 0.2s; line-height:1.2; letter-spacing:1px;
+}
+.row-menu-btn:hover { border-color:var(--rosa); color:var(--rosa); }
+.row-menu-dropdown {
+  display:none; position:absolute; right:0; top:calc(100% + 4px);
+  background:var(--white); border:1px solid var(--border); border-radius:8px;
+  box-shadow:0 4px 16px rgba(61,43,50,0.12); z-index:20; min-width:200px; padding:6px 0;
+}
+.row-menu-dropdown.open { display:block; }
+.row-menu-dropdown button {
+  display:block; width:100%; text-align:left; padding:9px 16px;
+  background:none; border:none; cursor:pointer;
+  font-family:'Montserrat',sans-serif; font-size:0.62rem; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase; color:var(--text-light);
+  transition:background 0.15s, color 0.15s;
+}
+.row-menu-dropdown button:hover { background:var(--cream); color:var(--mauve); }
+
+/* ── ACORDEÓN ── */
+.clienta-accordion {
+  background:var(--white); border:1px solid var(--rosa-light); border-top:none;
+  border-radius:0 0 10px 10px; padding:16px;
+}
 
 .planes-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 @media(max-width:580px){ .planes-grid { grid-template-columns:1fr; } }
@@ -147,13 +191,12 @@ main { max-width:860px; margin:0 auto; padding:36px 20px 60px; }
 .btn-ver-pdf { font-size:0.55rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:4px 8px; border-radius:4px; text-decoration:none; background:transparent; border:1px solid var(--border); color:var(--mauve); transition:all 0.2s; }
 .btn-ver-pdf:hover { border-color:var(--rosa); color:var(--rosa); }
 
-.clienta-footer { display:flex; justify-content:flex-end; padding-top:12px; border-top:1px solid var(--border); }
-.btn-desactivar { padding:7px 16px; border-radius:6px; background:transparent; border:1px solid var(--rosa-light); color:var(--mauve); font-family:'Montserrat',sans-serif; font-size:0.58rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s; }
-.btn-desactivar:hover { background:var(--rosa-pale); border-color:var(--rosa); }
-.btn-activar { padding:7px 16px; border-radius:6px; background:transparent; border:1px solid var(--green-border); color:var(--green); font-family:'Montserrat',sans-serif; font-size:0.58rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:all 0.2s; }
-.btn-activar:hover { background:var(--green-light); }
-
 .empty-list { text-align:center; padding:48px 20px; font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--text-light); }
+
+@media(max-width:480px){
+  .row-email { display:none; }
+  .row-planes-count { display:none; }
+}
 
 /* ── BOTÓN NUEVA CLIENTA ── */
 .btn-nueva-clienta {
@@ -295,20 +338,12 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     </a>
   </div>
 
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-num" id="statActivas">—</div>
-      <div class="stat-label">Clientas activas</div>
+  <div class="seccion-header">
+    <div class="seccion-title-left">
+      <span class="label-text">Mis clientas</span>
+      <span class="stat-badge activas"    id="statActivas">— activas</span>
+      <span class="stat-badge completadas" id="statInactivas">— completadas</span>
     </div>
-    <div class="stat-card">
-      <div class="stat-num" id="statInactivas">—</div>
-      <div class="stat-label">Retos completados</div>
-    </div>
-  </div>
-
-  <div class="seccion-title" style="justify-content:space-between;">
-    <span class="label-text">Mis clientas</span>
     <button class="btn-nueva-clienta" onclick="abrirModalNuevaClienta()">+ Nueva clienta</button>
   </div>
   <div class="tabs">
@@ -356,8 +391,8 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   function renderStats() {
     const activas   = clientasData.filter(c => c.activa !== false).length;
     const inactivas = clientasData.filter(c => c.activa === false).length;
-    document.getElementById('statActivas').textContent   = activas;
-    document.getElementById('statInactivas').textContent = inactivas;
+    document.getElementById('statActivas').textContent   = activas   + (activas   === 1 ? ' activa'      : ' activas');
+    document.getElementById('statInactivas').textContent = inactivas + (inactivas === 1 ? ' completada'  : ' completadas');
   }
 
   function cambiarTab(tab, btn) {
@@ -400,8 +435,11 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     }
 
     list.innerHTML = filtradas.map(c => {
-      const planes = planesPorClienta[c.id] || [];
-      const planesHTML = planes.length
+      const planes    = planesPorClienta[c.id] || [];
+      const numPlanes = planes.length;
+      const activa    = c.activa !== false;
+
+      const planesHTML = numPlanes
         ? planes.map((p, i) => `
             <div class="plan-badge">
               <div class="plan-num">${p.num_plan || 'Plan '+(i+1)}</div>
@@ -410,7 +448,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
                 ${p.plan_url ? `<a href="visor.html?url=${encodeURIComponent(p.plan_url)}" target="_blank" class="btn-ver-plan">👁 Ver</a>` : ''}
                 ${p.pdf_url  ? `<a href="${p.pdf_url}" target="_blank" class="btn-ver-pdf">📄 PDF</a>` : ''}
                 <a href="plan_editor_v3.html?plan_id=${p.id}" class="btn-ver-plan" style="background:#27ae60;">✏️ Editar</a>
-                <button data-pdf-btn="${p.id}" onclick="abrirSubirPDF('${p.id}')" class="btn-ver-pdf" style="background:#9e6070;color:white;border:none;cursor:pointer;">📄 ${p.pdf_url ? 'Cambiar PDF' : 'Subir PDF'}</button>
+                <button data-pdf-btn="${p.id}" onclick="event.stopPropagation();abrirSubirPDF('${p.id}')" class="btn-ver-pdf" style="background:#9e6070;color:white;border:none;cursor:pointer;">📄 ${p.pdf_url ? 'Cambiar PDF' : 'Subir PDF'}</button>
               </div>
             </div>`).join('')
         : `<div class="plan-badge" style="grid-column:1/-1">
@@ -418,30 +456,55 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
            </div>`;
 
       return `
-        <div class="clienta-card ${c.activa === false ? 'inactiva' : ''}">
-          <div class="clienta-header">
-            <div class="clienta-info">
-              <div class="clienta-nombre">${c.nombre}</div>
-              <div class="clienta-email">${c.email}</div>
+        <div class="clienta-item">
+          <div class="clienta-row${activa ? '' : ' inactiva'}" onclick="toggleRow('${c.id}')">
+            <div class="row-info">
+              <span class="row-nombre">${c.nombre}</span>
+              <span class="row-email">${c.email}</span>
             </div>
-            <span class="${c.activa !== false ? 'badge-activa' : 'badge-inactiva'}">
-              ${c.activa !== false ? '✓ Activa' : 'Reto completado'}
-            </span>
+            <div class="row-meta">
+              <span class="row-planes-count">${numPlanes} ${numPlanes === 1 ? 'plan' : 'planes'}</span>
+              <span class="${activa ? 'badge-activa' : 'badge-inactiva'}">${activa ? '✓ Activa' : 'Completada'}</span>
+              <button class="row-toggle" onclick="event.stopPropagation();toggleRow('${c.id}')">▾</button>
+              <div class="row-menu-wrap">
+                <button class="row-menu-btn" onclick="event.stopPropagation();toggleMenu('${c.id}')">···</button>
+                <div class="row-menu-dropdown" id="menu-${c.id}">
+                  ${activa
+                    ? `<button onclick="event.stopPropagation();toggleActiva('${c.id}','${c.nombre.replace(/'/g,"\\'")}',false)">Marcar reto completado</button>`
+                    : `<button onclick="event.stopPropagation();toggleActiva('${c.id}','${c.nombre.replace(/'/g,"\\'")}',true)">Reactivar clienta</button>`
+                  }
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="planes-grid">${planesHTML}</div>
-          <div class="clienta-footer">
-            ${c.activa !== false
-              ? `<button class="btn-desactivar" onclick="toggleActiva('${c.id}', '${c.nombre}', false)">
-                  Marcar reto completado
-                 </button>`
-              : `<button class="btn-activar" onclick="toggleActiva('${c.id}', '${c.nombre}', true)">
-                  Reactivar clienta
-                 </button>`
-            }
+          <div class="clienta-accordion" id="acc-${c.id}" style="display:none">
+            <div class="planes-grid">${planesHTML}</div>
           </div>
         </div>`;
     }).join('');
   }
+
+  function toggleRow(clientaId) {
+    const acc = document.getElementById('acc-' + clientaId);
+    if (!acc) return;
+    const row    = acc.previousElementSibling;
+    const isOpen = acc.style.display !== 'none';
+    acc.style.display = isOpen ? 'none' : 'block';
+    row.classList.toggle('open', !isOpen);
+    const btn = row.querySelector('.row-toggle');
+    if (btn) btn.textContent = isOpen ? '▾' : '▴';
+  }
+
+  function toggleMenu(clientaId) {
+    const dropdown = document.getElementById('menu-' + clientaId);
+    const isOpen   = dropdown.classList.contains('open');
+    document.querySelectorAll('.row-menu-dropdown.open').forEach(d => d.classList.remove('open'));
+    if (!isOpen) dropdown.classList.add('open');
+  }
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.row-menu-dropdown.open').forEach(d => d.classList.remove('open'));
+  });
 
   async function toggleActiva(id, nombre, activar) {
     const msg = activar
