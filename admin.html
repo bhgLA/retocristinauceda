@@ -475,8 +475,6 @@ function abrirSubirPDF(planId) {
 // ════════════════════════════════
 //  NUEVA CLIENTA
 // ════════════════════════════════
-const EDGE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co/functions/v1/create-clienta';
-
 function abrirModalNuevaClienta() {
   document.getElementById('nc-nombre').value   = '';
   document.getElementById('nc-email').value    = '';
@@ -510,21 +508,12 @@ async function crearClienta() {
   btn.innerHTML = '<span class="spinner-sm"></span>Creando...';
 
   try {
-    const { data: { session } } = await sb.auth.getSession();
-    const res = await fetch(EDGE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
-        'apikey':        SUPABASE_KEY,
-      },
-      body: JSON.stringify({ nombre, email, telefono }),
+    const { data: result, error: fnError } = await sb.functions.invoke('create-clienta', {
+      body: { nombre, email, telefono },
     });
 
-    const result = await res.json();
-
-    if (!res.ok) {
-      setNcMsg('error', result.error ?? 'Error desconocido.');
+    if (fnError) {
+      setNcMsg('error', fnError.message ?? 'Error desconocido.');
       btn.disabled  = false;
       btn.innerHTML = 'Crear clienta';
       return;
