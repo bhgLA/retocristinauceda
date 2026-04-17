@@ -795,7 +795,7 @@ async function abrirModalGuardar() {
   const activas = (data||[]).filter(c => c.activa !== false);
   if (!activas.length) { sel.innerHTML = '<option value="">Sin clientas activas</option>'; return; }
   sel.innerHTML = '<option value="">— Elige clienta —</option>' +
-    activas.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+    activas.map(c => `<option value="${c.id}">${c.nombre}${c.email ? ' — ' + c.email : ''}</option>`).join('');
 }
 
 function cerrarModalGuardar() {

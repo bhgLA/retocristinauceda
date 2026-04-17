@@ -155,6 +155,70 @@ main { max-width:860px; margin:0 auto; padding:36px 20px 60px; }
 
 .empty-list { text-align:center; padding:48px 20px; font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--text-light); }
 
+/* ── BOTÓN NUEVA CLIENTA ── */
+.btn-nueva-clienta {
+  padding:8px 18px; border-radius:6px;
+  background:var(--mauve-dark); border:none; color:white;
+  font-family:'Montserrat',sans-serif; font-size:0.6rem; font-weight:600;
+  letter-spacing:1.5px; text-transform:uppercase; cursor:pointer;
+  transition:background 0.2s; white-space:nowrap;
+}
+.btn-nueva-clienta:hover { background:var(--mauve); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(61,43,50,0.45); z-index:500;
+  align-items:center; justify-content:center; padding:20px;
+}
+.modal-overlay.open { display:flex; }
+.modal-box {
+  background:var(--white); border-radius:16px; padding:36px 32px 28px;
+  width:100%; max-width:420px;
+  box-shadow:0 8px 40px rgba(61,43,50,0.18);
+}
+.modal-box h3 {
+  font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400;
+  color:var(--mauve-dark); margin-bottom:4px; text-align:center;
+}
+.modal-box .modal-sub {
+  font-size:0.62rem; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-light); text-align:center; margin-bottom:24px;
+}
+.modal-field { margin-bottom:16px; }
+.modal-field label {
+  display:block; font-size:0.6rem; font-weight:600;
+  letter-spacing:2px; text-transform:uppercase; color:var(--mauve); margin-bottom:6px;
+}
+.modal-field input {
+  width:100%; padding:11px 14px; border:1px solid var(--border); border-radius:8px;
+  font-family:'Montserrat',sans-serif; font-size:0.85rem; color:var(--text);
+  background:var(--cream); outline:none; transition:border-color 0.2s, box-shadow 0.2s;
+}
+.modal-field input:focus { border-color:var(--rosa); box-shadow:0 0 0 3px rgba(212,135,154,0.12); background:var(--white); }
+.modal-field input::placeholder { color:var(--text-light); font-weight:300; }
+.modal-field .field-hint { font-size:0.58rem; color:var(--text-light); margin-top:4px; }
+.modal-actions { display:flex; gap:10px; margin-top:24px; }
+.modal-actions .btn-cancelar {
+  flex:1; padding:12px; border-radius:8px; border:1px solid var(--border);
+  background:transparent; color:var(--text-light); font-family:'Montserrat',sans-serif;
+  font-size:0.6rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+  cursor:pointer; transition:all 0.2s;
+}
+.modal-actions .btn-cancelar:hover { border-color:var(--rosa); color:var(--mauve); }
+.modal-actions .btn-crear {
+  flex:2; padding:12px; border-radius:8px; border:none;
+  background:var(--mauve-dark); color:white; font-family:'Montserrat',sans-serif;
+  font-size:0.6rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+  cursor:pointer; transition:background 0.2s;
+}
+.modal-actions .btn-crear:hover { background:var(--mauve); }
+.modal-actions .btn-crear:disabled { opacity:0.6; cursor:not-allowed; }
+.modal-msg { margin-top:14px; padding:10px 14px; border-radius:8px; font-size:0.72rem; text-align:center; display:none; }
+.modal-msg.error   { background:#fdecea; color:#c0392b; border:1px solid #f5c6c2; display:block; }
+.modal-msg.success { background:#edf7f0; color:#27ae60; border:1px solid #c3e6cb; display:block; }
+.spinner-sm { display:inline-block; width:12px; height:12px; border:2px solid rgba(255,255,255,0.4); border-top-color:white; border-radius:50%; animation:spin 0.7s linear infinite; margin-right:6px; vertical-align:middle; }
+
 footer { background:var(--white); border-top:1px solid var(--border); padding:20px; text-align:center; margin-top:40px; }
 footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); }
 </style>
@@ -162,6 +226,32 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 <body>
 
 <input type="file" id="inputPDF" accept=".pdf" style="display:none" onchange="subirPDF(this)">
+
+<!-- MODAL NUEVA CLIENTA -->
+<div class="modal-overlay" id="modalNuevaClienta">
+  <div class="modal-box">
+    <h3>Nueva Clienta</h3>
+    <p class="modal-sub">Crear acceso al área privada</p>
+    <div class="modal-field">
+      <label for="nc-nombre">Nombre completo</label>
+      <input type="text" id="nc-nombre" placeholder="Ej: Nuria García López" autocomplete="off">
+    </div>
+    <div class="modal-field">
+      <label for="nc-email">Email</label>
+      <input type="email" id="nc-email" placeholder="clienta@email.com" autocomplete="off">
+      <div class="field-hint">Se le enviará un email para que establezca su contraseña.</div>
+    </div>
+    <div class="modal-field">
+      <label for="nc-telefono">Teléfono <span style="font-weight:400;color:var(--text-light)">(opcional)</span></label>
+      <input type="tel" id="nc-telefono" placeholder="600 000 000" autocomplete="off">
+    </div>
+    <div class="modal-msg" id="nc-msg"></div>
+    <div class="modal-actions">
+      <button class="btn-cancelar" onclick="cerrarModalNuevaClienta()">Cancelar</button>
+      <button class="btn-crear" id="nc-btnCrear" onclick="crearClienta()">Crear clienta</button>
+    </div>
+  </div>
+</div>
 <div id="loading">
   <div class="spinner-lg"></div>
   <p>Cargando panel...</p>
@@ -217,7 +307,10 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     </div>
   </div>
 
-  <div class="seccion-title"><span class="label-text">Mis clientas</span></div>
+  <div class="seccion-title" style="justify-content:space-between;">
+    <span class="label-text">Mis clientas</span>
+    <button class="btn-nueva-clienta" onclick="abrirModalNuevaClienta()">+ Nueva clienta</button>
+  </div>
   <div class="tabs">
     <button class="tab active" onclick="cambiarTab('activas', this)">Activas</button>
     <button class="tab" onclick="cambiarTab('inactivas', this)">Reto completado</button>
@@ -379,6 +472,92 @@ function abrirSubirPDF(planId) {
   document.getElementById('inputPDF').click();
 }
 
+// ════════════════════════════════
+//  NUEVA CLIENTA
+// ════════════════════════════════
+const EDGE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co/functions/v1/create-clienta';
+
+function abrirModalNuevaClienta() {
+  document.getElementById('nc-nombre').value   = '';
+  document.getElementById('nc-email').value    = '';
+  document.getElementById('nc-telefono').value = '';
+  const msg = document.getElementById('nc-msg');
+  msg.className = 'modal-msg';
+  const btn = document.getElementById('nc-btnCrear');
+  btn.disabled  = false;
+  btn.innerHTML = 'Crear clienta';
+  document.getElementById('modalNuevaClienta').classList.add('open');
+  setTimeout(() => document.getElementById('nc-nombre').focus(), 100);
+}
+
+function cerrarModalNuevaClienta() {
+  document.getElementById('modalNuevaClienta').classList.remove('open');
+}
+
+async function crearClienta() {
+  const nombre   = document.getElementById('nc-nombre').value.trim();
+  const email    = document.getElementById('nc-email').value.trim();
+  const telefono = document.getElementById('nc-telefono').value.trim();
+  const msg      = document.getElementById('nc-msg');
+  const btn      = document.getElementById('nc-btnCrear');
+
+  msg.className = 'modal-msg';
+
+  if (!nombre) { setNcMsg('error', 'El nombre completo es obligatorio.'); return; }
+  if (!email)  { setNcMsg('error', 'El email es obligatorio.'); return; }
+
+  btn.disabled  = true;
+  btn.innerHTML = '<span class="spinner-sm"></span>Creando...';
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const res = await fetch(EDGE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+        'apikey':        SUPABASE_KEY,
+      },
+      body: JSON.stringify({ nombre, email, telefono }),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      setNcMsg('error', result.error ?? 'Error desconocido.');
+      btn.disabled  = false;
+      btn.innerHTML = 'Crear clienta';
+      return;
+    }
+
+    setNcMsg('success', `✓ Clienta creada. Se le ha enviado un email a ${email} para que establezca su contraseña.`);
+    btn.innerHTML = '✓ Creada';
+
+    // Recargar lista tras 2 s y cerrar
+    setTimeout(async () => {
+      cerrarModalNuevaClienta();
+      await cargarClientas();
+    }, 2500);
+
+  } catch (err) {
+    setNcMsg('error', 'Error de red: ' + err.message);
+    btn.disabled  = false;
+    btn.innerHTML = 'Crear clienta';
+  }
+}
+
+function setNcMsg(tipo, texto) {
+  const el = document.getElementById('nc-msg');
+  el.className   = 'modal-msg ' + tipo;
+  el.textContent = texto;
+}
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('modalNuevaClienta').addEventListener('click', function(e) {
+  if (e.target === this) cerrarModalNuevaClienta();
+});
+
+// ── Subir PDF ──
 async function subirPDF(input) {
   if (!input.files || !input.files[0]) return;
   const file     = input.files[0];
