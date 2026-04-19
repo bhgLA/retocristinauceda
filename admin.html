@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
 :root {
   --cream: #faf7f4;
@@ -473,6 +474,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
                     ? `<button onclick="event.stopPropagation();toggleActiva('${c.id}','${c.nombre.replace(/'/g,"\\'")}',false)">Marcar reto completado</button>`
                     : `<button onclick="event.stopPropagation();toggleActiva('${c.id}','${c.nombre.replace(/'/g,"\\'")}',true)">Reactivar clienta</button>`
                   }
+                  <button onclick="event.stopPropagation();generarCarta('${c.nombre.replace(/'/g,"\\'")}')">📄 Carta de bienvenida</button>
                 </div>
               </div>
             </div>
@@ -613,6 +615,61 @@ function setNcMsg(tipo, texto) {
 document.getElementById('modalNuevaClienta').addEventListener('click', function(e) {
   if (e.target === this) cerrarModalNuevaClienta();
 });
+
+// ════════════════════════════════
+//  CARTA DE BIENVENIDA
+// ════════════════════════════════
+async function generarCarta(nombre) {
+  // Cerrar el menú desplegable
+  document.querySelectorAll('.row-menu-dropdown.open').forEach(d => d.classList.remove('open'));
+
+  try {
+    const { PDFDocument, rgb, StandardFonts } = PDFLib;
+
+    // Cargar PDF base
+    const resp = await fetch('CartaBienvenida/welcome.pdf');
+    if (!resp.ok) throw new Error('No se encontró CartaBienvenida/welcome.pdf');
+    const pdfBytes = await resp.arrayBuffer();
+    const pdfDoc   = await PDFDocument.load(pdfBytes);
+
+    const pages = pdfDoc.getPages();
+    if (pages.length < 2) throw new Error('El PDF base no tiene página 2.');
+
+    const page             = pages[1]; // página 2 (índice 1)
+    const { height }       = page.getSize();
+
+    // ── Fuente ──
+    const font     = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const fontSize = 13; // ← ajustar si no coincide con el tamaño del texto original
+
+    // ── Coordenadas del punto exacto donde termina "¡Hola " ──
+    // x: distancia desde el margen izquierdo hasta el final de "¡Hola "
+    // y: altura desde abajo de la página hasta la línea
+    // Si el nombre no cae en el sitio correcto, ajustar estos dos valores.
+    const x = 148; // ← calibrar si hace falta
+    const y = height - 143; // ← calibrar si hace falta
+
+    page.drawText(`${nombre.trim()}!`, {
+      x, y,
+      size: fontSize,
+      font,
+      color: rgb(0, 0, 0),
+    });
+
+    // ── Descargar ──
+    const modBytes = await pdfDoc.save();
+    const blob     = new Blob([modBytes], { type: 'application/pdf' });
+    const url      = URL.createObjectURL(blob);
+    const a        = document.createElement('a');
+    a.href         = url;
+    a.download     = `welcome_${nombre.trim().replace(/\s+/g, '_')}.pdf`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+  } catch (err) {
+    alert('Error al generar la carta: ' + err.message);
+  }
+}
 
 // ── Subir PDF ──
 async function subirPDF(input) {
