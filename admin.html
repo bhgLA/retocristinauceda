@@ -647,7 +647,7 @@ async function generarCarta(nombre) {
     // y: altura desde abajo de la página hasta la línea
     // Si el nombre no cae en el sitio correcto, ajustar estos dos valores.
     const x = 86;  // ← calibrar si hace falta
-    const y = height - 64; // ← calibrar si hace falta
+    const y = height - 63; // ← calibrar si hace falta
 
     page.drawText(`${nombre.trim()}!`, {
       x, y,
