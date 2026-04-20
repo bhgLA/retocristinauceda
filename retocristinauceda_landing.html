@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cristina Uceda — Dietista & Personal Trainer</title>
+<title>Cristina Uceda — Nutricionista & Personal Trainer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -41,9 +41,9 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
   position:absolute;inset:0;z-index:1;
   background:linear-gradient(
     to bottom,
-    rgba(80,32,44,.82) 0%,
-    rgba(80,32,44,.65) 50%,
-    rgba(60,20,32,.88) 100%
+    rgba(180,90,110,.42) 40%,
+    rgba(130,100,140,.32) 90%,
+    rgba(120,60,80,.60) 100%
   );
 }
 
@@ -55,7 +55,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
   border-bottom:1px solid rgba(255,255,255,.12);
 }
 .nav-logo img{
-  height:100px;width:auto;display:block;
+  height:62px;width:auto;display:block;
   filter:brightness(0) invert(1) opacity(.92);
 }
 .nav-logo-fallback{
@@ -78,6 +78,75 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
   transition:background .3s,border-color .3s;
 }
 .nav-cta:hover{background:rgba(255,255,255,.12);border-color:var(--white)}
+.nav-acceso{
+  font-size:.63rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.6)!important;
+  border:1px solid rgba(255,255,255,.2);
+  padding:.55rem 1.1rem;border-radius:2px;text-decoration:none;
+  transition:background .3s,border-color .3s,color .3s;
+  white-space:nowrap;
+}
+.nav-acceso:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5);color:var(--white)!important}
+
+/* ── HAMBURGUESA MÓVIL ── */
+.burger{
+  display:none;
+  flex-direction:column;justify-content:center;align-items:center;
+  gap:5px;width:40px;height:40px;cursor:pointer;
+  background:none;border:none;padding:4px;z-index:300;
+}
+.burger span{
+  display:block;width:22px;height:1.5px;
+  background:rgba(255,255,255,.85);
+  transition:transform .35s,opacity .35s;transform-origin:center;
+}
+.burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* Drawer */
+.mobile-menu{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(300px,85vw);
+  background:rgba(80,30,44,.97);
+  backdrop-filter:blur(20px);
+  z-index:250;
+  display:flex;flex-direction:column;
+  padding:5rem 2.5rem 3rem;
+  transform:translateX(100%);
+  transition:transform .4s cubic-bezier(.4,0,.2,1);
+  border-left:1px solid rgba(255,255,255,.08);
+}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{
+  font-size:.75rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.75);text-decoration:none;
+  padding:1rem 0;border-bottom:1px solid rgba(255,255,255,.07);
+  transition:color .3s;
+}
+.mobile-menu a:hover{color:var(--rose-light)}
+.mobile-menu .m-cta{
+  margin-top:1.5rem;
+  color:var(--white)!important;
+  background:var(--rose-deep);
+  text-align:center;padding:.9rem 1rem;
+  border-radius:2px;border:none;
+}
+.mobile-menu .m-acceso{
+  margin-top:.8rem;
+  color:rgba(255,255,255,.65)!important;
+  border:1px solid rgba(255,255,255,.2)!important;
+  text-align:center;padding:.9rem 1rem;border-radius:2px;
+}
+.mobile-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:240;
+}
+.mobile-overlay.open{display:block}
+
+@media(max-width:1100px){
+  .burger{display:flex}
+  .nav-links{display:none}
+}
 
 /* contenido central del hero */
 .hero-content{
@@ -87,10 +156,20 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
   text-align:center;
   padding:5rem 3rem 7rem;
 }
+/* halo oscuro solo detrás del texto, no en toda la foto */
+.hero-content::before{
+  content:'';
+  position:absolute;
+  inset:-4rem -6rem;
+  background:radial-gradient(ellipse at center, rgba(60,18,32,.72) 30%, rgba(60,18,32,.45) 65%, transparent 85%);
+  z-index:-1;
+  pointer-events:none;
+}
 .hero-eyebrow{
   font-size:.65rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;
   color:var(--rose-light);margin-bottom:1.8rem;
   display:flex;align-items:center;justify-content:center;gap:1rem;
+  text-shadow:0 1px 12px rgba(0,0,0,.6);
 }
 .hero-eyebrow::before,.hero-eyebrow::after{
   content:'';display:block;width:40px;height:1px;background:var(--rose-light);
@@ -100,11 +179,13 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
   font-size:clamp(3.5rem,7vw,7rem);
   font-weight:300;line-height:1.04;color:var(--white);
   margin-bottom:1.6rem;letter-spacing:-.01em;
+  text-shadow:0 2px 24px rgba(0,0,0,.65), 0 1px 4px rgba(0,0,0,.4);
 }
 .hero-h1 em{font-style:italic;color:var(--rose-light)}
 .hero-sub{
-  font-size:.9rem;font-weight:300;line-height:1.9;
-  color:rgba(255,255,255,.7);max-width:560px;margin:0 auto 2.8rem;
+  font-size:.9rem;font-weight:400;line-height:1.9;
+  color:rgba(255,255,255,.95);max-width:560px;margin:0 auto 2.8rem;
+  text-shadow:0 1px 16px rgba(0,0,0,.7), 0 1px 4px rgba(0,0,0,.5);
 }
 .hero-btns{display:flex;gap:1rem;align-items:center;justify-content:center;flex-wrap:wrap}
 .btn-solid{
@@ -334,7 +415,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
    FOOTER
 ══════════════════════ */
 footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
-.fl img{height:65px;width:auto;filter:brightness(0) invert(1) opacity(.8)}
+.fl img{height:46px;width:auto;filter:brightness(0) invert(1) opacity(.8)}
 .fc{font-size:.6rem;letter-spacing:.08em;color:rgba(255,255,255,.38);text-align:center}
 .flinks{display:flex;gap:2rem;list-style:none}
 .flinks a{font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);text-decoration:none;transition:color .3s}
@@ -393,7 +474,7 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
   <!-- NAV dentro del hero -->
   <nav class="hero-nav" id="mainnav">
     <a href="#inicio" class="nav-logo">
-      <img src="logo.png" alt="Cristina Uceda"
+      <img src="logoCrisTransparente.png" alt="Cristina Uceda"
            id="nav-logo-img"
            onerror="this.style.display='none';document.querySelector('.nav-logo-fallback').style.display='block'">
       <span class="nav-logo-fallback">Cristina Uceda</span>
@@ -404,8 +485,24 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
       <li><a href="#metodo">El Reto</a></li>
       <li><a href="#testimonios">Resultados</a></li>
       <li><a href="#contacto" class="nav-cta">Primera consulta gratis</a></li>
+      <li><a href="/index.html" class="nav-acceso">🔒 Acceso clientes</a></li>
     </ul>
+    <!-- Hamburguesa móvil -->
+    <button class="burger" id="burger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- Drawer móvil -->
+  <div class="mobile-overlay" id="mob-overlay"></div>
+  <div class="mobile-menu" id="mob-menu">
+    <a href="#sobre-mi"    class="mob-link">Sobre mí</a>
+    <a href="#servicios"   class="mob-link">Servicios</a>
+    <a href="#metodo"      class="mob-link">El Reto</a>
+    <a href="#testimonios" class="mob-link">Resultados</a>
+    <a href="#contacto"    class="mob-link m-cta">Primera consulta gratis</a>
+    <a href="/index.html"  class="mob-link m-acceso">🔒 Acceso clientes</a>
+  </div>
 
   <!-- Contenido central -->
   <div class="hero-content">
@@ -450,14 +547,12 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
 <div class="trust-bar">
   <div class="t-item">
     <div class="t-svg">
-      <!-- Mortarboard / graduación -->
       <svg viewBox="0 0 24 24"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M2 8v6"/><path d="M6 10.5v5.5a6 6 0 0012 0v-5.5"/></svg>
     </div>
-    <span class="t-lbl">Graduada en Nutrición y Dietética</span>
+    <span class="t-lbl">Graduada en Dietética</span>
   </div>
   <div class="t-item">
     <div class="t-svg">
-      <!-- Dumbbell / mancuerna -->
       <svg viewBox="0 0 24 24"><rect x="2" y="10" width="4" height="4" rx="1"/><rect x="18" y="10" width="4" height="4" rx="1"/><rect x="5" y="8" width="3" height="8" rx="1"/><rect x="16" y="8" width="3" height="8" rx="1"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
     </div>
     <span class="t-lbl">Certificada en Entrenamiento Personal</span>
@@ -721,7 +816,7 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
 ══════════════════════════════════ -->
 <footer>
   <a href="#inicio" class="fl">
-    <img src="logo.png" alt="Cristina Uceda"
+    <img src="logoCrisTransparente.png" alt="Cristina Uceda"
          onerror="this.onerror=null;this.src='https://bhgla.github.io/gym-plan/logoCrisTransparente.png'">
   </a>
   <p class="fc">© 2026 retocristinauceda.com · Todos los derechos reservados · by BHG 2026 v1</p>
@@ -749,6 +844,20 @@ window.addEventListener('scroll',()=>{
 // Scroll reveal
 const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Hamburguesa móvil
+const burger=document.getElementById('burger');
+const mobMenu=document.getElementById('mob-menu');
+const mobOverlay=document.getElementById('mob-overlay');
+function toggleMenu(open){
+  burger.classList.toggle('open',open);
+  mobMenu.classList.toggle('open',open);
+  mobOverlay.classList.toggle('open',open);
+  document.body.style.overflow=open?'hidden':'';
+}
+burger.addEventListener('click',()=>toggleMenu(!mobMenu.classList.contains('open')));
+mobOverlay.addEventListener('click',()=>toggleMenu(false));
+document.querySelectorAll('.mob-link').forEach(l=>l.addEventListener('click',()=>toggleMenu(false)));
 </script>
 </body>
 </html>
