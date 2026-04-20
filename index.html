@@ -35,7 +35,7 @@ body {
 
 header {
   background:var(--mauve-dark);
-  padding:28px 20px 24px;
+  padding:20px 20px 16px;
   text-align:center;
 }
 .logo-wrap { display:flex; flex-direction:row; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap; }
@@ -50,17 +50,17 @@ header {
   .header-titles { text-align:center; }
 }
 
-main { flex:1; display:flex; align-items:center; justify-content:center; padding:40px 20px 60px; }
+main { flex:1; display:flex; align-items:flex-start; justify-content:center; padding:20px 20px 40px; }
 .login-wrap { width:100%; max-width:420px; }
 
-.login-intro { text-align:center; margin-bottom:32px; }
-.login-intro p { font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-style:italic; color:var(--text-light); line-height:1.9; }
+.login-intro { text-align:center; margin-bottom:14px; }
+.login-intro p { font-family:'Cormorant Garamond',serif; font-size:1.15rem; font-style:italic; color:var(--text-light); line-height:1.7; }
 .login-intro strong { font-style:normal; color:var(--mauve); font-weight:600; }
 
-.divider { display:flex; align-items:center; gap:14px; color:var(--rosa); font-size:0.75rem; letter-spacing:3px; margin-bottom:32px; }
+.divider { display:flex; align-items:center; gap:14px; color:var(--rosa); font-size:0.75rem; letter-spacing:3px; margin-bottom:20px; }
 .divider::before, .divider::after { content:''; flex:1; height:1.5px; background:var(--border); }
 
-.login-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:36px 32px 32px; box-shadow:0 4px 24px rgba(120,60,80,0.07); }
+.login-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:28px 28px 24px; box-shadow:0 4px 24px rgba(120,60,80,0.07); }
 .login-card h2 { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; color:var(--mauve-dark); margin-bottom:6px; text-align:center; }
 .login-card .subtitle { font-size:0.65rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); text-align:center; margin-bottom:28px; }
 
@@ -117,7 +117,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     <!-- VISTA LOGIN NORMAL -->
     <div id="vistaLogin">
       <div class="login-intro">
-        <p>Bienvenid@ a tu espacio personal. 💕<br>        
+        <p>Bienvenid@ a tu espacio personal 💕<br><strong>Introduce tus credenciales</strong> </p>
       </div>
       <div class="divider"><span>✦</span></div>
       <div class="login-card">
