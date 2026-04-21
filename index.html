@@ -307,7 +307,9 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     if (profile.rol === 'admin') {
       window.location.href = 'admin.html';
     } else {
-      window.location.href = 'dashboard.html';
+      const returnUrl = sessionStorage.getItem('returnUrl');
+      sessionStorage.removeItem('returnUrl');
+      window.location.href = returnUrl || 'dashboard.html';
     }
   }
 

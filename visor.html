@@ -83,6 +83,7 @@
     // 1. Verificar sesión activa
     const { data: { session } } = await sb.auth.getSession();
     if (!session) {
+      sessionStorage.setItem('returnUrl', window.location.href);
       window.location.href = 'index.html';
       return;
     }
