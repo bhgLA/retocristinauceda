@@ -7,6 +7,7 @@
 <title>Formulario de Valoración RETO| Cristina Uceda</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --cream: #faf7f4;
@@ -692,6 +693,21 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 </footer>
 
 <script>
+// ── Supabase ──
+const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_apcmOtkjMewxZzZ_JC9gcQ_UPT38IWq';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── Comprobar sesión al cargar ──
+(async function() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    sessionStorage.setItem('returnUrl', window.location.href);
+    window.location.href = '../index.html';
+  }
+})();
+
 // ── Checkboxes con estilo ──
 document.querySelectorAll('.check-label input[type=checkbox]').forEach(cb => {
   cb.addEventListener('change', () => {
@@ -702,41 +718,26 @@ document.querySelectorAll('.check-label input[type=checkbox]').forEach(cb => {
 // ── Validación y envío ──
 document.getElementById('mainForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  const form    = this;
-  const btn     = document.getElementById('btnSubmit');
-  const msgEl   = document.getElementById('formMsg');
+  const form  = this;
+  const btn   = document.getElementById('btnSubmit');
+  const msgEl = document.getElementById('formMsg');
   msgEl.className = 'form-msg';
 
-  // Campos requeridos de texto/select/textarea
-  const requeridos = form.querySelectorAll('[required]');
+  // Campos requeridos texto/select/textarea
   let valido = true;
-  requeridos.forEach(el => {
+  form.querySelectorAll('[required]').forEach(el => {
     el.classList.remove('invalid');
-    if (!el.value.trim()) {
-      el.classList.add('invalid');
-      valido = false;
-    }
+    if (!el.value.trim()) { el.classList.add('invalid'); valido = false; }
   });
 
-  // Radio groups requeridos
-  ['flexibilidad'].forEach(name => {
-    const radios = form.querySelectorAll(`input[name="${name}"]`);
-    const checked = Array.from(radios).some(r => r.checked);
-    if (!checked) {
-      valido = false;
-      radios.forEach(r => r.closest('.radio-group')?.classList.add('invalid'));
-    }
-  });
-
-  // Checkbox groups requeridos — al menos 1 marcado
-  ['frutas','proteinas','hidratos'].forEach(name => {
+  // Checkbox groups obligatorios — al menos 1 marcado
+  ['lacteos','frutas','proteinas','hidratos'].forEach(name => {
     const checked = form.querySelectorAll(`input[name="${name}"]:checked`);
+    const grid    = form.querySelector(`input[name="${name}"]`)?.closest('.check-grid');
     if (checked.length === 0) {
       valido = false;
-      const grid = form.querySelector(`input[name="${name}"]`)?.closest('.check-grid');
       if (grid) grid.style.outline = '2px solid #e74c3c';
     } else {
-      const grid = form.querySelector(`input[name="${name}"]`)?.closest('.check-grid');
       if (grid) grid.style.outline = 'none';
     }
   });
@@ -748,16 +749,107 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     return;
   }
 
-  btn.disabled  = true;
+  btn.disabled    = true;
   btn.textContent = 'Enviando...';
 
-  // TODO: insertar en Supabase cuando esté creada la tabla
-  // Por ahora mostramos el mensaje de éxito
-  setTimeout(() => {
-    form.style.display = 'none';
-    document.getElementById('successScreen').style.display = 'block';
-    window.scrollTo({ top:0, behavior:'smooth' });
-  }, 800);
+  // ── Sesión ──
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '../index.html'; return; }
+  const clientaId = session.user.id;
+
+  // ── Subir analítica PDF si la han adjuntado ──
+  let analiticaUrl = null;
+  const analiticaFile = form.querySelector('input[name="analitica"]').files[0];
+  if (analiticaFile) {
+    const { data: uploadData, error: uploadError } = await sb.storage
+      .from('formularios')
+      .upload(`${clientaId}/analitica.pdf`, analiticaFile, { upsert: true });
+    if (!uploadError) analiticaUrl = uploadData.path;
+  }
+
+  // ── Helper checkboxes ──
+  const getChecked = name =>
+    Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+
+  // ── Construir objeto con todos los campos ──
+  const datos = {
+    clienta_id:          clientaId,
+    // 1. Datos personales
+    nombre:              form.nombre.value.trim(),
+    apellidos:           form.apellidos.value.trim(),
+    fecha_nacimiento:    form.fechaNacimiento.value,
+    edad:                parseInt(form.edad.value),
+    telefono:            form.telefono.value.trim(),
+    email:               form.email.value.trim(),
+    estado_civil:        form.estadoCivil.value.trim()       || null,
+    hijos:               form.hijos.value.trim()             || null,
+    profesion:           form.profesion.value.trim()         || null,
+    // 2. Objetivo y contexto
+    objetivo:            form.objetivo.value.trim(),
+    motivo_busqueda:     form.motivoBusqueda.value.trim(),
+    altura:              form.altura.value.trim(),
+    peso:                form.peso.value.trim(),
+    porcentaje_grasa:    form.porcentajeGrasa.value.trim()   || null,
+    masa_muscular:       form.masaMuscular.value.trim()      || null,
+    // 3. Salud y síntomas
+    digestion:           form.digestion.value.trim(),
+    ciclo_menstrual:     form.cicloMenstrual.value.trim()    || null,
+    energia:             form.energia.value.trim(),
+    estres:              form.estres.value.trim(),
+    sueno:               form.sueno.value.trim(),
+    historia_medica:     form.historiaMedica.value.trim()    || null,
+    analitica_url:       analiticaUrl,
+    medicacion:          form.medicacion.value.trim()        || null,
+    operaciones:         form.operaciones.value.trim()       || null,
+    // 4. Hábitos
+    tabaco:              form.tabaco.value.trim(),
+    alcohol:             form.alcohol.value.trim(),
+    actividad_fisica:    form.actividadFisica.value.trim(),
+    // 5. Alimentación actual
+    comidas_dia:         form.comidasDia.value,
+    agua:                form.agua.value,
+    cafe:                form.cafe.value.trim()              || null,
+    dietas_anteriores:   form.dietasAnteriores.value.trim()  || null,
+    comidas_fuera:       form.comidasFuera.value.trim()      || null,
+    hambre_emocional:    form.hambreEmocional.value.trim()   || null,
+    dia_completo:        form.diaCompleto.value.trim(),
+    // 6. Preferencias alimentarias
+    no_gustan:           form.noGustan.value.trim(),
+    sientan_mal:         form.sientanMal.value.trim(),
+    lacteos_cuales:      form.lacteos_cuales.value.trim(),
+    lacteos:             getChecked('lacteos'),
+    frutas_diadia:       form.frutas_diadia.value.trim(),
+    frutas:              getChecked('frutas'),
+    verduras:            form.verduras.value.trim(),
+    proteinas:           getChecked('proteinas'),
+    hidratos_preferencia: form.hidratos_preferencia.value.trim(),
+    hidratos:            getChecked('hidratos'),
+    alimentos_encanta:   form.alimentosEncanta.value.trim()  || null,
+    // 7. Vida social
+    eventos_sociales:    form.eventosSociales.value,
+    viajes:              form.viajes.value,
+    dificultades:        form.dificultades.value.trim(),
+    flexibilidad:        form.flexibilidad.value.trim(),
+    // 8. Motivación
+    expectativas:        form.expectativas.value.trim(),
+    recomendacion:       form.recomendacion.value.trim()     || null,
+    motivacion:          form.motivacion.value.trim(),
+  };
+
+  // ── Insertar en Supabase ──
+  const { error } = await sb.from('formularios').insert(datos);
+
+  if (error) {
+    btn.disabled    = false;
+    btn.textContent = 'Enviar mi formulario 💕';
+    msgEl.className = 'form-msg error';
+    msgEl.textContent = 'Ha habido un error al enviar. Por favor inténtalo de nuevo.';
+    console.error(error);
+    return;
+  }
+
+  // ── Éxito → página de gracias ──
+  window.location.href = 'gracias_cris.html';
 });
 </script>
 </body>
