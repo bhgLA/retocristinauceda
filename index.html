@@ -97,6 +97,15 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
 .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,0.4); border-top-color:white; border-radius:50%; animation:spin 0.7s linear infinite; margin-right:8px; vertical-align:middle; }
 @keyframes spin { to { transform:rotate(360deg); } }
+
+.input-wrap { position:relative; }
+.input-wrap input { padding-right:42px; }
+.eye-btn {
+  position:absolute; right:12px; top:50%; transform:translateY(-50%);
+  background:none; border:none; cursor:pointer; padding:4px;
+  color:var(--text-light); transition:color .2s; line-height:1;
+}
+.eye-btn:hover { color:var(--rosa); }
 </style>
 </head>
 <body>
@@ -129,7 +138,12 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
         </div>
         <div class="form-group">
           <label for="password">Contraseña</label>
-          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+          <div class="input-wrap">
+            <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="eye-btn" onclick="toggleEye('password',this)" tabindex="-1" aria-label="Mostrar contraseña">
+              <svg id="eye-password" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
         <button class="btn-login" id="btnLogin" onclick="handleLogin()">Entrar</button>
         <div class="msg" id="msgError"></div>
@@ -139,22 +153,32 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       </div>
     </div>
 
-    <!-- VISTA NUEVA CONTRASEÑA (reset) -->
+    <!-- VISTA NUEVA CONTRASEÑA (reset / nuevo alta) -->
     <div id="vistaReset" style="display:none">
       <div class="login-intro">
-        <p>Elige tu <strong>nueva contraseña</strong> para acceder a tu plan. 💕</p>
+        <p id="resetIntroText"></p>
       </div>
       <div class="divider"><span>✦</span></div>
       <div class="login-card">
-        <h2>Nueva contraseña</h2>
-        <p class="subtitle">Introduce tu nueva contraseña</p>
+        <h2 id="resetTitle"></h2>
+        <p class="subtitle" id="resetSubtitle"></p>
         <div class="form-group">
           <label for="newPassword">Nueva contraseña</label>
-          <input type="password" id="newPassword" placeholder="••••••••" autocomplete="new-password">
+          <div class="input-wrap">
+            <input type="password" id="newPassword" placeholder="••••••••" autocomplete="new-password">
+            <button type="button" class="eye-btn" onclick="toggleEye('newPassword',this)" tabindex="-1" aria-label="Mostrar contraseña">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
         <div class="form-group">
           <label for="confirmPassword">Confirmar contraseña</label>
-          <input type="password" id="confirmPassword" placeholder="••••••••" autocomplete="new-password">
+          <div class="input-wrap">
+            <input type="password" id="confirmPassword" placeholder="••••••••" autocomplete="new-password">
+            <button type="button" class="eye-btn" onclick="toggleEye('confirmPassword',this)" tabindex="-1" aria-label="Mostrar contraseña">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
         </div>
         <button class="btn-login" id="btnReset" onclick="handleReset()">Guardar contraseña</button>
         <div class="msg" id="msgReset"></div>
@@ -182,12 +206,34 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   const _hash = new URLSearchParams(window.location.hash.slice(1));
   const isRecoveryLanding = _sp.get('code') !== null
                          || _hash.get('type') === 'recovery';
+  const isNuevo = _sp.get('nuevo') === '1';
 
   let isRecovering = isRecoveryLanding;
 
   if (isRecoveryLanding) {
     document.getElementById('vistaLogin').style.display = 'none';
     document.getElementById('vistaReset').style.display = 'block';
+
+    // Textos según si es alta nueva o recuperación
+    if (isNuevo) {
+      document.getElementById('resetIntroText').innerHTML = '¡Bienvenida al Reto! 💕<br><strong>Crea tu contraseña</strong> para acceder a tu espacio personal.';
+      document.getElementById('resetTitle').textContent   = '¡Hola! Crea tu contraseña';
+      document.getElementById('resetSubtitle').textContent = 'Elige una contraseña de al menos 6 caracteres';
+    } else {
+      document.getElementById('resetIntroText').innerHTML = 'Elige tu <strong>nueva contraseña</strong> para acceder a tu plan. 💕';
+      document.getElementById('resetTitle').textContent   = 'Nueva contraseña';
+      document.getElementById('resetSubtitle').textContent = 'Introduce tu nueva contraseña';
+    }
+  }
+
+  // ── OJO: mostrar/ocultar contraseña ──
+  function toggleEye(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    btn.innerHTML = isHidden
+      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
   }
 
   // ── INIT ──
