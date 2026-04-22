@@ -842,18 +842,21 @@ Genera entre 4 y 5 slides de contenido (sin contar portada ni CTA). Hazlo concre
     const userPrompt = `Genera un carrusel sobre: "${topic}"`;
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: userPrompt }]
-        })
+		const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co/functions/v1/generar-carrusel';
+		const SUPABASE_ANON_KEY = 'sb_publishable_apcmOtkjMewxZzZ_JC9gcQ_UPT38IWq'; // la pública, sin problema
+		const r = await fetch(SUPABASE_URL, {
+			method: 'POST',
+			headers: { 
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+		},
+        body: JSON.stringify({ 
+		system: sys, 
+		prompt: `Genera un carrusel sobre: "${topic}"` 
+		}),
       });
 
-      const data = await response.json();
+      const data = await r.json();
       const raw = data.content.map(b => b.text || '').join('');
       const clean = raw.replace(/```json|```/g, '').trim();
       generatedData = JSON.parse(clean);
