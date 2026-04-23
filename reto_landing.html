@@ -372,9 +372,13 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
 .testimonials{padding:8rem 7rem;background:var(--rose-pale)}
 .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:4rem}
 .tc{background:var(--white);padding:2.5rem}
-.tstars{color:var(--rose);font-size:.75rem;letter-spacing:3px;margin-bottom:1.2rem;display:block}
+.tc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.tstars{color:var(--rose);font-size:.75rem;letter-spacing:3px;display:block}
 .tq{font-family:'Cormorant Garamond',serif;font-size:4.5rem;line-height:.7;color:var(--rose-light);display:block;margin-bottom:.8rem}
-.tt{font-size:.83rem;font-weight:300;line-height:1.9;color:var(--warm-gray);font-style:italic;margin-bottom:2rem}
+.tt{font-size:.83rem;font-weight:300;line-height:1.9;color:#2e2424;font-style:italic;margin-bottom:.8rem}
+.tt-wrap .tt{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.tt-wrap.expanded .tt{display:block;overflow:visible}
+.leer-mas-btn{background:none;border:none;color:var(--rose);font-size:.68rem;font-weight:600;letter-spacing:.06em;cursor:pointer;padding:0;margin-bottom:1.6rem;text-decoration:underline;font-family:'Montserrat',sans-serif}
 .ta{display:flex;align-items:center;gap:1rem}
 .tav{width:42px;height:42px;border-radius:50%;background:var(--rose-pale);border:2px solid var(--rose-light);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--rose-deep)}
 .tn{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--charcoal)}
@@ -745,22 +749,31 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
   <h2 class="stitle">Resultados <em>reales,<br>personas reales</em></h2>
   <div class="tgrid">
     <div class="tc reveal">
-      <span class="tstars">★★★★★</span>
+      <div class="tc-top">
+        <div class="ta"><div class="tav">R</div><div><div class="tn">Regina</div><div class="tg">El Reto · 1 mes</div></div></div>
+        <span class="tstars">★★★★★</span>
+      </div>
       <span class="tq">"</span>
-      <p class="tt">Llevaba años intentando bajar de peso con dietas de todo tipo. Con Cris por fin entendí que no se trata de comer menos, sino de comer bien. En 3 meses perdí 8 kg sin pasar hambre.</p>
-      <div class="ta"><div class="tav">M</div><div><div class="tn">María G.</div><div class="tg">Plan de nutrición · 3 meses</div></div></div>
+      <div class="tt-wrap" id="tt1">
+        <p class="tt">Lo que me animó a apuntarme fue ver, durante semanas, a un grupo en el gimnasio hablar de "el reto" con ilusión. Siempre se las veía motivadas, compartiendo sus progresos, además de lo bien que decía que se sentían. Era imposible no sentir curiosidad porque, además, yo llevaba bastante tiempo sintiéndome mal: cualquier cosa que comía me hinchaba muchísimo, no me gustaba cómo me veía, me notaba muy pesada y además dormía fatal, con muchos despertares durante la noche.<br><br>
+        Así que, al final, me animé, hablé con Cris y decidí apuntarme a esto que llamaban "el reto".<br><br>
+        Después de completar un formulario muuuuyyyy completo, me preparó un plan personalizado con muchas explicaciones y propuestas para mejorar los síntomas que tenía y que no sabía cómo solucionar. Además, me explicó el origen de muchos de ellos, algo que me ayudó muchísimo a entender lo que me pasaba. También me pautó una guía semanal con las cantidades de alimentos necesarias para no solo comer, sino nutrirme, que no es lo mismo.<br><br>
+        Llevo poco más de un mes y el cambio ha sido increíble: adiós a la hinchazón constante, ya no me levanto con la barriga como si estuviera embarazada de seis meses, me siento mucho más ligera, me veo mejor y, algo que hacía muchísimo tiempo que no conseguía… descanso por las noches.<br><br>
+        Todo han sido ventajas. Es verdad que la primera semana, y los días previos con la compra, pueden ser un poco caóticos porque hay muchas cosas nuevas (¡yo no sabía ni lo que era el tahini negro!), pero con un poco de organización y con la ayuda de Cris y del resto del grupo, todo se hace mucho más fácil.<br><br>
+        Muy agradecida por haber dado el paso. Sin duda, una de las mejores decisiones que he tomado para mi salud 🙂</p>
+      </div>
+      <button class="leer-mas-btn" onclick="toggleTestimonio('tt1',this)">Leer más</button>
     </div>
     <div class="tc reveal d1">
-      <span class="tstars">★★★★★</span>
+      <div class="tc-top">
+        <div class="ta"><div class="tav">L</div><div><div class="tn">Laura Esteban</div><div class="tg">El Reto enero 2026</div></div></div>
+        <span class="tstars">★★★★★</span>
+      </div>
       <span class="tq">"</span>
-      <p class="tt">El pack completo es una maravilla. Nunca había entrenado de forma constante, y ahora no me imagino mi semana sin mis sesiones. Los resultados físicos se notan, pero el cambio mental es brutal.</p>
-      <div class="ta"><div class="tav">L</div><div><div class="tn">Laura P.</div><div class="tg">Pack completo · 4 meses</div></div></div>
-    </div>
-    <div class="tc reveal d2">
-      <span class="tstars">★★★★★</span>
-      <span class="tq">"</span>
-      <p class="tt">Cris no te da un plan y desaparece. Está pendiente de todo, responde rápido y adapta el plan cuando algo no funciona. Eso marca la diferencia total con otras experiencias que había tenido.</p>
-      <div class="ta"><div class="tav">S</div><div><div class="tn">Sandra M.</div><div class="tg">Entrenamiento personal · 6 meses</div></div></div>
+      <div class="tt-wrap" id="tt2">
+        <p class="tt">Una de las primeras razones para empezar con el reto era para aprender a comer y cuidarme. Y he conseguido mucho más, no solo mis dos primeros objetivos, sino que rindo mucho más en el gimnasio, tengo más energía, duermo mejor y me veo genial. El deporte está genial pero hay que combinarlo con una buena alimentación adecuada a las necesidades en cada una. Gracias Cris por hacerlo posible.</p>
+      </div>
+      <button class="leer-mas-btn" onclick="toggleTestimonio('tt2',this)">Leer más</button>
     </div>
   </div>
 </section>
@@ -858,6 +871,13 @@ function toggleMenu(open){
 burger.addEventListener('click',()=>toggleMenu(!mobMenu.classList.contains('open')));
 mobOverlay.addEventListener('click',()=>toggleMenu(false));
 document.querySelectorAll('.mob-link').forEach(l=>l.addEventListener('click',()=>toggleMenu(false)));
+
+// ── Leer más / Leer menos en testimonios ──
+function toggleTestimonio(id, btn) {
+  const wrap = document.getElementById(id);
+  wrap.classList.toggle('expanded');
+  btn.textContent = wrap.classList.contains('expanded') ? 'Leer menos' : 'Leer más';
+}
 </script>
 </body>
 </html>
