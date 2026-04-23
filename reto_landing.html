@@ -370,19 +370,33 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
    TESTIMONIALS
 ══════════════════════ */
 .testimonials{padding:8rem 7rem;background:var(--rose-pale)}
-.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4rem}
-.tc{background:var(--white);padding:2.5rem;border-radius:18px;box-shadow:0 2px 16px rgba(100,40,55,.07)}
+/* carrusel wrapper */
+.t-carousel-wrap{position:relative;margin-top:4rem}
+.tgrid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:1.5rem;padding-bottom:1.2rem;scrollbar-width:none;-ms-overflow-style:none;cursor:grab}
+.tgrid::-webkit-scrollbar{display:none}
+.tgrid.grabbing{cursor:grabbing}
+/* cada card ocupa 1/3 menos gap en desktop */
+.tc{background:var(--white);padding:2.5rem;border-radius:18px;box-shadow:0 2px 16px rgba(100,40,55,.07);scroll-snap-align:start;flex:0 0 calc(33.333% - 1rem);min-width:0}
 .tc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
 .tstars{color:var(--rose);font-size:.75rem;letter-spacing:3px;display:block}
 .tq{font-family:'Cormorant Garamond',serif;font-size:4.5rem;line-height:.7;color:var(--rose-light);display:block;margin-bottom:.8rem}
 .tt{font-size:.83rem;font-weight:300;line-height:1.9;color:#2e2424;font-style:italic;margin-bottom:.8rem}
 .tt-wrap .tt{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
 .tt-wrap.expanded .tt{display:block;overflow:visible}
-.leer-mas-btn{background:none;border:none;color:var(--rose);font-size:.68rem;font-weight:600;letter-spacing:.06em;cursor:pointer;padding:0;margin-bottom:1.6rem;text-decoration:underline;font-family:'Montserrat',sans-serif}
+.leer-mas-btn{background:none;border:none;color:var(--rose);font-size:.68rem;font-weight:600;letter-spacing:.06em;cursor:pointer;padding:0;margin-bottom:.4rem;text-decoration:underline;font-family:'Montserrat',sans-serif}
 .ta{display:flex;align-items:center;gap:1rem}
 .tav{width:42px;height:42px;border-radius:50%;background:var(--rose-pale);border:2px solid var(--rose-light);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--rose-deep)}
 .tn{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--charcoal)}
 .tg{font-size:.62rem;color:var(--text-muted);margin-top:2px}
+/* flechas */
+.t-arrow{position:absolute;top:50%;transform:translateY(-60%);background:var(--white);border:1.5px solid var(--rose-light);color:var(--rose-deep);border-radius:50%;width:42px;height:42px;font-size:1.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;box-shadow:0 2px 10px rgba(100,40,55,.12);transition:background .2s,border-color .2s;line-height:1}
+.t-arrow:hover{background:var(--rose-pale);border-color:var(--rose)}
+.t-prev{left:-22px}
+.t-next{right:-22px}
+/* dots */
+.t-dots{display:flex;justify-content:center;gap:.55rem;margin-top:1.8rem}
+.t-dot{width:8px;height:8px;border-radius:50%;background:var(--rose-light);border:none;cursor:pointer;padding:0;transition:background .25s,transform .25s}
+.t-dot.active{background:var(--rose);transform:scale(1.25)}
 
 /* ══════════════════════
    CONTACT
@@ -448,7 +462,8 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
   .sgrid{grid-template-columns:1fr}
   .planes-grid{grid-template-columns:1fr}
   .mgrid{grid-template-columns:1fr 1fr}
-  .tgrid{grid-template-columns:1fr}
+  .tc{flex:0 0 calc(50% - .75rem)}
+  .t-prev{left:-14px}.t-next{right:-14px}
   .gallery{grid-template-columns:1fr 1fr;grid-template-rows:auto}
   .gc.tall{grid-row:auto}.gc.wide{grid-column:auto}
   .trust-bar{padding:1.4rem 2.5rem;gap:2rem}
@@ -463,6 +478,8 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
   .services,.testimonials,.contact,.igstrip{padding:4rem 1.5rem}
   footer{padding:2rem 1.5rem}
   .gallery{grid-template-columns:1fr}
+  .tc{flex:0 0 calc(100% - .1rem)}
+  .t-arrow{display:none}
 }
 </style>
 </head>
@@ -747,35 +764,82 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
 <section class="testimonials" id="testimonios">
   <p class="eyebrow">Lo que dicen ellas</p>
   <h2 class="stitle">Resultados <em>reales,<br>personas reales</em></h2>
-  <div class="tgrid">
-    <div class="tc reveal">
-      <div class="tc-top">
-        <div class="ta"><div class="tav">R</div><div><div class="tn">Regina</div><div class="tg">El Reto · 1 mes</div></div></div>
-        <span class="tstars">★★★★★</span>
+  <div class="t-carousel-wrap">
+    <button class="t-arrow t-prev" id="tprev" aria-label="Anterior">&#8249;</button>
+    <div class="tgrid" id="tgrid">
+
+      <div class="tc">
+        <div class="tc-top">
+          <div class="ta"><div class="tav">R</div><div><div class="tn">Regina</div><div class="tg">El Reto · 1 mes</div></div></div>
+          <span class="tstars">★★★★★</span>
+        </div>
+        <span class="tq">"</span>
+        <div class="tt-wrap" id="tt1">
+          <p class="tt">Lo que me animó a apuntarme fue ver, durante semanas, a un grupo en el gimnasio hablar de "el reto" con ilusión. Siempre se las veía motivadas, compartiendo sus progresos, además de lo bien que decía que se sentían. Era imposible no sentir curiosidad porque, además, yo llevaba bastante tiempo sintiéndome mal: cualquier cosa que comía me hinchaba muchísimo, no me gustaba cómo me veía, me notaba muy pesada y además dormía fatal, con muchos despertares durante la noche.<br><br>
+          Así que, al final, me animé, hablé con Cris y decidí apuntarme a esto que llamaban "el reto".<br><br>
+          Después de completar un formulario muuuuyyyy completo, me preparó un plan personalizado con muchas explicaciones y propuestas para mejorar los síntomas que tenía y que no sabía cómo solucionar. Además, me explicó el origen de muchos de ellos, algo que me ayudó muchísimo a entender lo que me pasaba. También me pautó una guía semanal con las cantidades de alimentos necesarias para no solo comer, sino nutrirme, que no es lo mismo.<br><br>
+          Llevo poco más de un mes y el cambio ha sido increíble: adiós a la hinchazón constante, ya no me levanto con la barriga como si estuviera embarazada de seis meses, me siento mucho más ligera, me veo mejor y, algo que hacía muchísimo tiempo que no conseguía… descanso por las noches.<br><br>
+          Todo han sido ventajas. Es verdad que la primera semana, y los días previos con la compra, pueden ser un poco caóticos porque hay muchas cosas nuevas (¡yo no sabía ni lo que era el tahini negro!), pero con un poco de organización y con la ayuda de Cris y del resto del grupo, todo se hace mucho más fácil.<br><br>
+          Muy agradecida por haber dado el paso. Sin duda, una de las mejores decisiones que he tomado para mi salud 🙂</p>
+        </div>
+        <button class="leer-mas-btn" onclick="toggleTestimonio('tt1',this)">Leer más</button>
       </div>
-      <span class="tq">"</span>
-      <div class="tt-wrap" id="tt1">
-        <p class="tt">Lo que me animó a apuntarme fue ver, durante semanas, a un grupo en el gimnasio hablar de "el reto" con ilusión. Siempre se las veía motivadas, compartiendo sus progresos, además de lo bien que decía que se sentían. Era imposible no sentir curiosidad porque, además, yo llevaba bastante tiempo sintiéndome mal: cualquier cosa que comía me hinchaba muchísimo, no me gustaba cómo me veía, me notaba muy pesada y además dormía fatal, con muchos despertares durante la noche.<br><br>
-        Así que, al final, me animé, hablé con Cris y decidí apuntarme a esto que llamaban "el reto".<br><br>
-        Después de completar un formulario muuuuyyyy completo, me preparó un plan personalizado con muchas explicaciones y propuestas para mejorar los síntomas que tenía y que no sabía cómo solucionar. Además, me explicó el origen de muchos de ellos, algo que me ayudó muchísimo a entender lo que me pasaba. También me pautó una guía semanal con las cantidades de alimentos necesarias para no solo comer, sino nutrirme, que no es lo mismo.<br><br>
-        Llevo poco más de un mes y el cambio ha sido increíble: adiós a la hinchazón constante, ya no me levanto con la barriga como si estuviera embarazada de seis meses, me siento mucho más ligera, me veo mejor y, algo que hacía muchísimo tiempo que no conseguía… descanso por las noches.<br><br>
-        Todo han sido ventajas. Es verdad que la primera semana, y los días previos con la compra, pueden ser un poco caóticos porque hay muchas cosas nuevas (¡yo no sabía ni lo que era el tahini negro!), pero con un poco de organización y con la ayuda de Cris y del resto del grupo, todo se hace mucho más fácil.<br><br>
-        Muy agradecida por haber dado el paso. Sin duda, una de las mejores decisiones que he tomado para mi salud 🙂</p>
+
+      <div class="tc">
+        <div class="tc-top">
+          <div class="ta"><div class="tav">L</div><div><div class="tn">Laura Esteban</div><div class="tg">El Reto enero 2026</div></div></div>
+          <span class="tstars">★★★★★</span>
+        </div>
+        <span class="tq">"</span>
+        <div class="tt-wrap" id="tt2">
+          <p class="tt">Una de las primeras razones para empezar con el reto era para aprender a comer y cuidarme. Y he conseguido mucho más, no solo mis dos primeros objetivos, sino que rindo mucho más en el gimnasio, tengo más energía, duermo mejor y me veo genial. El deporte está genial pero hay que combinarlo con una buena alimentación adecuada a las necesidades en cada una. Gracias Cris por hacerlo posible.</p>
+        </div>
+        <button class="leer-mas-btn" onclick="toggleTestimonio('tt2',this)">Leer más</button>
       </div>
-      <button class="leer-mas-btn" onclick="toggleTestimonio('tt1',this)">Leer más</button>
+
+      <div class="tc">
+        <div class="tc-top">
+          <div class="ta"><div class="tav">M</div><div><div class="tn">Maribel</div><div class="tg">El Reto · 3 meses</div></div></div>
+          <span class="tstars">★★★★★</span>
+        </div>
+        <span class="tq">"</span>
+        <div class="tt-wrap" id="tt3">
+          <p class="tt">Quería darte las gracias de corazón. Desde enero ya he perdido 8 kilos y medio, pero más allá del peso, lo que más valoro es cómo me siento: duermo genial, estoy mucho más ágil y han desaparecido mis problemas de estómago. Incluso, con 53 años, se me ha regulado el periodo, algo que me tiene súper contenta.<br><br>
+          De verdad, gracias por todo lo que haces por mí y por la paciencia infinita que tienes conmigo. Estoy muy feliz con el camino que estamos recorriendo juntas, gracias por el apoyo y las horas que dedicas a tod@s 💛</p>
+        </div>
+        <button class="leer-mas-btn" onclick="toggleTestimonio('tt3',this)">Leer más</button>
+      </div>
+
+      <div class="tc">
+        <div class="tc-top">
+          <div class="ta"><div class="tav">L</div><div><div class="tn">Laura Fernández</div><div class="tg">El Reto · 3,5 meses</div></div></div>
+          <span class="tstars">★★★★★</span>
+        </div>
+        <span class="tq">"</span>
+        <div class="tt-wrap" id="tt4">
+          <p class="tt">El resumen de mis tres meses y medio contigo mano a mano es que nadie dijo que fuera fácil pero que todo sacrificio tiene su recompensa 💪🥰. Cuando empecé en enero nunca imaginé el esfuerzo y compromiso que esto conllevaría pero precisamente por ello estoy convencida de que nunca más volveré a abandonarme. He aprendido que mi cuerpo es mi templo y que la vida está para disfrutarla pero no 24/7, que en el término medio está la virtud, que un cuerpo sano también es felicidad, que comer sin control afecta mi salud y mi autoestima y que si quiero soy capaz de vencer cualquier demonio 💪😘</p>
+        </div>
+        <button class="leer-mas-btn" onclick="toggleTestimonio('tt4',this)">Leer más</button>
+      </div>
+
+      <div class="tc">
+        <div class="tc-top">
+          <div class="ta"><div class="tav">E</div><div><div class="tn">Esther Mora</div><div class="tg">El Reto</div></div></div>
+          <span class="tstars">★★★★★</span>
+        </div>
+        <span class="tq">"</span>
+        <div class="tt-wrap" id="tt5">
+          <p class="tt">Para mi, entrar en el reto ha sido un antes y un después en mi vida, no sólo por los cambios físicos que son obvios, si no por el grupo maravilloso que he conocido, donde siempre encuentras apoyo cuando las fuerzas flojean.<br><br>
+          Después de haber intentado muchas veces perder peso sin demasiado éxito, empecé el reto con poca confianza, pero en muy poco tiempo descubrí que no tenía nada que ver con lo que había hecho anteriormente y no puedo estar más contenta de haber descubierto a Cris, que me ha hecho entender la importancia de comer bien, descansar y hasta estoy deseando ir a entrenar!!!<br><br>
+          Sin duda alguna de las mejores decisiones que he tomado, animo a tod@s porque a parte de ganar en salud conocerás un grupazo que te lo pone todo mas fácil y estarás en las mejores manos con Cris ❤️</p>
+        </div>
+        <button class="leer-mas-btn" onclick="toggleTestimonio('tt5',this)">Leer más</button>
+      </div>
+
     </div>
-    <div class="tc reveal d1">
-      <div class="tc-top">
-        <div class="ta"><div class="tav">L</div><div><div class="tn">Laura Esteban</div><div class="tg">El Reto enero 2026</div></div></div>
-        <span class="tstars">★★★★★</span>
-      </div>
-      <span class="tq">"</span>
-      <div class="tt-wrap" id="tt2">
-        <p class="tt">Una de las primeras razones para empezar con el reto era para aprender a comer y cuidarme. Y he conseguido mucho más, no solo mis dos primeros objetivos, sino que rindo mucho más en el gimnasio, tengo más energía, duermo mejor y me veo genial. El deporte está genial pero hay que combinarlo con una buena alimentación adecuada a las necesidades en cada una. Gracias Cris por hacerlo posible.</p>
-      </div>
-      <button class="leer-mas-btn" onclick="toggleTestimonio('tt2',this)">Leer más</button>
-    </div>
+    <button class="t-arrow t-next" id="tnext" aria-label="Siguiente">&#8250;</button>
   </div>
+  <div class="t-dots" id="tdots"></div>
 </section>
 
 <!-- ══════════════════════════════════
@@ -878,6 +942,58 @@ function toggleTestimonio(id, btn) {
   wrap.classList.toggle('expanded');
   btn.textContent = wrap.classList.contains('expanded') ? 'Leer menos' : 'Leer más';
 }
+
+// ── Carrusel testimonios ─────────────────────────────────
+(function(){
+  const grid  = document.getElementById('tgrid');
+  const prev  = document.getElementById('tprev');
+  const next  = document.getElementById('tnext');
+  const dotsEl= document.getElementById('tdots');
+  if(!grid) return;
+
+  const cards = Array.from(grid.children);
+  const total = cards.length;
+
+  // Crear dots
+  cards.forEach((_,i)=>{
+    const d = document.createElement('button');
+    d.className = 't-dot' + (i===0?' active':'');
+    d.setAttribute('aria-label','Ir a reseña '+(i+1));
+    d.addEventListener('click',()=>scrollToCard(i));
+    dotsEl.appendChild(d);
+  });
+
+  function cardWidth(){
+    return cards[0].getBoundingClientRect().width + parseFloat(getComputedStyle(grid).gap);
+  }
+
+  function scrollToCard(i){
+    grid.scrollTo({left: i * cardWidth(), behavior:'smooth'});
+  }
+
+  function visibleIndex(){
+    return Math.round(grid.scrollLeft / cardWidth());
+  }
+
+  function updateDots(){
+    const idx = visibleIndex();
+    dotsEl.querySelectorAll('.t-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+    prev.style.opacity = idx===0 ? '.35':'1';
+    next.style.opacity = idx>=total-1 ? '.35':'1';
+  }
+
+  prev.addEventListener('click',()=>scrollToCard(Math.max(0, visibleIndex()-1)));
+  next.addEventListener('click',()=>scrollToCard(Math.min(total-1, visibleIndex()+1)));
+
+  grid.addEventListener('scroll', updateDots, {passive:true});
+  updateDots();
+
+  // Drag to scroll en desktop
+  let isDown=false, startX, startLeft;
+  grid.addEventListener('mousedown',e=>{isDown=true;startX=e.pageX;startLeft=grid.scrollLeft;grid.classList.add('grabbing')});
+  window.addEventListener('mouseup',()=>{isDown=false;grid.classList.remove('grabbing')});
+  grid.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();grid.scrollLeft=startLeft-(e.pageX-startX)});
+}());
 </script>
 </body>
 </html>
