@@ -841,8 +841,9 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     motivacion:          form.motivacion.value.trim(),
   };
 
-  // ── Insertar en Supabase ──
-  const { error } = await sb.from('formularios').insert(datos);
+  // ── Insertar o actualizar (upsert) — si ya existe uno lo sobreescribe y resetea a pendiente ──
+  datos.estado = 'pendiente'; // al reenviar vuelve a pendiente para que Cris lo revise
+  const { error } = await sb.from('formularios').upsert(datos, { onConflict: 'clienta_id' });
 
   if (error) {
     btn.disabled    = false;
