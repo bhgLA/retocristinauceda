@@ -794,9 +794,21 @@ async function generarCarta(nombre, clientaId) {
         .from('planes')
         .upload(filePath, blob, { contentType: 'application/pdf', upsert: true });
 
-      if (!upErr) {
+      if (upErr) {
+        console.error('Error subiendo carta a Storage:', upErr);
+        alert('La carta se ha descargado pero no se ha podido subir al área de la clienta.\nError: ' + upErr.message);
+      } else {
         const { data: urlData } = sb.storage.from('planes').getPublicUrl(filePath);
-        await sb.from('profiles').update({ carta_url: urlData.publicUrl }).eq('id', clientaId);
+        console.log('URL carta:', urlData.publicUrl);
+        const { error: updateErr } = await sb.from('profiles')
+          .update({ carta_url: urlData.publicUrl })
+          .eq('id', clientaId);
+        if (updateErr) {
+          console.error('Error guardando carta_url en profiles:', updateErr);
+          alert('Carta subida pero no se pudo guardar en el perfil.\nError: ' + updateErr.message);
+        } else {
+          console.log('carta_url guardada correctamente en profiles');
+        }
       }
     }
 

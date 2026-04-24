@@ -331,7 +331,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     // Comprobar formulario
     const { data: formulario } = await sb
       .from('formularios')
-      .select('estado')
+      .select('estado, nota_cris')
       .eq('clienta_id', profile.id)
       .maybeSingle();
 
@@ -368,6 +368,12 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
     // Formulario enviado, esperando OK de Cris
     if (formulario.estado === 'pendiente' || formulario.estado === 'revisado') {
+      const notaHtml = formulario.nota_cris
+        ? `<div style="margin-top:10px;padding:12px 14px;background:var(--rosa-pale);border:1px solid var(--rosa-light);border-radius:8px;">
+             <div style="font-size:0.58rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--rosa);margin-bottom:4px">Mensaje de Cris</div>
+             <div style="font-size:0.82rem;color:var(--text);line-height:1.6">${formulario.nota_cris}</div>
+           </div>`
+        : '';
       wrap.innerHTML = `
         <div class="form-strip espera">
           <div class="form-strip-icon">💕</div>
@@ -375,6 +381,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
             <div class="form-strip-tag">Formulario recibido</div>
             <div class="form-strip-titulo">Cris está revisando tu valoración</div>
             <div class="form-strip-sub">En cuanto lo revise recibirás tu plan personalizado</div>
+            ${notaHtml}
           </div>
         </div>`;
       wrap.style.display = 'block';
