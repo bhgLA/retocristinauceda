@@ -194,7 +194,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   <!-- INFO BOX -->
   <div class="info-box">
     <div class="info-title">¿Por qué te pido tantos datos?</div>
-    <p>Porque tu cuerpo no funciona con plantillas. Funciona con tu historia y tus hábitos, tus horarios, tu estrés, tu descanso, tu energía, tus síntomas, tus gustos...<br>
+    <p>Porque tu cuerpo no funciona con plantillas. Funciona con tu historia: tus hábitos, tus horarios, tu estrés, tu descanso, tu energía, tus síntomas, tus gustos...<br>
     Para diseñarte un plan que de verdad te encaje — que te guste, puedas mantener y te acerque a tu objetivo — necesito conocerte bien. Cuanto más información me des, más preciso, realista y personalizado será tu plan.<br>
     <strong>Rellénalo sin prisa. Esto es para ti. 💕</strong></p>
   </div>
@@ -262,9 +262,9 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
     <div class="card">
       <div class="field">
-        <label>2.2 · ¿Qué te ha llevado a buscar ayuda ahora? <span class="req">*</span></label>
+        <label>2.2 · Cuentame qué te ha traido hasta aquí <span class="req">*</span></label>
         <p class="sublabel">Cambio de etapa, síntomas, frustración con otros métodos...</p>
-        <textarea name="motivoBusqueda" placeholder="Cuéntame qué ha pasado o qué has sentido que te ha traído hasta aquí..." required></textarea>
+        <textarea name="motivoBusqueda" placeholder="Cuentame qué te ha traido hasta aquí ..." required></textarea>
       </div>
     </div>
 
@@ -283,11 +283,11 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
         </div>
         <div class="field">
           <label>% Grasa</label>
-          <input type="text" name="porcentajeGrasa" placeholder="Si lo sabes">
+          <input type="text" name="porcentajeGrasa" placeholder="% Grasa">
         </div>
         <div class="field">
           <label>% Masa muscular</label>
-          <input type="text" name="masaMuscular" placeholder="Si lo sabes">
+          <input type="text" name="masaMuscular" placeholder="% Masa muscular">
         </div>
       </div>
     </div>
@@ -332,7 +332,8 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     <div class="pregunta-destacada">
       <div class="q-label">3.5 · Sueño <span class="req" style="color:var(--rosa)">*</span> — ¡Esto es importante!</div>
       <div class="q-hint">¿Cuántas horas duermes y cómo es la calidad? ¿Te duermes con facilidad? ¿Tienes despertares nocturnos?? ¿A qué crees que se debe si duermes mal? Cuéntamelo con detalle, esto es importante!!.</div>
-      <textarea name="sueno" placeholder="Horas de sueño, si descansas bien, si te despiertas, qué te impide dormir..." required></textarea>
+      <textarea name="sueno" placeholder="Horas de sueño,  si descansas bien, si te duermes con facilidad pero te despiertas en la noche y sobre qué hora lo haces, si  duermes del.tiron.pero te despiertas super.pronto y ya no vuelves a conciliar el sueño...  
+	  intenta ser lo mas explícito posible porque me ayudará a valorar que puede estar pasando y como abordarlo" required></textarea>
     </div>
 
     <div class="card">
@@ -347,7 +348,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     <div class="card">
       <div class="field">
         <label>3.7 · Analítica reciente <span style="font-weight:300;text-transform:none;letter-spacing:0;color:var(--text-light)">(opcional)</span></label>
-        <p class="sublabel">Si tienes una analítica reciente y quieres compartirla , súbela aquí en pdf.  No es obligatorio pero me ayudará a interpretar mejor tus síntomas y para poder ajustar más tu plan.</p>
+        <p class="sublabel">Si tienes una analítica reciente y quieres compartirla , súbela aquí en pdf.  No es obligatorio pero me ayudará a interpretar mejor tus síntomas para poder ajustar más tu plan.</p>
         <input type="file" name="analitica" accept=".pdf" style="margin-top:6px">
       </div>
     </div>
@@ -361,7 +362,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
         </div>
         <div class="field">
           <label>3.9 · Operaciones o lesiones relevantes</label>
-          <textarea name="operaciones" placeholder="Ej:hernia discal, hombro, rodilla..."></textarea>
+          <textarea name="operaciones" placeholder=" Por ej. Operaciones tipo me quitaron un mioma, tuve pólipos, me quitaron la  tiroides,  no tengo útero,  ya no tengo vesicula..."></textarea>
         </div>
       </div>
     </div>
@@ -510,6 +511,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
         <label>¿Cuáles te gustan? Marca todas las que consumas o te gusten <span class="req">*</span></label>
         <div class="check-grid cols-3" id="grid-frutas">
           <label class="check-label"><input type="checkbox" name="frutas" value="arandanos"> Arándanos</label>
+		  <label class="check-label"><input type="checkbox" name="frutas" value="frutos_rojos"> Frutos rojos</label>
           <label class="check-label"><input type="checkbox" name="frutas" value="fresas"> Fresas</label>
           <label class="check-label"><input type="checkbox" name="frutas" value="kiwi_amarillo"> Kiwi amarillo</label>
           <label class="check-label"><input type="checkbox" name="frutas" value="kiwi_verde"> Kiwi verde</label>
@@ -587,10 +589,13 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
           <label class="check-label"><input type="checkbox" name="hidratos" value="patata_boniato"> Patata/Boniato</label>
           <label class="check-label"><input type="checkbox" name="hidratos" value="legumbres"> Legumbres</label>
           <label class="check-label"><input type="checkbox" name="hidratos" value="pasta_arroz"> Pasta de arroz</label>
+		  <label class="check-label"><input type="checkbox" name="hidratos" value="arroz_integral"> Arroz integral</label>
+		  <label class="check-label"><input type="checkbox" name="hidratos" value="pasta_legumbres"> Pasta de legumbres</label>
           <label class="check-label"><input type="checkbox" name="hidratos" value="guisantes"> Guisantes</label>
           <label class="check-label"><input type="checkbox" name="hidratos" value="crema_arroz"> Crema de arroz</label>
           <label class="check-label"><input type="checkbox" name="hidratos" value="pan_wasa"> Pan wasa</label>
           <label class="check-label"><input type="checkbox" name="hidratos" value="pan_masa_madre"> Pan de masa madre</label>
+		  
         </div>
       </div>
     </div>
@@ -598,9 +603,9 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     <!-- 6.8 -->
     <div class="card">
       <div class="field">
-        <label>6.8 · ¿Qué alimentos te encantan y te gusrtaría mantener?</label>
+        <label>6.8 · ¿Qué alimentos te encantan y te gustaría mantener?</label>
         <p class="sublabel">Alimentos que te gustaría mantener o incluir alguna vez para que lo pueda valorar</p>
-        <textarea name="alimentosEncanta" placeholder="Ej: Me encanta el chocolate negro, el queso manchego, la pizza los sábados..."></textarea>
+        <textarea name="alimentosEncanta" placeholder="Ej: Me encanta el chocolate negro, el queso manchego, la burrata, no puedo vivir sin pan... etc"></textarea>
       </div>
     </div>
 
