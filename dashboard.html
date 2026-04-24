@@ -368,19 +368,21 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
     // Formulario enviado, esperando OK de Cris
     if (formulario.estado === 'pendiente' || formulario.estado === 'revisado') {
-      const notaHtml = formulario.nota_cris
+      const tienaNota = formulario.nota_cris && formulario.nota_cris.trim();
+      const notaHtml = tienaNota
         ? `<div style="margin-top:10px;padding:12px 14px;background:var(--rosa-pale);border:1px solid var(--rosa-light);border-radius:8px;">
-             <div style="font-size:0.58rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--rosa);margin-bottom:4px">Mensaje de Cris</div>
-             <div style="font-size:0.82rem;color:var(--text);line-height:1.6">${formulario.nota_cris}</div>
+             <div style="font-size:0.58rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--rosa);margin-bottom:4px">💬 Mensaje de Cris</div>
+             <div style="font-size:0.82rem;color:var(--text);line-height:1.6;margin-bottom:10px">${formulario.nota_cris}</div>
+             <a href="formularios/index.html" style="display:inline-block;padding:7px 14px;background:var(--mauve-dark);color:white;border-radius:6px;font-size:0.6rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none">Actualizar mi formulario →</a>
            </div>`
         : '';
       wrap.innerHTML = `
         <div class="form-strip espera">
-          <div class="form-strip-icon">💕</div>
+          <div class="form-strip-icon">${tienaNota ? '💬' : '💕'}</div>
           <div class="form-strip-texto">
-            <div class="form-strip-tag">Formulario recibido</div>
-            <div class="form-strip-titulo">Cris está revisando tu valoración</div>
-            <div class="form-strip-sub">En cuanto lo revise recibirás tu plan personalizado</div>
+            <div class="form-strip-tag">${tienaNota ? 'Cris tiene un mensaje para ti' : 'Formulario recibido'}</div>
+            <div class="form-strip-titulo">${tienaNota ? 'Revisa el mensaje y actualiza tu formulario' : 'Cris está revisando tu valoración'}</div>
+            ${!tienaNota ? '<div class="form-strip-sub">En cuanto lo revise recibirás tu plan personalizado</div>' : ''}
             ${notaHtml}
           </div>
         </div>`;
