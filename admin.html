@@ -996,7 +996,7 @@ async function verFormulario(id) {
       <div class="mf-field"><div class="mf-label">Medicación</div>${val(f.medicacion)}</div>
       <div class="mf-field"><div class="mf-label">Operaciones</div>${val(f.operaciones)}</div>
     </div>
-    ${f.analitica_url ? `<div class="mf-field" style="margin-top:8px"><div class="mf-label">Analítica</div><a href="${f.analitica_url}" target="_blank" style="font-size:0.8rem;color:var(--mauve)">📄 Ver PDF analítica</a></div>` : ''}
+    ${f.analitica_url ? `<div class="mf-field" style="margin-top:8px"><div class="mf-label">Analítica</div><span id="analiticaLink"><em style="font-size:0.75rem;color:var(--text-light)">Generando enlace...</em></span></div>` : ''}
 
     <div class="mf-section-title">4 · Hábitos y Estilo de Vida</div>
     <div class="mf-grid">
@@ -1064,6 +1064,19 @@ async function verFormulario(id) {
   `;
 
   document.getElementById('modalFormulario').classList.add('open');
+
+  // Generar signed URL para la analítica si existe (bucket privado)
+  if (f.analitica_url) {
+    const { data: signed, error: signErr } = await sb.storage
+      .from('formularios')
+      .createSignedUrl(f.analitica_url, 3600); // válida 1 hora
+    const el = document.getElementById('analiticaLink');
+    if (el) {
+      el.innerHTML = signErr
+        ? `<em style="font-size:0.75rem;color:#c0392b">No se pudo generar el enlace</em>`
+        : `<a href="${signed.signedUrl}" target="_blank" style="font-size:0.8rem;color:var(--mauve)">📄 Ver PDF analítica</a>`;
+    }
+  }
 }
 
 function selEstado(nuevo, btn) {
