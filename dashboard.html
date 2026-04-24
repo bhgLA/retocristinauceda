@@ -148,6 +148,50 @@ header {
 .btn-pdf:hover { border-color:var(--rosa) !important; color:var(--rosa); }
 .btn-plan svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 
+/* ── FORMULARIO STRIP ── */
+.form-strip {
+  display:flex; align-items:center; gap:14px;
+  border-radius:12px; padding:16px 18px;
+  text-decoration:none; color:inherit;
+  transition:box-shadow 0.2s; margin-bottom:6px;
+}
+.form-strip.pendiente {
+  background:linear-gradient(135deg,#fff8e7 0%,var(--white) 100%);
+  border:1.5px solid #f0c040;
+}
+.form-strip.pendiente:hover { box-shadow:0 2px 12px rgba(200,160,0,0.12); }
+.form-strip.espera {
+  background:var(--white); border:1px solid var(--border);
+  cursor:default;
+}
+.form-strip-icon { width:38px; height:38px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+.form-strip.pendiente .form-strip-icon { background:#fef3cd; }
+.form-strip.espera   .form-strip-icon { background:var(--rosa-pale); }
+.form-strip-texto { flex:1; }
+.form-strip-tag   { font-size:0.58rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; }
+.form-strip.pendiente .form-strip-tag { color:#b8860b; }
+.form-strip.espera    .form-strip-tag { color:var(--rosa); }
+.form-strip-titulo { font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--mauve-dark); }
+.form-strip-sub { font-size:0.62rem; color:var(--text-light); margin-top:2px; }
+
+/* ── CARTA STRIP ── */
+.carta-strip {
+  display:flex; align-items:center; gap:14px;
+  background:linear-gradient(135deg,var(--rosa-pale) 0%,var(--white) 100%);
+  border:1px solid var(--rosa-light); border-radius:12px;
+  padding:14px 18px; text-decoration:none; color:inherit;
+  transition:border-color 0.2s, box-shadow 0.2s; margin-bottom:6px;
+}
+.carta-strip:hover { border-color:var(--rosa); box-shadow:0 2px 12px rgba(120,60,80,0.1); }
+.carta-strip-icon {
+  width:38px; height:38px; border-radius:50%; flex-shrink:0;
+  background:var(--rosa-light); display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem;
+}
+.carta-strip-texto { flex:1; }
+.carta-strip-tag { font-size:0.58rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--rosa); }
+.carta-strip-titulo { font-family:'Cormorant Garamond',serif; font-size:1rem; color:var(--mauve-dark); }
+
 /* ── ANEXOS STRIP ── */
 .anexos-strip {
   display:flex; align-items:center; gap:14px;
@@ -203,6 +247,21 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 <!-- SALUDO COMPACTO -->
 <div class="saludo">Hola, <em id="nombreClienta">...</em> — aquí tienes todo lo que necesitas 💕</div>
 
+<!-- CARTA BIENVENIDA (solo si existe) -->
+<div id="cartaWrap" style="display:none;max-width:600px;margin:0 auto 4px;padding:0 16px">
+  <a id="cartaLink" href="#" target="_blank" class="carta-strip">
+    <div class="carta-strip-icon">📄</div>
+    <div class="carta-strip-texto">
+      <div class="carta-strip-tag">Bienvenida al reto</div>
+      <div class="carta-strip-titulo">Tu carta de bienvenida</div>
+    </div>
+    <svg style="width:16px;height:16px;flex-shrink:0;fill:none;stroke:var(--text-light);stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</div>
+
+<!-- FORMULARIO (estado progresivo) -->
+<div id="formularioWrap" style="display:none;max-width:600px;margin:0 auto 4px;padding:0 16px"></div>
+
 <!-- PLANES -->
 <section class="seccion">
   <div class="seccion-title">
@@ -249,7 +308,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
     const { data: profile, error } = await sb
       .from('profiles')
-      .select('id, nombre, rol')
+      .select('id, nombre, rol, carta_url')
       .eq('id', session.user.id)
       .single();
 
@@ -257,6 +316,26 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     if (profile.rol === 'admin') { window.location.href = 'admin.html'; return; }
 
     document.getElementById('nombreClienta').textContent = profile.nombre;
+
+    // Mostrar carta de bienvenida si Cris la ha generado y la clienta no la ha leído aún
+    if (profile.carta_url && !localStorage.getItem('carta_leida_' + profile.id)) {
+      const cartaLink = document.getElementById('cartaLink');
+      cartaLink.href = profile.carta_url;
+      cartaLink.addEventListener('click', () => {
+        localStorage.setItem('carta_leida_' + profile.id, '1');
+        setTimeout(() => { document.getElementById('cartaWrap').style.display = 'none'; }, 300);
+      });
+      document.getElementById('cartaWrap').style.display = 'block';
+    }
+
+    // Comprobar formulario
+    const { data: formulario } = await sb
+      .from('formularios')
+      .select('estado')
+      .eq('clienta_id', profile.id)
+      .maybeSingle();
+
+    renderFormulario(formulario);
 
     const { data: planes } = await sb
       .from('planes')
@@ -266,6 +345,43 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
     renderPlanes(planes || []);
     document.getElementById('loading').style.display = 'none';
+  }
+
+  function renderFormulario(formulario) {
+    const wrap = document.getElementById('formularioWrap');
+
+    // Sin formulario → invitar a rellenarlo
+    if (!formulario) {
+      wrap.innerHTML = `
+        <a href="formularios/index.html" class="form-strip pendiente">
+          <div class="form-strip-icon">📋</div>
+          <div class="form-strip-texto">
+            <div class="form-strip-tag">Paso 1 · Importante</div>
+            <div class="form-strip-titulo">Rellena tu formulario de valoración</div>
+            <div class="form-strip-sub">Necesitamos conocerte para preparar tu plan personalizado</div>
+          </div>
+          <svg style="width:16px;height:16px;flex-shrink:0;fill:none;stroke:#b8860b;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>`;
+      wrap.style.display = 'block';
+      return;
+    }
+
+    // Formulario enviado, esperando OK de Cris
+    if (formulario.estado === 'pendiente' || formulario.estado === 'revisado') {
+      wrap.innerHTML = `
+        <div class="form-strip espera">
+          <div class="form-strip-icon">💕</div>
+          <div class="form-strip-texto">
+            <div class="form-strip-tag">Formulario recibido</div>
+            <div class="form-strip-titulo">Cris está revisando tu valoración</div>
+            <div class="form-strip-sub">En cuanto lo revise recibirás tu plan personalizado</div>
+          </div>
+        </div>`;
+      wrap.style.display = 'block';
+      return;
+    }
+
+    // estado = 'completo' → no mostramos nada, el formulario desaparece
   }
 
   function renderPlanes(planes) {

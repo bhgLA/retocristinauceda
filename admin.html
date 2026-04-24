@@ -265,6 +265,113 @@ main { max-width:860px; margin:0 auto; padding:36px 20px 60px; }
 
 footer { background:var(--white); border-top:1px solid var(--border); padding:20px; text-align:center; margin-top:40px; }
 footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); }
+
+/* ── SECCIÓN FORMULARIOS ── */
+#formulariosSection { margin-bottom:32px; display:none; }
+.fform-header {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; margin-bottom:16px; padding-bottom:14px;
+  border-bottom:1px solid var(--border); flex-wrap:wrap;
+}
+.fform-list { display:flex; flex-direction:column; gap:8px; }
+.fform-row {
+  background:var(--white); border:1px solid var(--border); border-radius:10px;
+  padding:13px 16px; display:flex; align-items:center; gap:12px;
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.fform-row:hover { border-color:var(--rosa-light); box-shadow:0 2px 10px rgba(120,60,80,0.07); }
+.fform-row.pendiente { border-left:3px solid #f0c040; }
+.fform-row.revisado  { border-left:3px solid var(--rosa-light); }
+.fform-row.completo  { border-left:3px solid var(--green); }
+.fform-info { flex:1; min-width:0; }
+.fform-nombre { font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:var(--mauve-dark); }
+.fform-fecha  { font-size:0.6rem; color:var(--text-light); margin-top:1px; }
+.fform-badge {
+  font-size:0.52rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+  padding:3px 9px; border-radius:20px; white-space:nowrap; flex-shrink:0;
+}
+.fform-badge.pendiente { background:#fef3cd; color:#b8860b; border:1px solid #f0c040; }
+.fform-badge.revisado  { background:var(--rosa-pale); color:var(--mauve); border:1px solid var(--rosa-light); }
+.fform-badge.completo  { background:var(--green-light); color:var(--green); border:1px solid var(--green-border); }
+.btn-ver-form {
+  flex-shrink:0; padding:6px 14px; border-radius:6px;
+  background:var(--mauve-dark); border:none; color:white;
+  font-family:'Montserrat',sans-serif; font-size:0.58rem; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:background 0.2s;
+}
+.btn-ver-form:hover { background:var(--mauve); }
+
+/* ── MODAL FORMULARIO DETALLE ── */
+.modal-form-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(61,43,50,0.5); z-index:600;
+  align-items:flex-start; justify-content:center; padding:20px;
+  overflow-y:auto;
+}
+.modal-form-overlay.open { display:flex; }
+.modal-form-box {
+  background:var(--white); border-radius:16px; padding:32px 28px 28px;
+  width:100%; max-width:680px; margin:auto;
+  box-shadow:0 8px 40px rgba(61,43,50,0.18); position:relative;
+}
+.mf-close {
+  position:absolute; top:16px; right:16px;
+  background:none; border:1px solid var(--border); border-radius:50%;
+  width:30px; height:30px; font-size:1rem; cursor:pointer;
+  color:var(--text-light); display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s; line-height:1;
+}
+.mf-close:hover { border-color:var(--rosa); color:var(--rosa); }
+.mf-header { margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+.mf-nombre { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:300; color:var(--mauve-dark); }
+.mf-meta   { font-size:0.62rem; color:var(--text-light); margin-top:4px; }
+.mf-section-title {
+  font-size:0.58rem; font-weight:600; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--rosa); margin:20px 0 10px; padding-bottom:6px;
+  border-bottom:1px solid var(--rosa-pale);
+}
+.mf-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 20px; }
+.mf-grid.full { grid-template-columns:1fr; }
+.mf-field { display:flex; flex-direction:column; gap:3px; }
+.mf-label { font-size:0.57rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-light); }
+.mf-value { font-size:0.8rem; color:var(--text); line-height:1.6; }
+.mf-value.vacio { color:var(--text-light); font-style:italic; }
+@media(max-width:560px){ .mf-grid { grid-template-columns:1fr; } }
+
+/* ── PANEL CRIS ── */
+.mf-panel-cris {
+  margin-top:24px; padding:20px; background:var(--rosa-pale);
+  border:1px solid var(--rosa-light); border-radius:12px;
+}
+.mf-panel-cris .mf-section-title { border-bottom-color:var(--rosa-light); margin-top:0; }
+.mf-panel-cris textarea {
+  width:100%; padding:10px 12px; border:1px solid var(--rosa-light); border-radius:8px;
+  font-family:'Montserrat',sans-serif; font-size:0.8rem; color:var(--text);
+  background:var(--white); resize:vertical; min-height:80px; outline:none;
+  transition:border-color 0.2s;
+}
+.mf-panel-cris textarea:focus { border-color:var(--rosa); }
+.mf-estado-btns { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+.btn-estado {
+  padding:7px 14px; border-radius:6px; border:1px solid var(--border);
+  background:transparent; color:var(--text-light);
+  font-family:'Montserrat',sans-serif; font-size:0.58rem; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:all 0.2s;
+}
+.btn-estado.sel-pendiente { background:#fef3cd; color:#b8860b; border-color:#f0c040; }
+.btn-estado.sel-revisado  { background:var(--rosa-pale); color:var(--mauve); border-color:var(--rosa-light); }
+.btn-estado.sel-completo  { background:var(--green-light); color:var(--green); border-color:var(--green-border); }
+.btn-guardar-form {
+  width:100%; margin-top:14px; padding:12px; border-radius:8px; border:none;
+  background:var(--mauve-dark); color:white; font-family:'Montserrat',sans-serif;
+  font-size:0.62rem; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+  cursor:pointer; transition:background 0.2s;
+}
+.btn-guardar-form:hover { background:var(--mauve); }
+.btn-guardar-form:disabled { opacity:0.6; cursor:not-allowed; }
+.mf-save-msg { margin-top:10px; padding:8px 12px; border-radius:6px; font-size:0.72rem; text-align:center; display:none; }
+.mf-save-msg.ok    { background:var(--green-light); color:var(--green); border:1px solid var(--green-border); display:block; }
+.mf-save-msg.error { background:#fdecea; color:#c0392b; border:1px solid #f5c6c2; display:block; }
 </style>
 </head>
 <body>
@@ -316,13 +423,13 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
   <!-- MENÚ ACCESOS RÁPIDOS -->
   <div class="menu-rapido">
-    <a href="formularios/index.html" target="_blank" class="menu-btn">
+    <button onclick="toggleFormularios()" class="menu-btn" style="cursor:pointer;border:none;text-align:left" id="btnMenuFormularios">
       <div class="menu-btn-icon">📋</div>
       <div class="menu-btn-texto">
         <div class="menu-btn-titulo">Formularios</div>
-        <div class="menu-btn-sub">Ver respuestas de clientas</div>
+        <div class="menu-btn-sub" id="menuFormSub">Ver respuestas de clientas</div>
       </div>
-    </a>
+    </button>
     <a href="anexos/index.html" target="_blank" class="menu-btn">
       <div class="menu-btn-icon">📎</div>
       <div class="menu-btn-texto">
@@ -337,6 +444,19 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
         <div class="menu-btn-sub">Crear y guardar planes nutricionales</div>
       </div>
     </a>
+  </div>
+
+  <!-- SECCIÓN FORMULARIOS -->
+  <div id="formulariosSection">
+    <div class="fform-header">
+      <div class="seccion-title-left">
+        <span class="label-text">Formularios recibidos</span>
+        <span class="stat-badge activas" id="fformCount">—</span>
+      </div>
+    </div>
+    <div class="fform-list" id="fformList">
+      <div class="empty-list">Cargando formularios...</div>
+    </div>
   </div>
 
   <div class="seccion-header">
@@ -358,6 +478,14 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 <footer>
   <p>© Cristina Uceda ✦ Documento privado ✦ Todos los derechos reservados ✦ by BHG 2026</p>
 </footer>
+
+<!-- MODAL DETALLE FORMULARIO -->
+<div class="modal-form-overlay" id="modalFormulario">
+  <div class="modal-form-box">
+    <button class="mf-close" onclick="cerrarModalFormulario()">✕</button>
+    <div id="mfBody"></div>
+  </div>
+</div>
 
 <script>
   const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
@@ -474,7 +602,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
                     ? `<button onclick="event.stopPropagation();toggleActiva('${c.id}','${c.nombre.replace(/'/g,"\\'")}',false)">Marcar reto completado</button>`
                     : `<button onclick="event.stopPropagation();toggleActiva('${c.id}','${c.nombre.replace(/'/g,"\\'")}',true)">Reactivar clienta</button>`
                   }
-                  <button onclick="event.stopPropagation();generarCarta('${c.nombre.replace(/'/g,"\\'")}')">📄 Carta de bienvenida</button>
+                  <button onclick="event.stopPropagation();generarCarta('${c.nombre.replace(/'/g,"\\'")}','${c.id}')">📄 Carta de bienvenida</button>
                 </div>
               </div>
             </div>
@@ -619,7 +747,7 @@ document.getElementById('modalNuevaClienta').addEventListener('click', function(
 // ════════════════════════════════
 //  CARTA DE BIENVENIDA
 // ════════════════════════════════
-async function generarCarta(nombre) {
+async function generarCarta(nombre, clientaId) {
   // Cerrar el menú desplegable
   document.querySelectorAll('.row-menu-dropdown.open').forEach(d => d.classList.remove('open'));
 
@@ -635,36 +763,42 @@ async function generarCarta(nombre) {
     const pages = pdfDoc.getPages();
     if (pages.length < 2) throw new Error('El PDF base no tiene página 2.');
 
-    const page             = pages[1]; // página 2 (índice 1)
-    const { height }       = page.getSize();
+    const page       = pages[1]; // página 2 (índice 1)
+    const { height } = page.getSize();
 
     // ── Fuente ──
     const font     = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const fontSize = 13; // ← ajustar si no coincide con el tamaño del texto original
-
-    // ── Coordenadas del punto exacto donde termina "¡Hola " ──
-    // x: distancia desde el margen izquierdo hasta el final de "¡Hola "
-    // y: altura desde abajo de la página hasta la línea
-    // Si el nombre no cae en el sitio correcto, ajustar estos dos valores.
-    const x = 86;  // ← calibrar si hace falta
-    const y = height - 62; // ← calibrar si hace falta
+    const fontSize = 13;
+    const x = 86;
+    const y = height - 64;
 
     page.drawText(`${nombre.trim()}!`, {
-      x, y,
-      size: fontSize,
-      font,
-      color: rgb(0, 0, 0),
+      x, y, size: fontSize, font, color: rgb(0, 0, 0),
     });
 
-    // ── Descargar ──
     const modBytes = await pdfDoc.save();
     const blob     = new Blob([modBytes], { type: 'application/pdf' });
-    const url      = URL.createObjectURL(blob);
-    const a        = document.createElement('a');
-    a.href         = url;
-    a.download     = `welcome_${nombre.trim().replace(/\s+/g, '_')}.pdf`;
+
+    // ── Descargar localmente (igual que antes) ──
+    const url = URL.createObjectURL(blob);
+    const a   = document.createElement('a');
+    a.href    = url;
+    a.download = `welcome_${nombre.trim().replace(/\s+/g, '_')}.pdf`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+    // ── Subir a Storage y guardar URL en profiles ──
+    if (clientaId) {
+      const filePath = `${clientaId}/carta_bienvenida.pdf`;
+      const { error: upErr } = await sb.storage
+        .from('planes')
+        .upload(filePath, blob, { contentType: 'application/pdf', upsert: true });
+
+      if (!upErr) {
+        const { data: urlData } = sb.storage.from('planes').getPublicUrl(filePath);
+        await sb.from('profiles').update({ carta_url: urlData.publicUrl }).eq('id', clientaId);
+      }
+    }
 
   } catch (err) {
     alert('Error al generar la carta: ' + err.message);
@@ -725,6 +859,242 @@ async function subirPDF(input) {
 
   resetTimer(); // arrancar el contador
 })();
+
+
+
+// ── FORMULARIOS ────────────────────────────────────────────
+
+let formulariosData = [];
+let formActualId    = null;
+let estadoActual    = 'pendiente';
+
+async function toggleFormularios() {
+  const sec = document.getElementById('formulariosSection');
+  const sub = document.getElementById('menuFormSub');
+  if (sec.style.display === 'block') {
+    sec.style.display = 'none';
+    sub.textContent = 'Ver respuestas de clientas';
+  } else {
+    sec.style.display = 'block';
+    sub.textContent = 'Ocultar sección';
+    await loadFormularios();
+  }
+}
+
+async function loadFormularios() {
+  const list = document.getElementById('fformList');
+  list.innerHTML = '<div class="empty-list">Cargando...</div>';
+
+  const { data, error } = await sb
+    .from('formularios')
+    .select('id, clienta_id, created_at, estado, nota_cris, nombre, apellidos, email')
+    .order('created_at', { ascending: false });
+
+  if (error || !data) {
+    list.innerHTML = '<div class="empty-list">Error al cargar formularios.</div>';
+    return;
+  }
+  formulariosData = data;
+  const count = document.getElementById('fformCount');
+  const pendientes = data.filter(f => f.estado === 'pendiente').length;
+  count.textContent = pendientes > 0 ? `${pendientes} pendiente${pendientes>1?'s':''}` : `${data.length} total`;
+  count.className = 'stat-badge ' + (pendientes > 0 ? 'activas' : 'completadas');
+
+  if (!data.length) {
+    list.innerHTML = '<div class="empty-list">Aún no hay formularios enviados.</div>';
+    return;
+  }
+
+  list.innerHTML = data.map(f => {
+    const fecha  = new Date(f.created_at).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
+    const labels = { pendiente:'Pendiente', revisado:'Revisado', completo:'OK ✓' };
+    return `
+      <div class="fform-row ${f.estado}">
+        <div class="fform-info">
+          <div class="fform-nombre">${f.nombre} ${f.apellidos}</div>
+          <div class="fform-fecha">${f.email} · ${fecha}</div>
+        </div>
+        <span class="fform-badge ${f.estado}">${labels[f.estado]||f.estado}</span>
+        <button class="btn-ver-form" onclick="verFormulario('${f.id}')">Ver</button>
+      </div>`;
+  }).join('');
+}
+
+async function verFormulario(id) {
+  const { data: f, error } = await sb
+    .from('formularios')
+    .select('*')
+    .eq('id', id)
+    .single();
+  if (error || !f) { alert('Error al cargar formulario'); return; }
+
+  formActualId = id;
+  estadoActual = f.estado;
+
+  // Si está pendiente → marcar como revisado automáticamente
+  if (f.estado === 'pendiente') {
+    await sb.from('formularios').update({ estado: 'revisado' }).eq('id', id);
+    estadoActual = 'revisado';
+    f.estado = 'revisado';
+  }
+
+  const fecha = new Date(f.created_at).toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
+
+  const val = (v, fallback='—') => {
+    if (v === null || v === undefined || v === '') return `<span class="mf-value vacio">${fallback}</span>`;
+    if (Array.isArray(v)) return `<span class="mf-value">${v.length ? v.map(s=>s.replace(/_/g,' ')).join(', ') : '—'}</span>`;
+    return `<span class="mf-value">${v}</span>`;
+  };
+
+  document.getElementById('mfBody').innerHTML = `
+    <div class="mf-header">
+      <div class="mf-nombre">${f.nombre} ${f.apellidos}</div>
+      <div class="mf-meta">${f.email} · ${f.telefono || ''} · Enviado el ${fecha}</div>
+    </div>
+
+    <div class="mf-section-title">1 · Datos Personales</div>
+    <div class="mf-grid">
+      <div class="mf-field"><div class="mf-label">Fecha nacimiento</div>${val(f.fecha_nacimiento)}</div>
+      <div class="mf-field"><div class="mf-label">Edad</div>${val(f.edad)}</div>
+      <div class="mf-field"><div class="mf-label">Estado civil</div>${val(f.estado_civil)}</div>
+      <div class="mf-field"><div class="mf-label">Hijos</div>${val(f.hijos)}</div>
+      <div class="mf-field"><div class="mf-label">Profesión</div>${val(f.profesion)}</div>
+    </div>
+
+    <div class="mf-section-title">2 · Objetivo y Contexto</div>
+    <div class="mf-grid full">
+      <div class="mf-field"><div class="mf-label">Objetivo</div>${val(f.objetivo)}</div>
+      <div class="mf-field"><div class="mf-label">Motivo de búsqueda</div>${val(f.motivo_busqueda)}</div>
+    </div>
+    <div class="mf-grid">
+      <div class="mf-field"><div class="mf-label">Altura</div>${val(f.altura)}</div>
+      <div class="mf-field"><div class="mf-label">Peso</div>${val(f.peso)}</div>
+      <div class="mf-field"><div class="mf-label">% Grasa</div>${val(f.porcentaje_grasa)}</div>
+      <div class="mf-field"><div class="mf-label">Masa muscular</div>${val(f.masa_muscular)}</div>
+    </div>
+
+    <div class="mf-section-title">3 · Salud y Síntomas</div>
+    <div class="mf-grid full">
+      <div class="mf-field"><div class="mf-label">Digestión</div>${val(f.digestion)}</div>
+      <div class="mf-field"><div class="mf-label">Ciclo menstrual</div>${val(f.ciclo_menstrual)}</div>
+      <div class="mf-field"><div class="mf-label">Energía</div>${val(f.energia)}</div>
+      <div class="mf-field"><div class="mf-label">Estrés</div>${val(f.estres)}</div>
+      <div class="mf-field"><div class="mf-label">Sueño</div>${val(f.sueno)}</div>
+      <div class="mf-field"><div class="mf-label">Historia médica</div>${val(f.historia_medica)}</div>
+      <div class="mf-field"><div class="mf-label">Medicación</div>${val(f.medicacion)}</div>
+      <div class="mf-field"><div class="mf-label">Operaciones</div>${val(f.operaciones)}</div>
+    </div>
+    ${f.analitica_url ? `<div class="mf-field" style="margin-top:8px"><div class="mf-label">Analítica</div><a href="${f.analitica_url}" target="_blank" style="font-size:0.8rem;color:var(--mauve)">📄 Ver PDF analítica</a></div>` : ''}
+
+    <div class="mf-section-title">4 · Hábitos y Estilo de Vida</div>
+    <div class="mf-grid">
+      <div class="mf-field"><div class="mf-label">Tabaco</div>${val(f.tabaco)}</div>
+      <div class="mf-field"><div class="mf-label">Alcohol</div>${val(f.alcohol)}</div>
+      <div class="mf-field"><div class="mf-label">Actividad física</div>${val(f.actividad_fisica)}</div>
+    </div>
+
+    <div class="mf-section-title">5 · Alimentación Actual</div>
+    <div class="mf-grid">
+      <div class="mf-field"><div class="mf-label">Comidas al día</div>${val(f.comidas_dia)}</div>
+      <div class="mf-field"><div class="mf-label">Agua</div>${val(f.agua)}</div>
+      <div class="mf-field"><div class="mf-label">Café</div>${val(f.cafe)}</div>
+      <div class="mf-field"><div class="mf-label">Comidas fuera</div>${val(f.comidas_fuera)}</div>
+    </div>
+    <div class="mf-grid full">
+      <div class="mf-field"><div class="mf-label">Dietas anteriores</div>${val(f.dietas_anteriores)}</div>
+      <div class="mf-field"><div class="mf-label">Hambre emocional</div>${val(f.hambre_emocional)}</div>
+      <div class="mf-field"><div class="mf-label">Día completo típico</div>${val(f.dia_completo)}</div>
+    </div>
+
+    <div class="mf-section-title">6 · Preferencias Alimentarias</div>
+    <div class="mf-grid full">
+      <div class="mf-field"><div class="mf-label">No me gustan</div>${val(f.no_gustan)}</div>
+      <div class="mf-field"><div class="mf-label">Me sientan mal</div>${val(f.sientan_mal)}</div>
+      <div class="mf-field"><div class="mf-label">Lácteos (cuáles)</div>${val(f.lacteos_cuales)}</div>
+      <div class="mf-field"><div class="mf-label">Lácteos ✓</div>${val(f.lacteos)}</div>
+      <div class="mf-field"><div class="mf-label">Frutas día a día</div>${val(f.frutas_diadia)}</div>
+      <div class="mf-field"><div class="mf-label">Frutas ✓</div>${val(f.frutas)}</div>
+      <div class="mf-field"><div class="mf-label">Verduras</div>${val(f.verduras)}</div>
+      <div class="mf-field"><div class="mf-label">Proteínas ✓</div>${val(f.proteinas)}</div>
+      <div class="mf-field"><div class="mf-label">Hidratos (preferencia)</div>${val(f.hidratos_preferencia)}</div>
+      <div class="mf-field"><div class="mf-label">Hidratos ✓</div>${val(f.hidratos)}</div>
+      <div class="mf-field"><div class="mf-label">Alimentos que le encantan</div>${val(f.alimentos_encanta)}</div>
+    </div>
+
+    <div class="mf-section-title">7 · Vida Social y Flexibilidad</div>
+    <div class="mf-grid full">
+      <div class="mf-field"><div class="mf-label">Eventos sociales</div>${val(f.eventos_sociales)}</div>
+      <div class="mf-field"><div class="mf-label">Viajes</div>${val(f.viajes)}</div>
+      <div class="mf-field"><div class="mf-label">Dificultades</div>${val(f.dificultades)}</div>
+      <div class="mf-field"><div class="mf-label">Día flexible</div>${val(f.flexibilidad)}</div>
+    </div>
+
+    <div class="mf-section-title">8 · Motivación y Expectativas</div>
+    <div class="mf-grid full">
+      <div class="mf-field"><div class="mf-label">Expectativas</div>${val(f.expectativas)}</div>
+      <div class="mf-field"><div class="mf-label">Recomendado por</div>${val(f.recomendacion)}</div>
+      <div class="mf-field"><div class="mf-label">Motivación</div>${val(f.motivacion)}</div>
+    </div>
+
+    <div class="mf-panel-cris">
+      <div class="mf-section-title">Panel Cris</div>
+      <div class="mf-label" style="margin-bottom:8px">Estado</div>
+      <div class="mf-estado-btns">
+        <button class="btn-estado ${estadoActual==='pendiente'?'sel-pendiente':''}" onclick="selEstado('pendiente',this)">Pendiente</button>
+        <button class="btn-estado ${estadoActual==='revisado'?'sel-revisado':''}"  onclick="selEstado('revisado',this)">Revisado</button>
+        <button class="btn-estado ${estadoActual==='completo'?'sel-completo':''}"  onclick="selEstado('completo',this)">OK ✓ Completo</button>
+      </div>
+      <div class="mf-label" style="margin-bottom:6px">Nota para la clienta</div>
+      <textarea id="mfNota" placeholder="Escribe aquí si necesitas aclarar algo con la clienta...">${f.nota_cris||''}</textarea>
+      <button class="btn-guardar-form" id="btnGuardarForm" onclick="guardarFormulario()">Guardar cambios</button>
+      <div class="mf-save-msg" id="mfSaveMsg"></div>
+    </div>
+  `;
+
+  document.getElementById('modalFormulario').classList.add('open');
+}
+
+function selEstado(nuevo, btn) {
+  estadoActual = nuevo;
+  document.querySelectorAll('.btn-estado').forEach(b => {
+    b.className = 'btn-estado';
+  });
+  btn.classList.add('sel-' + nuevo);
+}
+
+async function guardarFormulario() {
+  const btn  = document.getElementById('btnGuardarForm');
+  const msg  = document.getElementById('mfSaveMsg');
+  const nota = document.getElementById('mfNota').value.trim();
+  btn.disabled = true;
+  msg.className = 'mf-save-msg';
+
+  const { error } = await sb.from('formularios')
+    .update({ estado: estadoActual, nota_cris: nota || null })
+    .eq('id', formActualId);
+
+  btn.disabled = false;
+  if (error) {
+    msg.className = 'mf-save-msg error';
+    msg.textContent = 'Error al guardar. Inténtalo de nuevo.';
+  } else {
+    msg.className = 'mf-save-msg ok';
+    msg.textContent = '✓ Guardado correctamente';
+    setTimeout(() => { msg.className = 'mf-save-msg'; }, 2500);
+    // Refrescar lista sin cerrar modal
+    loadFormularios();
+  }
+}
+
+function cerrarModalFormulario() {
+  document.getElementById('modalFormulario').classList.remove('open');
+  formActualId = null;
+}
+
+// Cerrar modal al hacer click fuera
+document.getElementById('modalFormulario').addEventListener('click', function(e) {
+  if (e.target === this) cerrarModalFormulario();
+});
 
 </script>
 </body>
