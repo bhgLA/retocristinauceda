@@ -801,16 +801,13 @@ async function generarCarta(nombre, clientaId) {
       } else {
         const { data: urlData } = sb.storage.from('planes').getPublicUrl(filePath);
         console.log('URL carta:', urlData.publicUrl);
-        const { data: updatedRows, error: updateErr } = await sb.from('profiles')
-          .update({ carta_url: urlData.publicUrl })
-          .eq('id', clientaId)
-          .select('id');
+        const { error: updateErr } = await sb.rpc('admin_set_carta_url', {
+          p_clienta_id: clientaId,
+          p_carta_url: urlData.publicUrl
+        });
         if (updateErr) {
           console.error('Error guardando carta_url en profiles:', updateErr);
           alert('Carta subida pero no se pudo guardar en el perfil.\nError: ' + updateErr.message);
-        } else if (!updatedRows || updatedRows.length === 0) {
-          console.warn('carta_url: update sin error pero 0 filas actualizadas (posible RLS bloqueando)');
-          alert('Carta subida a Storage pero no se guardó en el perfil (0 filas actualizadas).\nVerifica que la política RLS de admin UPDATE en profiles está activa.');
         } else {
           console.log('carta_url guardada correctamente en profiles:', urlData.publicUrl);
           alert(`✓ Carta de bienvenida generada y guardada en el perfil de ${nombre}.`);
