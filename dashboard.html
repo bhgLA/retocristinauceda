@@ -498,8 +498,11 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   })();
 
   function extractPlanesPath(pathOrUrl) {
-    const marker = '/object/public/planes/';
-    return pathOrUrl.includes(marker) ? pathOrUrl.split(marker)[1] : pathOrUrl;
+    const pub  = '/object/public/planes/';
+    const sign = '/object/sign/planes/';
+    if (pathOrUrl.includes(pub))  return pathOrUrl.split(pub)[1];
+    if (pathOrUrl.includes(sign)) return pathOrUrl.split(sign)[1].split('?')[0];
+    return pathOrUrl;
   }
 
   async function verPlan(pathOrUrl) {

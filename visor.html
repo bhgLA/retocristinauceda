@@ -110,11 +110,17 @@
       .single();
     const esHombre = profile?.genero === 'hombre';
 
-    // 3. Generar signed URL (bucket planes es privado)
+    // 3. Extraer el path de Storage y generar una signed URL fresca
     const publicMarker = '/object/public/planes/';
-    const storagePath  = url.includes(publicMarker)
-      ? url.split(publicMarker)[1]
-      : url; // ya es un path o signed URL
+    const signMarker   = '/object/sign/planes/';
+    let storagePath;
+    if (url.includes(publicMarker)) {
+      storagePath = url.split(publicMarker)[1];
+    } else if (url.includes(signMarker)) {
+      storagePath = url.split(signMarker)[1].split('?')[0]; // quitar ?token=...
+    } else {
+      storagePath = url; // ya es un path limpio
+    }
 
     const { data: signed, error: signErr } = await sb.storage
       .from('planes')
