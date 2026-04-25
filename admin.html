@@ -621,6 +621,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
                     : `<button data-id="${c.id}" data-nombre="${esc(c.nombre)}" onclick="event.stopPropagation();toggleActiva(this.dataset.id,this.dataset.nombre,true)">Reactivar clienta</button>`
                   }
                   <button data-id="${c.id}" data-nombre="${esc(c.nombre)}" onclick="event.stopPropagation();generarCarta(this.dataset.nombre,this.dataset.id)">📄 Carta de bienvenida</button>
+                  <button data-id="${c.id}" data-nombre="${esc(c.nombre)}" onclick="event.stopPropagation();verComoClienta(this.dataset.id,this.dataset.nombre)">👁 Ver su dashboard</button>
                 </div>
               </div>
             </div>
@@ -1151,6 +1152,27 @@ function cerrarModalFormulario() {
 document.getElementById('modalFormulario').addEventListener('click', function(e) {
   if (e.target === this) cerrarModalFormulario();
 });
+
+// ════════════════════════════════
+//  VER COMO CLIENTA
+// ════════════════════════════════
+async function verComoClienta(clientaId, nombre) {
+  if (!confirm(`¿Ver el dashboard de ${nombre}?\n\nSe abrirá en una nueva pestaña. Tu panel de admin seguirá abierto, pero evita recargar esa pestaña hasta que termines.`)) return;
+
+  const win = window.open('', '_blank');
+
+  const { data, error } = await sb.functions.invoke('get-magic-link', {
+    body: { clienta_id: clientaId }
+  });
+
+  if (error || !data?.link) {
+    win.close();
+    alert('No se pudo generar el enlace. Inténtalo de nuevo.');
+    return;
+  }
+
+  win.location.href = data.link;
+}
 
 // ════════════════════════════════
 //  SIGNED URLS — bucket planes privado
