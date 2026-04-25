@@ -592,8 +592,8 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
               <div class="plan-num">${p.num_plan || 'Plan '+(i+1)}</div>
               <div class="plan-url asignado">✓ ${p.fecha || 'Sin fecha'}</div>
               <div class="plan-links">
-                ${p.plan_url ? `<a href="visor.html?url=${encodeURIComponent(p.plan_url)}" target="_blank" class="btn-ver-plan">👁 Ver</a>` : ''}
-                ${p.pdf_url  ? `<a href="${p.pdf_url}" target="_blank" class="btn-ver-pdf">📄 PDF</a>` : ''}
+                ${p.plan_url ? `<a href="javascript:void(0)" data-url="${p.plan_url}" onclick="verPlan(this.dataset.url)" class="btn-ver-plan">👁 Ver</a>` : ''}
+                ${p.pdf_url  ? `<a href="javascript:void(0)" data-url="${p.pdf_url}" onclick="verPDF(this.dataset.url)" class="btn-ver-pdf">📄 PDF</a>` : ''}
                 <a href="plan_editor_v3.html?plan_id=${p.id}" class="btn-ver-plan" style="background:#27ae60;">✏️ Editar</a>
                 <button data-pdf-btn="${p.id}" onclick="event.stopPropagation();abrirSubirPDF('${p.id}')" class="btn-ver-pdf" style="background:#9e6070;color:white;border:none;cursor:pointer;">📄 ${p.pdf_url ? 'Cambiar PDF' : 'Subir PDF'}</button>
               </div>
@@ -821,11 +821,9 @@ async function generarCarta(nombre, clientaId) {
         console.error('Error subiendo carta a Storage:', upErr);
         alert('La carta se ha descargado pero no se ha podido subir al área de la clienta.\nError: ' + upErr.message);
       } else {
-        const { data: urlData } = sb.storage.from('planes').getPublicUrl(filePath);
-        console.log('URL carta:', urlData.publicUrl);
         const { error: updateErr } = await sb.rpc('admin_set_carta_url', {
           p_clienta_id: clientaId,
-          p_carta_url: urlData.publicUrl
+          p_carta_url: filePath
         });
         if (updateErr) {
           console.error('Error guardando carta_url en profiles:', updateErr);
@@ -855,10 +853,8 @@ async function subirPDF(input) {
 
   try {
     await sb.storage.from('planes').upload(fileName, file, {contentType:'application/pdf', upsert:true});
-    const { data: urlData } = sb.storage.from('planes').getPublicUrl(fileName);
-    const pdfUrl = urlData.publicUrl;
 
-    const { error } = await sb.from('planes').update({ pdf_url: pdfUrl }).eq('id', planIdParaPDF);
+    const { error } = await sb.from('planes').update({ pdf_url: fileName }).eq('id', planIdParaPDF);
     if (error) throw new Error(error.message);
 
     // Actualizar en memoria y re-renderizar
@@ -1145,6 +1141,26 @@ function cerrarModalFormulario() {
 document.getElementById('modalFormulario').addEventListener('click', function(e) {
   if (e.target === this) cerrarModalFormulario();
 });
+
+// ════════════════════════════════
+//  SIGNED URLS — bucket planes privado
+// ════════════════════════════════
+function extractPlanesPath(pathOrUrl) {
+  const marker = '/object/public/planes/';
+  return pathOrUrl.includes(marker) ? pathOrUrl.split(marker)[1] : pathOrUrl;
+}
+
+async function verPlan(pathOrUrl) {
+  const { data } = await sb.storage.from('planes').createSignedUrl(extractPlanesPath(pathOrUrl), 3600);
+  if (data?.signedUrl) window.open(`visor.html?url=${encodeURIComponent(data.signedUrl)}`, '_blank');
+  else alert('No se pudo abrir el plan. Inténtalo de nuevo.');
+}
+
+async function verPDF(pathOrUrl) {
+  const { data } = await sb.storage.from('planes').createSignedUrl(extractPlanesPath(pathOrUrl), 3600);
+  if (data?.signedUrl) window.open(data.signedUrl, '_blank');
+  else alert('No se pudo abrir el PDF. Inténtalo de nuevo.');
+}
 
 </script>
 </body>

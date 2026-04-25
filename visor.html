@@ -110,12 +110,24 @@
       .single();
     const esHombre = profile?.genero === 'hombre';
 
-    // 3. Obtener el HTML y renderizarlo en el iframe via srcdoc
+    // 3. Generar signed URL (bucket planes es privado)
+    const publicMarker = '/object/public/planes/';
+    const storagePath  = url.includes(publicMarker)
+      ? url.split(publicMarker)[1]
+      : url; // ya es un path o signed URL
+
+    const { data: signed, error: signErr } = await sb.storage
+      .from('planes')
+      .createSignedUrl(storagePath, 3600);
+
+    if (signErr || !signed?.signedUrl) { showError(); return; }
+
+    // 4. Obtener el HTML y renderizarlo en el iframe via srcdoc
     //    (iframe src directo falla por X-Frame-Options de Supabase Storage;
     //     srcdoc inyecta el contenido como string y no le afectan esas cabeceras)
     let html;
     try {
-      const res = await fetch(url);
+      const res = await fetch(signed.signedUrl);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       html = await res.text();
     } catch {

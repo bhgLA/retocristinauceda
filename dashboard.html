@@ -320,10 +320,12 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     // Mostrar carta de bienvenida si Cris la ha generado (carta_url en profiles)
     if (profile.carta_url) {
       const cartaLink = document.getElementById('cartaLink');
-      cartaLink.href = profile.carta_url;
-      cartaLink.addEventListener('click', () => {
+      cartaLink.href = 'javascript:void(0)';
+      cartaLink.addEventListener('click', async () => {
         document.getElementById('cartaWrap').style.display = 'none';
         sb.rpc('marcar_carta_leida');
+        const { data: signed } = await sb.storage.from('planes').createSignedUrl(profile.carta_url, 3600);
+        if (signed?.signedUrl) window.open(signed.signedUrl, '_blank');
       });
       document.getElementById('cartaWrap').style.display = 'block';
     }
@@ -414,8 +416,8 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     const numActual  = planes.length;
 
     const botonesActual = actual.plan_url
-      ? `<a href="visor.html?url=${encodeURIComponent(actual.plan_url)}" class="btn-plan btn-ver">Ver mi plan ${iconArrow}</a>
-         ${actual.pdf_url ? `<a href="${actual.pdf_url}" target="_blank" class="btn-plan btn-pdf">Descargar PDF ${iconPDF}</a>` : ''}`
+      ? `<a href="javascript:void(0)" data-url="${actual.plan_url}" onclick="verPlan(this.dataset.url)" class="btn-plan btn-ver">Ver mi plan ${iconArrow}</a>
+         ${actual.pdf_url ? `<a href="javascript:void(0)" data-url="${actual.pdf_url}" onclick="verPDF(this.dataset.url)" class="btn-plan btn-pdf">Descargar PDF ${iconPDF}</a>` : ''}`
       : `<span style="font-size:0.62rem;color:var(--text-light);font-style:italic">Disponible pronto 💕</span>`;
 
     let html = `
@@ -435,11 +437,12 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       const pillsHTML = anteriores.map((p, i) => {
         const label = p.num_plan || ('Plan ' + (i + 1));
         const fecha  = p.fecha ? ' · ' + p.fecha : '';
-        const href   = p.plan_url
-          ? `visor.html?url=${encodeURIComponent(p.plan_url)}`
-          : p.pdf_url || null;
-        return href
-          ? `<a href="${href}" ${p.pdf_url && !p.plan_url ? 'target="_blank"' : ''} class="plan-pill">${label}${fecha}</a>`
+        const dataUrl = p.plan_url || p.pdf_url || null;
+        const onclick = p.plan_url
+          ? `verPlan(this.dataset.url)`
+          : `verPDF(this.dataset.url)`;
+        return dataUrl
+          ? `<a href="javascript:void(0)" data-url="${dataUrl}" onclick="${onclick}" class="plan-pill">${label}${fecha}</a>`
           : `<span class="plan-pill" style="opacity:0.5;cursor:default">${label}${fecha}</span>`;
       }).join('');
 
@@ -484,6 +487,23 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
     resetTimer(); // arrancar el contador
   })();
+
+  function extractPlanesPath(pathOrUrl) {
+    const marker = '/object/public/planes/';
+    return pathOrUrl.includes(marker) ? pathOrUrl.split(marker)[1] : pathOrUrl;
+  }
+
+  async function verPlan(pathOrUrl) {
+    const { data } = await sb.storage.from('planes').createSignedUrl(extractPlanesPath(pathOrUrl), 3600);
+    if (data?.signedUrl) window.location.href = `visor.html?url=${encodeURIComponent(data.signedUrl)}`;
+    else alert('No se pudo abrir el plan. Inténtalo de nuevo.');
+  }
+
+  async function verPDF(pathOrUrl) {
+    const { data } = await sb.storage.from('planes').createSignedUrl(extractPlanesPath(pathOrUrl), 3600);
+    if (data?.signedUrl) window.open(data.signedUrl, '_blank');
+    else alert('No se pudo descargar el PDF. Inténtalo de nuevo.');
+  }
 </script>
 </body>
 </html>
