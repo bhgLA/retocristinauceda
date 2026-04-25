@@ -589,8 +589,8 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       const planesHTML = numPlanes
         ? planes.map((p, i) => `
             <div class="plan-badge">
-              <div class="plan-num">${p.num_plan || 'Plan '+(i+1)}</div>
-              <div class="plan-url asignado">✓ ${p.fecha || 'Sin fecha'}</div>
+              <div class="plan-num">${esc(p.num_plan) || 'Plan '+(i+1)}</div>
+              <div class="plan-url asignado">✓ ${esc(p.fecha) || 'Sin fecha'}</div>
               <div class="plan-links">
                 ${p.plan_url ? `<a href="javascript:void(0)" data-url="${p.plan_url}" onclick="verPlan(this.dataset.url)" class="btn-ver-plan">👁 Ver</a>` : ''}
                 ${p.pdf_url  ? `<a href="javascript:void(0)" data-url="${p.pdf_url}" onclick="verPDF(this.dataset.url)" class="btn-ver-pdf">📄 PDF</a>` : ''}
@@ -606,8 +606,8 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
         <div class="clienta-item">
           <div class="clienta-row${activa ? '' : ' inactiva'}" onclick="toggleRow('${c.id}')">
             <div class="row-info">
-              <span class="row-nombre">${c.nombre}</span>
-              <span class="row-email">${c.email}</span>
+              <span class="row-nombre">${esc(c.nombre)}</span>
+              <span class="row-email">${esc(c.email)}</span>
             </div>
             <div class="row-meta">
               <span class="row-planes-count">${numPlanes} ${numPlanes === 1 ? 'plan' : 'planes'}</span>
@@ -617,10 +617,10 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
                 <button class="row-menu-btn" onclick="event.stopPropagation();toggleMenu('${c.id}')">···</button>
                 <div class="row-menu-dropdown" id="menu-${c.id}">
                   ${activa
-                    ? `<button onclick="event.stopPropagation();toggleActiva('${c.id}','${c.nombre.replace(/'/g,"\\'")}',false)">Marcar reto completado</button>`
-                    : `<button onclick="event.stopPropagation();toggleActiva('${c.id}','${c.nombre.replace(/'/g,"\\'")}',true)">Reactivar clienta</button>`
+                    ? `<button data-id="${c.id}" data-nombre="${esc(c.nombre)}" onclick="event.stopPropagation();toggleActiva(this.dataset.id,this.dataset.nombre,false)">Marcar reto completado</button>`
+                    : `<button data-id="${c.id}" data-nombre="${esc(c.nombre)}" onclick="event.stopPropagation();toggleActiva(this.dataset.id,this.dataset.nombre,true)">Reactivar clienta</button>`
                   }
-                  <button onclick="event.stopPropagation();generarCarta('${c.nombre.replace(/'/g,"\\'")}','${c.id}')">📄 Carta de bienvenida</button>
+                  <button data-id="${c.id}" data-nombre="${esc(c.nombre)}" onclick="event.stopPropagation();generarCarta(this.dataset.nombre,this.dataset.id)">📄 Carta de bienvenida</button>
                 </div>
               </div>
             </div>
@@ -681,6 +681,16 @@ let planIdParaPDF = null;
 function abrirSubirPDF(planId) {
   planIdParaPDF = planId;
   document.getElementById('inputPDF').click();
+}
+
+// Escapa caracteres HTML para evitar XSS en innerHTML
+function esc(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // ════════════════════════════════
