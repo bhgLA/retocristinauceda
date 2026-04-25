@@ -788,6 +788,7 @@ async function generarCarta(nombre, clientaId) {
     setTimeout(() => URL.revokeObjectURL(url), 5000);
 
     // ── Subir a Storage y guardar URL en profiles ──
+    console.log('generarCarta → clientaId recibido:', clientaId);
     if (clientaId) {
       const filePath = `${clientaId}/carta_bienvenida.pdf`;
       const { error: upErr } = await sb.storage
@@ -800,14 +801,19 @@ async function generarCarta(nombre, clientaId) {
       } else {
         const { data: urlData } = sb.storage.from('planes').getPublicUrl(filePath);
         console.log('URL carta:', urlData.publicUrl);
-        const { error: updateErr } = await sb.from('profiles')
+        const { data: updatedRows, error: updateErr } = await sb.from('profiles')
           .update({ carta_url: urlData.publicUrl })
-          .eq('id', clientaId);
+          .eq('id', clientaId)
+          .select('id');
         if (updateErr) {
           console.error('Error guardando carta_url en profiles:', updateErr);
           alert('Carta subida pero no se pudo guardar en el perfil.\nError: ' + updateErr.message);
+        } else if (!updatedRows || updatedRows.length === 0) {
+          console.warn('carta_url: update sin error pero 0 filas actualizadas (posible RLS bloqueando)');
+          alert('Carta subida a Storage pero no se guardó en el perfil (0 filas actualizadas).\nVerifica que la política RLS de admin UPDATE en profiles está activa.');
         } else {
-          console.log('carta_url guardada correctamente en profiles');
+          console.log('carta_url guardada correctamente en profiles:', urlData.publicUrl);
+          alert(`✓ Carta de bienvenida generada y guardada en el perfil de ${nombre}.`);
         }
       }
     }
