@@ -594,7 +594,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
               <div class="plan-links">
                 ${p.plan_url ? `<a href="javascript:void(0)" data-url="${p.plan_url}" onclick="verPlan(this.dataset.url)" class="btn-ver-plan">👁 Ver</a>` : ''}
                 ${p.pdf_url  ? `<a href="javascript:void(0)" data-url="${p.pdf_url}" onclick="verPDF(this.dataset.url)" class="btn-ver-pdf">📄 PDF</a>` : ''}
-                <a href="plan_editor_v3.html?plan_id=${p.id}" class="btn-ver-plan" style="background:#27ae60;">✏️ Editar</a>
+                <a href="plan_editor_v3.html?plan_id=${p.id}&nombre=${encodeURIComponent(c.nombre)}" class="btn-ver-plan" style="background:#27ae60;">✏️ Editar</a>
                 <button data-pdf-btn="${p.id}" onclick="event.stopPropagation();abrirSubirPDF('${p.id}')" class="btn-ver-pdf" style="background:#9e6070;color:white;border:none;cursor:pointer;">📄 ${p.pdf_url ? 'Cambiar PDF' : 'Subir PDF'}</button>
               </div>
             </div>`).join('')
