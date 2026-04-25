@@ -317,13 +317,13 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
     document.getElementById('nombreClienta').textContent = profile.nombre;
 
-    // Mostrar carta de bienvenida si Cris la ha generado y la clienta no la ha leído aún
-    if (profile.carta_url && !localStorage.getItem('carta_leida_' + profile.id)) {
+    // Mostrar carta de bienvenida si Cris la ha generado (carta_url en profiles)
+    if (profile.carta_url) {
       const cartaLink = document.getElementById('cartaLink');
       cartaLink.href = profile.carta_url;
       cartaLink.addEventListener('click', () => {
-        localStorage.setItem('carta_leida_' + profile.id, '1');
-        setTimeout(() => { document.getElementById('cartaWrap').style.display = 'none'; }, 300);
+        document.getElementById('cartaWrap').style.display = 'none';
+        sb.rpc('marcar_carta_leida');
       });
       document.getElementById('cartaWrap').style.display = 'block';
     }
