@@ -354,9 +354,9 @@ async function cargarPlanExistente() {
 
     // Rellenar cabecera
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-    // Cargar nombre desde profiles
-    const { data: prof } = await sb.from('profiles').select('nombre').eq('id', plan.clienta_id).single();
-    set('nombre', prof?.nombre || '');
+    // Nombre: viene del parámetro URL (admin lo pasa directamente)
+    const nombreParam = params.get('nombre');
+    set('nombre', nombreParam ? decodeURIComponent(nombreParam) : '');
     set('fecha',         plan.fecha);
     set('numPlan',       plan.num_plan);
     set('objetivo',      plan.objetivo);
