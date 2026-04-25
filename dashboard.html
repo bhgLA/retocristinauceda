@@ -321,11 +321,18 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     if (profile.carta_url) {
       const cartaLink = document.getElementById('cartaLink');
       cartaLink.href = 'javascript:void(0)';
-      cartaLink.addEventListener('click', async () => {
+      cartaLink.addEventListener('click', async (e) => {
+        e.preventDefault();
         document.getElementById('cartaWrap').style.display = 'none';
         sb.rpc('marcar_carta_leida');
+        const win = window.open('', '_blank'); // abrir antes del await para evitar popup blocker
         const { data: signed } = await sb.storage.from('planes').createSignedUrl(profile.carta_url, 3600);
-        if (signed?.signedUrl) window.open(signed.signedUrl, '_blank');
+        if (signed?.signedUrl) {
+          win.location.href = signed.signedUrl;
+        } else {
+          win.close();
+          alert('No se pudo abrir la carta. Inténtalo de nuevo.');
+        }
       });
       document.getElementById('cartaWrap').style.display = 'block';
     }
@@ -500,9 +507,10 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
   }
 
   async function verPDF(pathOrUrl) {
+    const win = window.open('', '_blank');
     const { data } = await sb.storage.from('planes').createSignedUrl(extractPlanesPath(pathOrUrl), 3600);
-    if (data?.signedUrl) window.open(data.signedUrl, '_blank');
-    else alert('No se pudo descargar el PDF. Inténtalo de nuevo.');
+    if (data?.signedUrl) win.location.href = data.signedUrl;
+    else { win.close(); alert('No se pudo descargar el PDF. Inténtalo de nuevo.'); }
   }
 </script>
 </body>

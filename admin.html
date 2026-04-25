@@ -829,7 +829,7 @@ async function generarCarta(nombre, clientaId) {
           console.error('Error guardando carta_url en profiles:', updateErr);
           alert('Carta subida pero no se pudo guardar en el perfil.\nError: ' + updateErr.message);
         } else {
-          console.log('carta_url guardada correctamente en profiles:', urlData.publicUrl);
+          console.log('carta_url guardada correctamente en profiles:', filePath);
           alert(`✓ Carta de bienvenida generada y guardada en el perfil de ${nombre}.`);
         }
       }
@@ -1151,15 +1151,17 @@ function extractPlanesPath(pathOrUrl) {
 }
 
 async function verPlan(pathOrUrl) {
+  const win = window.open('', '_blank');
   const { data } = await sb.storage.from('planes').createSignedUrl(extractPlanesPath(pathOrUrl), 3600);
-  if (data?.signedUrl) window.open(`visor.html?url=${encodeURIComponent(data.signedUrl)}`, '_blank');
-  else alert('No se pudo abrir el plan. Inténtalo de nuevo.');
+  if (data?.signedUrl) win.location.href = `visor.html?url=${encodeURIComponent(data.signedUrl)}`;
+  else { win.close(); alert('No se pudo abrir el plan. Inténtalo de nuevo.'); }
 }
 
 async function verPDF(pathOrUrl) {
+  const win = window.open('', '_blank');
   const { data } = await sb.storage.from('planes').createSignedUrl(extractPlanesPath(pathOrUrl), 3600);
-  if (data?.signedUrl) window.open(data.signedUrl, '_blank');
-  else alert('No se pudo abrir el PDF. Inténtalo de nuevo.');
+  if (data?.signedUrl) win.location.href = data.signedUrl;
+  else { win.close(); alert('No se pudo abrir el PDF. Inténtalo de nuevo.'); }
 }
 
 </script>
