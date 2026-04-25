@@ -242,6 +242,11 @@ main { max-width:860px; margin:0 auto; padding:36px 20px 60px; }
 .modal-field input:focus { border-color:var(--rosa); box-shadow:0 0 0 3px rgba(212,135,154,0.12); background:var(--white); }
 .modal-field input::placeholder { color:var(--text-light); font-weight:300; }
 .modal-field .field-hint { font-size:0.58rem; color:var(--text-light); margin-top:4px; }
+.nc-radio-group { display:flex; gap:12px; }
+.nc-radio { display:flex; align-items:center; gap:6px; font-size:0.8rem; color:var(--text); cursor:pointer; font-weight:400; text-transform:none; letter-spacing:0; }
+.nc-radio input[type="radio"] { accent-color:var(--rosa); width:15px; height:15px; cursor:pointer; }
+.nc-check-label { display:flex; align-items:center; gap:8px; font-size:0.75rem; color:var(--text); cursor:pointer; font-weight:400; text-transform:none; letter-spacing:0; }
+.nc-check-label input[type="checkbox"] { accent-color:var(--rosa); width:15px; height:15px; cursor:pointer; flex-shrink:0; }
 .modal-actions { display:flex; gap:10px; margin-top:24px; }
 .modal-actions .btn-cancelar {
   flex:1; padding:12px; border-radius:8px; border:1px solid var(--border);
@@ -395,6 +400,19 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     <div class="modal-field">
       <label for="nc-telefono">Teléfono <span style="font-weight:400;color:var(--text-light)">(opcional)</span></label>
       <input type="tel" id="nc-telefono" placeholder="600 000 000" autocomplete="off">
+    </div>
+    <div class="modal-field">
+      <label>Género</label>
+      <div class="nc-radio-group">
+        <label class="nc-radio"><input type="radio" name="nc-genero" value="mujer" checked> Mujer</label>
+        <label class="nc-radio"><input type="radio" name="nc-genero" value="hombre"> Hombre</label>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label class="nc-check-label">
+        <input type="checkbox" id="nc-nueva" checked>
+        <span>Clienta nueva <span style="color:var(--text-light);font-size:0.7rem">(muestra el formulario de valoración)</span></span>
+      </label>
     </div>
     <div class="modal-msg" id="nc-msg"></div>
     <div class="modal-actions">
@@ -672,6 +690,8 @@ function abrirModalNuevaClienta() {
   document.getElementById('nc-nombre').value   = '';
   document.getElementById('nc-email').value    = '';
   document.getElementById('nc-telefono').value = '';
+  document.querySelector('input[name="nc-genero"][value="mujer"]').checked = true;
+  document.getElementById('nc-nueva').checked  = true;
   const msg = document.getElementById('nc-msg');
   msg.className = 'modal-msg';
   const btn = document.getElementById('nc-btnCrear');
@@ -689,6 +709,8 @@ async function crearClienta() {
   const nombre   = document.getElementById('nc-nombre').value.trim();
   const email    = document.getElementById('nc-email').value.trim();
   const telefono = document.getElementById('nc-telefono').value.trim();
+  const genero   = document.querySelector('input[name="nc-genero"]:checked').value;
+  const es_nueva = document.getElementById('nc-nueva').checked;
   const msg      = document.getElementById('nc-msg');
   const btn      = document.getElementById('nc-btnCrear');
 
@@ -702,7 +724,7 @@ async function crearClienta() {
 
   try {
     const { data: result, error: fnError } = await sb.functions.invoke('create-clienta', {
-      body: { nombre, email, telefono },
+      body: { nombre, email, telefono, genero, es_nueva },
     });
 
     if (fnError) {

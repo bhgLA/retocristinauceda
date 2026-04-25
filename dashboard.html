@@ -308,7 +308,7 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
 
     const { data: profile, error } = await sb
       .from('profiles')
-      .select('id, nombre, rol, carta_url')
+      .select('id, nombre, rol, carta_url, es_nueva')
       .eq('id', session.user.id)
       .single();
 
@@ -328,14 +328,18 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
       document.getElementById('cartaWrap').style.display = 'block';
     }
 
-    // Comprobar formulario
-    const { data: formulario } = await sb
-      .from('formularios')
-      .select('estado, nota_cris')
-      .eq('clienta_id', profile.id)
-      .maybeSingle();
+    // Comprobar formulario (solo para clientas nuevas)
+    let formulario = null;
+    if (profile.es_nueva) {
+      const { data } = await sb
+        .from('formularios')
+        .select('estado, nota_cris')
+        .eq('clienta_id', profile.id)
+        .maybeSingle();
+      formulario = data;
+    }
 
-    renderFormulario(formulario);
+    renderFormulario(formulario, profile.es_nueva);
 
     const { data: planes } = await sb
       .from('planes')
@@ -347,8 +351,11 @@ footer p { font-size:0.6rem; letter-spacing:2px; text-transform:uppercase; color
     document.getElementById('loading').style.display = 'none';
   }
 
-  function renderFormulario(formulario) {
+  function renderFormulario(formulario, esNueva) {
     const wrap = document.getElementById('formularioWrap');
+
+    // Clienta existente → no necesita formulario
+    if (!esNueva) return;
 
     // Sin formulario → invitar a rellenarlo
     if (!formulario) {

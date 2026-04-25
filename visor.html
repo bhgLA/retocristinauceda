@@ -102,6 +102,14 @@
       showError(); return;
     }
 
+    // 2b. Leer género del perfil para aplicar tema
+    const { data: profile } = await sb
+      .from('profiles')
+      .select('genero')
+      .eq('id', session.user.id)
+      .single();
+    const esHombre = profile?.genero === 'hombre';
+
     // 3. Obtener el HTML y renderizarlo en el iframe via srcdoc
     //    (iframe src directo falla por X-Frame-Options de Supabase Storage;
     //     srcdoc inyecta el contenido como string y no le afectan esas cabeceras)
@@ -112,6 +120,30 @@
       html = await res.text();
     } catch {
       showError(); return;
+    }
+
+    // Aplicar tema masculino si procede
+    if (esHombre) {
+      html = html.replace('</head>',
+        `<style>
+          :root {
+            --pink:#1976d2 !important;
+            --pink-dark:#0d47a1 !important;
+            --pink-soft:#90caf9 !important;
+            --pink-bg:#e3f2fd !important;
+            --pink-card:#bbdefb !important;
+            --rose:#e3f2fd !important;
+            --text2:#1a3a5c !important;
+            --text3:#5b7fa6 !important;
+          }
+          .header { background:linear-gradient(135deg,#0d47a1 0%,#1976d2 60%,#42a5f5 100%) !important; }
+          .food-dot { background:#90caf9 !important; }
+          .obs-box { background:#e3f2fd !important; border-color:#90caf9 !important; }
+          .tab-btn.active { color:#1976d2 !important; border-bottom-color:#1976d2 !important; }
+          .bnav-btn.active { color:#1976d2 !important; }
+        </style></head>`
+      );
+      html = html.replace('🌸', '💪');
     }
 
     const frame = document.getElementById('plan-frame');
