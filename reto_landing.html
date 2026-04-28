@@ -295,30 +295,31 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
 
 /* Caja destacada del RETO */
 .reto-box{
-  margin:2.5rem 0 4rem;
+  margin:2.5rem -2rem 4rem;
   border:1px solid rgba(201,123,138,.3);
   border-left:4px solid var(--rose);
   background:rgba(201,123,138,.07);
-  padding:2rem 2.8rem;
+  padding:2rem 4.8rem;
   border-radius:2px;
+  color:rgba(255,255,255,.6) !important;
 }
 .reto-box-title{
   font-family:'Cormorant Garamond',serif;
-  font-size:1.4rem;font-weight:400;color:var(--rose-light);
+  font-size:1.4rem;font-weight:400;color:var(--rose-light) !important;
   margin-bottom:1.2rem;letter-spacing:.03em;
 }
 .reto-box-desc{
   font-size:.8rem;font-weight:300;line-height:1.85;
-  color:rgba(255,255,255,.55);
+  color:rgba(255,255,255,.6) !important;
 }
-.reto-box-desc p{ margin-bottom:.9rem; }
+.reto-box-desc p{ margin-bottom:.9rem;color:rgba(255,255,255,.6) !important; }
 .reto-box-desc p:last-child{ margin-bottom:0; }
-.reto-box-desc strong{color:var(--rose-light);font-weight:500}
-.reto-box-desc em{color:rgba(255,255,255,.75);font-style:italic}
+.reto-box-desc strong{color:var(--rose-light) !important;font-weight:500}
+.reto-box-desc em{color:rgba(255,255,255,.8) !important;font-style:italic}
 .reto-box-section{
   font-family:'Cormorant Garamond',serif;
   font-size:1.1rem;font-weight:400;
-  color:var(--rose-light);
+  color:var(--rose-light) !important;
   margin:1.8rem 0 .7rem;
   letter-spacing:.02em;
 }
@@ -327,10 +328,10 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
   display:flex;flex-direction:column;gap:.4rem;
 }
 .reto-box-desc ul li{
-  padding-left:1.4rem;position:relative;
+  padding-left:1.4rem;position:relative;color:rgba(255,255,255,.6) !important;
 }
 .reto-box-desc ul li::before{
-  content:'✦';position:absolute;left:0;
+  content:'\2726';position:absolute;left:0;
   color:var(--rose);font-size:.55rem;top:.35rem;
 }
 .reto-box-closing{
@@ -338,7 +339,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
   border-top:1px solid rgba(201,123,138,.2);
   font-family:'Cormorant Garamond',serif;
   font-size:1rem;font-style:italic;
-  color:rgba(255,255,255,.7);line-height:2;
+  color:rgba(255,255,255,.7) !important;line-height:2;
 }
 
 /* Los 3 planes del reto */
@@ -484,6 +485,7 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
   .about,.contact{grid-template-columns:1fr;gap:3rem;padding:5rem 2.5rem}
   .about-imgs{height:340px}
   .services,.method,.testimonials,.igstrip{padding:5rem 2.5rem}
+  .reto-box{margin:2.5rem 0 4rem;padding:2rem 2rem}
   .sh{grid-template-columns:1fr}
   .sh-r{text-align:left}
   .sgrid{grid-template-columns:1fr}
@@ -729,9 +731,9 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
   <h2 class="stitle">El <em>Reto Cristina Uceda</em></h2>
 
   <!-- Caja explicativa del reto -->
-  <div class=”reto-box”>
-    <div class=”reto-box-title”>¿Qué es el Reto?</div>
-    <div class=”reto-box-desc”>
+  <div class="reto-box">
+    <div class="reto-box-title">¿Qué es el Reto?</div>
+    <div class="reto-box-desc">
 
       <p>El <strong>Reto Cristina Uceda</strong> nació hace más de un año, casi sin planearlo. Surgió de una idea que se me pasó por la cabeza y que comenté a una gran amiga que formaba parte de un grupo de mujeres que entrenaba conmigo cada día.</p>
 
@@ -743,7 +745,7 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
 
       <p>Lo que no imaginé es que ellas mismas iban a darle vida propia al Reto. En principio iba a durar solo tres meses, lo justo para que aprendieran lo esencial. Pero en ese tiempo el grupo creció, se unió, se apoyó… y empezaron a llegar más mujeres, y también hombres, dispuestos a probar. Y así el Reto dejó de ser “una idea” para convertirse en una comunidad real.</p>
 
-      <div class=”reto-box-section”>Un programa que evoluciona contigo</div>
+      <div class="reto-box-section">Un programa que evoluciona contigo</div>
 
       <p>Tres planes totalmente personalizados que se adaptan a tu progreso, tus resultados, tus objetivos, tu ritmo y tu vida real — porque no todos avanzamos igual ni necesitamos lo mismo en cada fase.</p>
 
@@ -753,7 +755,7 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
 
       <p><strong>No es una dieta que empiezas y terminas. No es un reto exprés ni un programa de 21 días.</strong> Es un proceso progresivo, sostenible y acompañado, pensado para durar lo que tú necesites.</p>
 
-      <div class=”reto-box-section”>Un grupo que te acompaña, te sostiene y te impulsa</div>
+      <div class="reto-box-section">Un grupo que te acompaña, te sostiene y te impulsa</div>
 
       <p>En el Reto no caminas solo. Formas parte de un grupo donde:</p>
       <ul>
@@ -765,7 +767,7 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
       </ul>
       <p>Aquí no buscamos perfección. Buscamos constancia, aprendizaje y evolución.</p>
 
-      <div class=”reto-box-closing”>
+      <div class="reto-box-closing">
         El Reto es un proceso que transforma tu alimentación, tu energía y tu vida.<br>
         Un camino que recorres acompañado.<br>
         Un cambio que se queda para siempre.
