@@ -436,6 +436,26 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
 .t-dot.active{background:var(--rose);transform:scale(1.25)}
 
 /* ══════════════════════
+   ANTES / DESPUÉS
+══════════════════════ */
+.resultados{padding:8rem 7rem;background:var(--charcoal)}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4rem}
+.ba-card{border-radius:3px;overflow:hidden;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);transition:border-color .3s}
+.ba-card:hover{border-color:rgba(201,123,138,.35)}
+.ba-photos{display:grid;grid-template-columns:1fr 1fr;position:relative}
+.ba-photo{height:300px;overflow:hidden;position:relative}
+.ba-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:opacity .5s,filter .5s,transform .5s}
+.ba-card:hover .ba-before img{opacity:.55;filter:grayscale(25%)}
+.ba-card:hover .ba-after img{transform:scale(1.04)}
+.ba-label{position:absolute;bottom:.6rem;left:.6rem;font-size:.48rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;background:rgba(0,0,0,.6);color:rgba(255,255,255,.85);padding:.28rem .65rem;border-radius:2px;backdrop-filter:blur(6px);z-index:2}
+.ba-divider{position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.2);z-index:3;pointer-events:none}
+.ba-divider::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:28px;height:28px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);border-radius:50%;backdrop-filter:blur(6px)}
+.ba-info{padding:1.1rem 1.4rem;border-top:1px solid rgba(255,255,255,.07)}
+.ba-name{font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white)}
+.ba-time{font-size:.6rem;font-weight:300;color:var(--rose-light);margin-top:.15rem}
+.ba-quote{font-size:.72rem;font-weight:300;font-style:italic;color:rgba(255,255,255,.42);line-height:1.7;margin-top:.55rem}
+
+/* ══════════════════════
    CONTACT
 ══════════════════════ */
 .contact{padding:8rem 7rem;display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;background:var(--white)}
@@ -493,7 +513,8 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
   .hero-stats .hstat{padding:1.5rem 2rem}
   .about,.contact{grid-template-columns:1fr;gap:3rem;padding:5rem 2.5rem}
   .about-imgs{height:340px}
-  .services,.method,.testimonials,.igstrip{padding:5rem 2.5rem}
+  .services,.method,.testimonials,.resultados,.igstrip{padding:5rem 2.5rem}
+  .res-grid{grid-template-columns:1fr;gap:1.2rem}
   .reto-box{margin:2.5rem 0 4rem;padding:2rem 2rem}
   .sh{grid-template-columns:1fr}
   .sh-r{text-align:left}
@@ -968,6 +989,77 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
 </section>
 
 <!-- ══════════════════════════════════
+     ANTES / DESPUÉS — RESULTADOS REALES
+══════════════════════════════════ -->
+<section class="resultados" id="resultados">
+  <p class="eyebrow" style="color:var(--rose-light)">Resultados reales</p>
+  <h2 class="stitle" style="color:var(--white)">Antes y <em>después</em></h2>
+  <div class="res-grid">
+
+    <!-- Tarjeta 1 -->
+    <div class="ba-card reveal">
+      <div class="ba-photos">
+        <div class="ba-photo ba-before">
+          <img src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=400&h=480&fit=crop&q=80" alt="Antes">
+          <span class="ba-label">Antes</span>
+        </div>
+        <div class="ba-photo ba-after">
+          <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=480&fit=crop&q=80" alt="Después">
+          <span class="ba-label">Después</span>
+        </div>
+        <div class="ba-divider"></div>
+      </div>
+      <div class="ba-info">
+        <div class="ba-name">Laura E.</div>
+        <div class="ba-time">3 meses en el Reto</div>
+        <p class="ba-quote">"No solo cambió mi cuerpo — cambió mi relación con la comida para siempre."</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 2 -->
+    <div class="ba-card reveal d1">
+      <div class="ba-photos">
+        <div class="ba-photo ba-before">
+          <img src="https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=480&fit=crop&q=80" alt="Antes">
+          <span class="ba-label">Antes</span>
+        </div>
+        <div class="ba-photo ba-after">
+          <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=480&fit=crop&q=80" alt="Después">
+          <span class="ba-label">Después</span>
+        </div>
+        <div class="ba-divider"></div>
+      </div>
+      <div class="ba-info">
+        <div class="ba-name">María C.</div>
+        <div class="ba-time">6 meses en el Reto</div>
+        <p class="ba-quote">"Con Cris aprendí a comer de verdad. Los resultados llegaron solos."</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta 3 -->
+    <div class="ba-card reveal d2">
+      <div class="ba-photos">
+        <div class="ba-photo ba-before">
+          <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=480&fit=crop&q=80" alt="Antes">
+          <span class="ba-label">Antes</span>
+        </div>
+        <div class="ba-photo ba-after">
+          <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&h=480&fit=crop&q=80" alt="Después">
+          <span class="ba-label">Después</span>
+        </div>
+        <div class="ba-divider"></div>
+      </div>
+      <div class="ba-info">
+        <div class="ba-name">Javier M.</div>
+        <div class="ba-time">4 meses en el Reto</div>
+        <p class="ba-quote">"Pensaba que era imposible a mi edad. Me equivocaba."</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
      CONTACTO
 ══════════════════════════════════ -->
 <section class="contact" id="contacto">
@@ -980,11 +1072,12 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
   <div class="cform reveal d1">
     <h3 class="ft">Consulta inicial <em style="font-style:italic;color:var(--rose)">gratuita</em></h3>
     <p class="fs">Rellena el formulario y te contacto en menos de 24h para conocer tu caso.</p>
-    <div class="fg"><label>Nombre</label><input type="text" placeholder="Tu nombre"></div>
-    <div class="fg"><label>Email</label><input type="email" placeholder="tu@email.com"></div>
+    <div class="fg"><label>Nombre *</label><input type="text" id="cf-nombre" placeholder="Tu nombre" required></div>
+    <div class="fg"><label>Teléfono *</label><input type="tel" id="cf-telefono" placeholder="600 000 000" required></div>
+    <div class="fg"><label>Email (opcional)</label><input type="email" id="cf-email" placeholder="tu@email.com"></div>
     <div class="fg">
       <label>¿Qué te interesa?</label>
-      <select>
+      <select id="cf-servicio">
         <option value="">Selecciona un servicio...</option>
         <option>El Reto (3 planes de nutrición)</option>
         <option>Entrenamiento personal</option>
@@ -992,8 +1085,8 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
         <option>No lo sé aún, quiero información</option>
       </select>
     </div>
-    <div class="fg"><label>Tu objetivo (opcional)</label><textarea placeholder="¿Qué te gustaría conseguir?"></textarea></div>
-    <button class="fsub">Solicitar consulta gratuita →</button>
+    <div class="fg"><label>Tu objetivo (opcional)</label><textarea id="cf-objetivo" placeholder="¿Qué te gustaría conseguir?"></textarea></div>
+    <button class="fsub" id="cf-submit">Solicitar consulta gratuita →</button>
   </div>
 </section>
 
