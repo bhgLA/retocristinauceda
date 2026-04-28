@@ -370,6 +370,15 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
   font-size:.75rem;font-weight:300;line-height:1.85;
   color:rgba(255,255,255,.45);
 }
+.plan-desc p{margin-bottom:.7rem;color:rgba(255,255,255,.45)}
+.plan-desc p:last-child{margin-bottom:0}
+.plan-desc strong{color:rgba(255,255,255,.65);font-weight:500}
+.plan-opcion-block{margin:.9rem 0;padding-left:.9rem;border-left:2px solid rgba(201,123,138,.4)}
+.plan-opcion-label{font-size:.63rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--rose-light);margin-bottom:.4rem}
+.plan-opcion-list{list-style:none;display:flex;flex-direction:column;gap:.25rem}
+.plan-opcion-list li{font-size:.72rem;font-weight:300;line-height:1.6;color:rgba(255,255,255,.42);padding-left:.85rem;position:relative}
+.plan-opcion-list li::before{content:'–';position:absolute;left:0;color:var(--rose);font-weight:400}
+.plan-cierre{margin-top:.9rem;font-style:italic;font-size:.73rem;color:rgba(255,255,255,.35);line-height:1.7}
 
 .mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,.07)}
 .mstep{padding:2.5rem 2.5rem;border-right:1px solid rgba(255,255,255,.07);position:relative;transition:background .4s}
@@ -599,7 +608,7 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
     <div class="t-svg">
       <svg viewBox="0 0 24 24"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M2 8v6"/><path d="M6 10.5v5.5a6 6 0 0012 0v-5.5"/></svg>
     </div>
-    <span class="t-lbl">Graduada en Dietética</span>
+    <span class="t-lbl">Especializada en dietetica y Nutrición</span>
   </div>
   <div class="t-item">
     <div class="t-svg">
@@ -652,12 +661,11 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
 						Cuando empiezas a cuidarte desde el respeto, todo se vuelve más natural, más llevadero y más tuyo.</p>
 	<p class="about-p">Si buscas un acompañamiento profesional, cercano y adaptado a ti —online o presencial— estaré encantada de ayudarte a construir un camino que te haga sentir fuerte, seguro y orgulloso de tu evolución.</p>					
 	<div class="chips">
-      <span class="chip">Nutrición deportiva</span>
-      <span class="chip">Recomposicion corporal</span>
-      <span class="chip">Ganancia muscular</span>
+      <span class="chip">Nutricion Antiinflamatoria</span>
+      <span class="chip">Recomposicion corporal</span>     
       <span class="chip">Salud hormonal</span>
       <span class="chip">Entrenamiento funcional</span>
-      <span class="chip">Menopausia-perimenopausia</span>
+
     </div>
   </div>
 </section>
@@ -678,9 +686,9 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
       <div class="si"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80" alt="Nutrición"></div>
       <div class="sb">
         <div class="sn">01</div>
-        <h3 class="st">Plan de <em>Nutrición</em></h3>
+        <h3 class="st">Valoración inicial <em>Completa</em></h3>
         <p class="sd">Análisis completo de tus hábitos, objetivos y estilo de vida para crear un plan nutricional que funcione contigo, no contra ti.</p>
-        <ul class="sf"><li>Valoración nutricional inicial</li><li>Plan semanal personalizado</li><li>Recetas y menús detallados</li><li>Seguimiento quincenal</li><li>Suplementación orientada</li></ul>
+        <ul class="sf"><li>Plan nutricional personalizado</li><li>Menús detallados y flexibles </li><li>Seguimiento y motivación  diaria</li><li>Suplementación orientada</li></ul>
         <a href="#contacto" class="sl">Solicitar plan</a>
       </div>
     </div>
@@ -689,8 +697,9 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
       <div class="sb">
         <div class="sn">02</div>
         <h3 class="st">Entrenamiento <em>Personal</em></h3>
-        <p class="sd">Rutinas adaptadas a tu nivel, objetivos y disponibilidad. Online o presencial, siempre con la misma intensidad y atención.</p>
-        <ul class="sf"><li>Valoración física y de objetivos</li><li>Rutinas progresivas adaptadas</li><li>Seguimiento de rendimiento</li><li>Ajuste mensual de rutinas</li><li>Soporte por mensaje directo</li></ul>
+        <p class="sd">Entrenamientos que se adaptan a ti, a tu nivel, objetivos y disponibilidad
+				Presencial para trabajar juntos con precisión; asesoramieno online si prefieres entrenar por tu cuenta con una guía clara.</p>
+        <ul class="sf"><li>Valoración física completa</li><li>Rutinas personalizadas y progresivas</li><li>Seguimiento real de tu evolución</li><li>Revisión mensual del plan </li><li>Soporte por mensaje directo</li></ul>
         <a href="#contacto" class="sl">Solicitar plan</a>
       </div>
     </div>
@@ -700,7 +709,7 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
         <div class="sn">03</div>
         <h3 class="st">Pack <em>Transformación</em></h3>
         <p class="sd">La combinación más efectiva: nutrición y entrenamiento trabajando juntos para resultados reales y duraderos.</p>
-        <ul class="sf"><li>Todo lo incluido en ambos planes</li><li>Seguimiento integrado mensual</li><li>Plataforma privada con tu plan</li><li>Modalidad mensual o trimestral</li></ul>
+        <ul class="sf"><li>Todo lo incluido en ambos planes</li><li>Seguimiento integrado mensual</li><li>Plataforma privada con tu plan</li><li>Modalidad flexible</li></ul>
         <a href="#contacto" class="sl">Quiero el pack completo</a>
       </div>
     </div>
@@ -788,17 +797,48 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
     <div class="plan-card reveal">
       <span class="plan-badge">Plan 1 · Inicio</span>
       <h3 class="plan-title">Adaptación &amp; <em>Base</em></h3>
-      <p class="plan-desc">Valoración completa y primer plan nutricional personalizado. Establecemos tu punto de partida, tus hábitos y los primeros cambios sostenibles. Tu cuerpo empieza a responder.</p>
+      <div class="plan-desc">
+        <p>Este primer plan es tu punto de partida real. Empiezo a integrar en tu día a día los alimentos que forman parte de una alimentación antiinflamatoria, adaptándolos a tus horarios, tu actividad física, tu nivel de estrés y tu estilo de vida.</p>
+        <p>El objetivo de esta fase es que tu cuerpo se desinflame por dentro y que empieces a notar cambios en tu energía, en tu digestión, en tu descanso y en cómo te sientes.</p>
+        <p>Un plan pensado para que aprendas sin agobios, entiendas el porqué de cada pauta y tu cuerpo empiece a responder.</p>
+      </div>
     </div>
     <div class="plan-card reveal d1">
       <span class="plan-badge">Plan 2 · Progreso</span>
       <h3 class="plan-title">Optimización &amp; <em>Avance</em></h3>
-      <p class="plan-desc">Con los datos reales de tu evolución, refinamos el plan. Ajustamos macros, calorías, timing y estrategia según cómo ha respondido tu cuerpo. El progreso se acelera.</p>
+      <div class="plan-desc">
+        <p>Con los datos reales de tu evolución —tu energía, tus medidas, tus sensaciones, tu rendimiento y tu respuesta metabólica— afinamos el plan.</p>
+        <p>En esta fase ajusto: <strong>macros, timing, estrategia nutricional, combinaciones y cargas de entrenamiento</strong> (si procede). Todo para que sigas avanzando, aprendiendo y mejorando.</p>
+        <p>Aquí el cuerpo responde aún mejor: más energía, menos inflamación, mejor digestión y composición corporal. Es la fase donde empiezas a notar cambios visibles y, sobre todo, cambios que se sienten.</p>
+      </div>
     </div>
     <div class="plan-card reveal d2">
       <span class="plan-badge">Plan 3 · Consolidación</span>
-      <h3 class="plan-title">Mantenimiento &amp; <em>Estilo de vida</em></h3>
-      <p class="plan-desc">El plan definitivo: diseñado para que los resultados duren. Aprendes a comer bien sin depender de un plan — con autonomía, criterio y sin miedo a la comida.</p>
+      <h3 class="plan-title">Autonomía &amp; <em>Estilo de vida</em></h3>
+      <div class="plan-desc">
+        <p>El tercer plan puede ser tu plan definitivo… o un paso más si aún te queda camino. Cada cuerpo es distinto, y muchos decidís continuar porque queréis seguir mejorando.</p>
+        <p>Cuando llegamos aquí, <strong>hablamos, valoramos tu evolución y decidimos juntos:</strong></p>
+        <div class="plan-opcion-block">
+          <div class="plan-opcion-label">Opción A — Plan definitivo de mantenimiento</div>
+          <ul class="plan-opcion-list">
+            <li>Consolidar todo lo aprendido</li>
+            <li>Mantener resultados sin retroceder</li>
+            <li>Darte autonomía y criterio real</li>
+            <li>Comer sin miedo ni dependencia de un plan</li>
+            <li>Unas pautas base para cuidarte siempre</li>
+          </ul>
+        </div>
+        <div class="plan-opcion-block">
+          <div class="plan-opcion-label">Opción B — Seguimos avanzando</div>
+          <ul class="plan-opcion-list">
+            <li>Composición corporal y rendimiento</li>
+            <li>Salud hormonal y digestión</li>
+            <li>Energía e inflamación</li>
+            <li>Hábitos a largo plazo</li>
+          </ul>
+        </div>
+        <p class="plan-cierre">Tres planes no significa que el proceso termine. Decidimos juntos cuál es el siguiente paso.</p>
+      </div>
     </div>
   </div>
 
