@@ -1242,6 +1242,61 @@ function toggleTestimonio(id, btn) {
   window.addEventListener('mouseup',()=>{isDown=false;grid.classList.remove('grabbing')});
   grid.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();grid.scrollLeft=startLeft-(e.pageX-startX)});
 }());
+
+// ── Formulario consulta ──────────────────────────────────
+(function(){
+  const btn    = document.getElementById('cf-submit');
+  if (!btn) return;
+
+  const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_apcmOtkjMewxZzZ_JC9gcQ_UPT38IWq';
+
+  btn.addEventListener('click', async () => {
+    const nombre   = document.getElementById('cf-nombre').value.trim();
+    const telefono = document.getElementById('cf-telefono').value.trim();
+    const email    = document.getElementById('cf-email').value.trim();
+    const servicio = document.getElementById('cf-servicio').value;
+    const objetivo = document.getElementById('cf-objetivo').value.trim();
+
+    if (!nombre || !telefono) {
+      alert('Por favor, rellena el nombre y el teléfono.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/formu-info`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'apikey':        SUPABASE_KEY,
+        },
+        body: JSON.stringify({ nombre, telefono, email, servicio, objetivo }),
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        btn.textContent = '✓ Mensaje enviado';
+        btn.style.background = '#4a7a55';
+        document.getElementById('cf-nombre').value   = '';
+        document.getElementById('cf-telefono').value = '';
+        document.getElementById('cf-email').value    = '';
+        document.getElementById('cf-servicio').value = '';
+        document.getElementById('cf-objetivo').value = '';
+      } else {
+        throw new Error(data.error || 'Error desconocido');
+      }
+    } catch (err) {
+      alert('Hubo un problema al enviar. Inténtalo de nuevo o escríbenos por Instagram.');
+      btn.disabled = false;
+      btn.textContent = 'Solicitar consulta gratuita →';
+    }
+  });
+}());
 </script>
 </body>
 </html>
