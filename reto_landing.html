@@ -418,8 +418,8 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--cha
 .tstars{color:var(--rose);font-size:.75rem;letter-spacing:3px;display:block}
 .tq{font-family:'Cormorant Garamond',serif;font-size:4.5rem;line-height:.7;color:var(--rose-light);display:block;margin-bottom:.8rem}
 .tt{font-size:.83rem;font-weight:300;line-height:1.9;color:#2e2424;font-style:italic;margin-bottom:.8rem}
-.tt-wrap .tt{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
-.tt-wrap.expanded .tt{display:block;overflow:visible}
+.tt-wrap .tt{overflow:hidden;max-height:7.9em}
+.tt-wrap.expanded .tt{max-height:none}
 .leer-mas-btn{background:none;border:none;color:var(--rose);font-size:.68rem;font-weight:600;letter-spacing:.06em;cursor:pointer;padding:0;margin-bottom:.4rem;text-decoration:underline;font-family:'Montserrat',sans-serif}
 .ta{display:flex;align-items:center;gap:1rem}
 .tav{width:42px;height:42px;border-radius:50%;background:var(--rose-pale);border:2px solid var(--rose-light);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--rose-deep)}
@@ -538,6 +538,7 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
   footer{padding:2rem 1.5rem}
   .gallery{grid-template-columns:1fr}
   .tc{flex:0 0 calc(100% - .1rem)}
+  .tgrid{align-items:flex-start}
   .t-arrow{display:none}
 }
 </style>
@@ -1002,7 +1003,8 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
           <p class="tt"> Aunque al principio era un poco reacia en comenzar, pensaba que esto era una dieta más...tanto Cristina como las compañeras del reto me animaron a intentarlo.Llevo casi dos meses y muchas cosas han cambiado de mi día a día! He dejado de tener dependencia al acucar, he empezado a comer de manera consciente y sobretodo saciante y además tengo un montón de energía!!! Cristina te acompaña en todo el proceso y te enseña cosas todos los días, alimentos, ejercicios y momentos estratégicos, todo en un combo perfecto!!!  El acompañamiento es personalizado, me alucina que Cristina se sepa que nos toca cada día...cuando se hacen las cosas con cariño, estos detalles salen solos!</p>
         </div>
         <button class="leer-mas-btn" onclick="toggleTestimonio('tt5',this)">Leer más</button>
-      </div> <div class="tc">
+		</div> 
+		<div class="tc">
         <div class="tc-top">
           <div class="ta"><div class="tav">E</div><div><div class="tn">Ruth Alcalde</div><div class="tg">Mayo 2025</div></div></div>
           <span class="tstars">★★★★★</span>
@@ -1013,8 +1015,18 @@ footer{background:var(--rose-dark);padding:2.5rem 7rem;display:flex;align-items:
 		  Gracias Cris por hacernos cómplices en este maravilloso proceso.. Ahh y cómo siempre digo en el grupo de WhatsApp, es la  segunda mejor decisión que he tomado en mi vida, la primera casarme, y la segunda apuntarme al Reto con Cris.❤️🙌🥰🥰🥰</p>
         </div>
         <button class="leer-mas-btn" onclick="toggleTestimonio('tt5',this)">Leer más</button>
-      </div>
-	  
+		</div>
+		<div class="tc">
+        <div class="tc-top">
+          <div class="ta"><div class="tav">E</div><div><div class="tn">Lucía Suárez </div><div class="tg">Octubre 2025</div></div></div>
+          <span class="tstars">★★★★★</span>
+        </div>
+        <span class="tq">"</span>
+        <div class="tt-wrap" id="tt5">
+          <p class="tt">Muchísimas gracias Cristina por todo lo que me has ayudado en estos meses. En mi caso comencé el reto para perder algo de peso y sobre todo para mejorar un problema de salud. A día de hoy, después de 7 meses he perdido casi 7 kilos, los dolores de tripa con los que he vivido durante años han desaparecido, y sobre todo y lo más importante, es que ahora tengo unas pautas claras sobre cómo poder llevar un estilo de vida saludable y sostenido en el tiempo. Animo a todo el mundo a ponerse en manos de esta gran profesional!!! ❤️</p>
+        </div>
+        <button class="leer-mas-btn" onclick="toggleTestimonio('tt5',this)">Leer más</button>
+		</div>
 
     </div>
     <button class="t-arrow t-next" id="tnext" aria-label="Siguiente">&#8250;</button>
@@ -1245,11 +1257,11 @@ function toggleTestimonio(id, btn) {
 
 // ── Formulario consulta ──────────────────────────────────
 (function(){
-  const btn    = document.getElementById('cf-submit');
+  const btn = document.getElementById('cf-submit');
   if (!btn) return;
 
-  const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_apcmOtkjMewxZzZ_JC9gcQ_UPT38IWq';
+  const TG_TOKEN = '8237830889:AAE4yQKhcIdCfkDYZC8FM-TvrFN1uTWL_B4';
+  const TG_CHAT  = '891744850'; // ← cambiar al chat_id de Cris cuando lo tenga
 
   btn.addEventListener('click', async () => {
     const nombre   = document.getElementById('cf-nombre').value.trim();
@@ -1267,27 +1279,38 @@ function toggleTestimonio(id, btn) {
     btn.textContent = 'Enviando...';
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/functions/v1/formu-info`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ nombre, telefono, email, servicio, objetivo }),
-      });
+      const lineas = [
+        '🔔 Nueva consulta en retocristinauceda.com',
+        '',
+        `👤 ${nombre}`,
+        `📱 ${telefono}`,
+      ];
+      if (email)    lineas.push(`📧 ${email}`);
+      if (servicio) lineas.push(`💼 ${servicio}`);
+      if (objetivo) lineas.push(`🎯 ${objetivo}`);
 
-      const data = await res.json();
+      const SUPABASE_URL = 'https://dqojzchtwhqzogrozevy.supabase.co';
 
-      if (data.ok) {
-        btn.textContent = '✓ Mensaje enviado';
-        btn.style.background = '#4a7a55';
-        document.getElementById('cf-nombre').value   = '';
-        document.getElementById('cf-telefono').value = '';
-        document.getElementById('cf-email').value    = '';
-        document.getElementById('cf-servicio').value = '';
-        document.getElementById('cf-objetivo').value = '';
-      } else {
-        throw new Error(data.error || 'Error desconocido');
-      }
+      await Promise.all([
+        fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: TG_CHAT, text: lineas.join('\n') })
+        }),
+        fetch(`${SUPABASE_URL}/functions/v1/formu-info`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, telefono, email, servicio, objetivo })
+        }).catch(() => {})
+      ]);
+
+      btn.textContent = '✓ Mensaje enviado';
+      btn.style.background = '#4a7a55';
+      document.getElementById('cf-nombre').value   = '';
+      document.getElementById('cf-telefono').value = '';
+      document.getElementById('cf-email').value    = '';
+      document.getElementById('cf-servicio').value = '';
+      document.getElementById('cf-objetivo').value = '';
     } catch (err) {
       alert('Hubo un problema al enviar. Inténtalo de nuevo o escríbenos por Instagram.');
       btn.disabled = false;
